@@ -6,7 +6,7 @@ package GraphGUI;
 
 /**
  *
- * @author rich
+ * @author Richard de Mellow
  */
 public class DynamicLineGraphGUI extends javax.swing.JFrame {
 
