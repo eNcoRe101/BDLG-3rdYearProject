@@ -1,4 +1,4 @@
-<project>
+<project name="HelloWorld" basedir="." default="main">
 
     <target name="clean">
         <delete dir="out/build"/>
