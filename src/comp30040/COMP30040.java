@@ -11,6 +11,7 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import java.awt.Dimension;
 import javax.swing.JFrame;
+import GraphGUI.DynamicLineGraphGUI;
 
 /**
  *
@@ -19,11 +20,8 @@ import javax.swing.JFrame;
 public class COMP30040 {
 
     public static void main(String[] args) {
-        
-        JFrame frame = new JFrame("Dynamic Line Graph Viewer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);       
+        System.out.println("Starting Application");
+        DynamicLineGraphGUI mainWindow  = new DynamicLineGraphGUI();
+        mainWindow.drawWindow();
     }
-    
 }
