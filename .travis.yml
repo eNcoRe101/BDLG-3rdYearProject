@@ -1,3 +1,2 @@
 # kickstart travis.
 language: java
-script: ant main
