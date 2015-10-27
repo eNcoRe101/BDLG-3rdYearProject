@@ -4,12 +4,13 @@
  */
 package GraphGUI;
 
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+
 /**
  *
  * @author Richard de Mellow
  */
 public class DynamicLineGraphGUI extends javax.swing.JFrame {
-
     /**
      * Creates new form DynamicLineGraphGUI
      */
@@ -38,18 +39,18 @@ public class DynamicLineGraphGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dynamic Line Graph Viewer");
         setAlwaysOnTop(true);
-        setPreferredSize(new java.awt.Dimension(400, 400));
+        setName("Home Frame"); // NOI18N
         setSize(new java.awt.Dimension(400, 400));
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 400, Short.MAX_VALUE)
+            .add(0, 703, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
+            .add(0, 439, Short.MAX_VALUE)
         );
 
         pack();
