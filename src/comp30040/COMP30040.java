@@ -9,7 +9,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.KPartiteGraph;
 import edu.uci.ics.jung.graph.OrderedKAryTree;
 import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -18,6 +18,8 @@ import GraphGUI.DynamicLineGraphGUI;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 
 import javax.swing.SwingUtilities;
 
@@ -70,10 +72,13 @@ public class COMP30040 {
 
         DynamicLineGraphGUI mainWindow  = new DynamicLineGraphGUI();
 
-        BasicVisualizationServer<String, String> vv = new BasicVisualizationServer<>(layout, new Dimension(600,600));
+        VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout, new Dimension(600,600));
         vv.getRenderContext().setEdgeShapeTransformer(
-                new EdgeShape.Loop<String,String>());
+                new EdgeShape.Line<String,String>());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        graphMouse.setMode(edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode.PICKING);
+        vv.setGraphMouse(graphMouse);
         mainWindow.setVisible(false);
         mainWindow.setContentPane(vv);
 
