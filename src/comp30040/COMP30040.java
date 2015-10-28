@@ -54,7 +54,7 @@ public class COMP30040 {
         g.addEdge("E62", "B3", "A3");
         g.addEdge("E7", "B2", "B3");
 
-        Layout<String, String> layout = new StaticLayout<String, String>(g);
+        Layout<String, String> layout = new DynamicLineGraphLayout<String, String>(g);
         Point2D p = new Point2D.Double(40.0, 20.0);
         layout.setLocation("A1", p);
         p = new Point2D.Double(40.0, 140.0);
