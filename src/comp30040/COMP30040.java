@@ -72,7 +72,7 @@ public class COMP30040 {
 
         BasicVisualizationServer<String, String> vv = new BasicVisualizationServer<>(layout, new Dimension(600,600));
         vv.getRenderContext().setEdgeShapeTransformer(
-                new EdgeShape.Line<String,String>());
+                new EdgeShape.Loop<String,String>());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         mainWindow.setVisible(false);
         mainWindow.setContentPane(vv);
