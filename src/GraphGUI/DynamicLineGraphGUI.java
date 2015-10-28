@@ -40,7 +40,7 @@ public class DynamicLineGraphGUI extends javax.swing.JFrame {
         setTitle("Dynamic Line Graph Viewer");
         setAlwaysOnTop(true);
         setName("Home Frame"); // NOI18N
-        setSize(new java.awt.Dimension(400, 400));
+        setSize(new java.awt.Dimension(600, 600));
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
