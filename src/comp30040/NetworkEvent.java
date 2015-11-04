@@ -8,14 +8,38 @@ import java.util.Arrays;
  */
 public class NetworkEvent {
     private int eventId;
+    private String eventLabel;
     private ArrayList<Actor> actorsAtEvent;
 
-    public NetworkEvent(Actor[] theActors, int eventId){
+    public NetworkEvent(Actor[] theActors, int eventId, String eventLabel){
         this.eventId = eventId;
+        this.eventLabel = eventLabel;
         actorsAtEvent = new ArrayList<>(Arrays.asList(theActors));
+    }
+    
+    public NetworkEvent(int eventId, String eventLabel){
+        this.eventId = eventId;
+        this.eventLabel = eventLabel;
+        actorsAtEvent = new ArrayList<>();
+    }
+    
+    public void addActor(Actor a){
+        actorsAtEvent.add(a);
+    }
+    
+    public Actor[] getActorsAtEvent(){
+        return actorsAtEvent.toArray(new Actor[actorsAtEvent.size()]);
     }
 
     public int getNumberOfActorsAtEvent(){
         return actorsAtEvent.size();
+    }
+    
+    public String getLabel(){
+        return eventLabel;
+    }
+
+    public String toString(){
+        return eventLabel + "\n" + actorsAtEvent;
     }
 }

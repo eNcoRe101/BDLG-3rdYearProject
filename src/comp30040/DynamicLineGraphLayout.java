@@ -2,7 +2,6 @@ package comp30040;
 
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.collections15.Transformer;
 

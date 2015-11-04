@@ -13,6 +13,7 @@ import edu.uci.ics.jung.visualization.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.io.FileNotFoundException;
 import javax.swing.JFrame;
 import GraphGUI.DynamicLineGraphGUI;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
@@ -23,16 +24,36 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 
 import javax.swing.SwingUtilities;
 
+import comp30040.GraphImporter;
+
 /**
  *
  * @author Richard de Mellow
  */
 public class COMP30040 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
+        Point2D p = new Point2D.Double(0.0, 0.0);
         DirectedSparseGraph g = new DirectedSparseGraph();
-        //1
+        GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
+        NetworkEvent[] theEvents = imp.getEvents();
+        for(NetworkEvent e: theEvents){
+            g.addVertex(e.getLabel());
+            /*for(Actor a : e.getActorsAtEvent())
+            {
+                //g.addVertex(a);
+                g.addEdge(e.getLabel() + a, e.getLabel(), a);
+                for(Actor aa : e.getActorsAtEvent())
+                {
+                    if(!a.equals(aa)){
+                        g.addEdge("" + a + aa, a, aa);
+                    }
+                }
+            }*/
+        }
+        
+        /*//1
         g.addVertex("A1");
         //2
         g.addVertex("A2");
@@ -52,10 +73,10 @@ public class COMP30040 {
         g.addEdge("E5", "A2", "A3");
         g.addEdge("E6", "A3", "B3");
         g.addEdge("E62", "B3", "A3");
-        g.addEdge("E7", "B2", "B3");
+        g.addEdge("E7", "B2", "B3");*/
 
-        Layout<String, String> layout = new DynamicLineGraphLayout<String, String>(g);
-        Point2D p = new Point2D.Double(40.0, 20.0);
+        Layout<String, String> layout =  new DynamicLineGraphLayout<String, String>(g);
+        /*Point2D p = new Point2D.Double(40.0, 20.0);
         layout.setLocation("A1", p);
         p = new Point2D.Double(40.0, 140.0);
         layout.setLocation("A2", p);
@@ -67,7 +88,14 @@ public class COMP30040 {
         p = new Point2D.Double(40.0, 240.0);
         layout.setLocation("A3", p);
         p = new Point2D.Double(80.0, 240.0);
-        layout.setLocation("B3", p);
+        layout.setLocation("B3", p);*/
+        
+        double eventSpacing = imp.getEvents().length;
+        
+        for(NetworkEvent e : imp.getEvents()){
+            layout.setLocation(e.getLabel(), p);
+            p.setLocation(p.getX() + eventSpacing, p.getY() + eventSpacing);
+        }
 
 
         DynamicLineGraphGUI mainWindow  = new DynamicLineGraphGUI();
