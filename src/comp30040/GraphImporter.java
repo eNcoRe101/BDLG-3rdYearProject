@@ -67,11 +67,12 @@ public class GraphImporter {
         
         for(int i = 1; i < fileLineArray.size(); i++){
             String[] lineAsArray = fileLineArray.get(i).split(",");
+            for(String s : lineAsArray) System.out.println(s);
             Actor currentActor = new Actor(i, lineAsArray[0]);
             tempActors.add(currentActor);
-            for(int j = i; j < lineAsArray.length; j++)
+            for(int j = 1; j < lineAsArray.length; j++)
             {
-                if(lineAsArray[i].equals("1"))
+                if(lineAsArray[j].equals("1"))
                     tempArrayOfEvents.get(j).addActor(currentActor);
             }
         }

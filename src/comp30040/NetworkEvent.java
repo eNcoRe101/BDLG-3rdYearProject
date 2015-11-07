@@ -30,6 +30,10 @@ public class NetworkEvent {
     public Actor[] getActorsAtEvent(){
         return actorsAtEvent.toArray(new Actor[actorsAtEvent.size()]);
     }
+    
+    public boolean isActorAtEvent(Actor a){
+        return this.actorsAtEvent.contains(a);
+    }
 
     public int getNumberOfActorsAtEvent(){
         return actorsAtEvent.size();

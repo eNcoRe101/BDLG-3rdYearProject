@@ -21,10 +21,14 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 
 import javax.swing.SwingUtilities;
 
 import comp30040.GraphImporter;
+import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
+import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
+import edu.uci.ics.jung.visualization.control.ScalingControl;
 import java.util.Random;
 
 /**
@@ -35,11 +39,12 @@ public class COMP30040 {
 
     public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
-        Point2D p = new Point2D.Double(0.0, 0.0);
+        Point2D p = new Point2D.Double(50.0, 0.0);
         DirectedSparseGraph g = new DirectedSparseGraph();
         GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
         NetworkEvent[] theEvents = imp.getEvents();
-        for(NetworkEvent e: theEvents){
+        for(int i = 0; i < theEvents.length; i++){
+            NetworkEvent e = theEvents[i];
             for(Actor a : e.getActorsAtEvent())
             {
                 g.addVertex(a + e.getLabel());
@@ -49,6 +54,12 @@ public class COMP30040 {
                     if(!a.equals(aa)){
                         g.addEdge(a + e.getLabel() + aa + e.getLabel(), a + e.getLabel(), aa + e.getLabel());
                     }
+                }
+                if(i < theEvents.length -1 
+                       && !e.equals(theEvents[i+1]) 
+                        && theEvents[i+1].isActorAtEvent(a)){
+                        g.addEdge(a + e.getLabel() + theEvents[i+1].getLabel(),
+                                a + e.getLabel(), a + theEvents[i+1].getLabel());
                 }
             }
         }
@@ -90,19 +101,19 @@ public class COMP30040 {
         p = new Point2D.Double(80.0, 240.0);
         layout.setLocation("B3", p);*/
         
-        double eventSpacingX = 1440/imp.getEvents().length*2;
-        double eventSpacingY = 900/imp.getEvents().length*2;
+        double eventSpacingX = 1440/imp.getEvents().length*1.5;
+        double eventSpacingY = 900/imp.getEvents().length*5;
         Random randomGenerator = new Random();
         for(NetworkEvent e : imp.getEvents()){
             int numberOfActorSeen = 0;
             for(Actor a: e.getActorsAtEvent()){
                 Point2D pp = new Point2D.Double(p.getX(), p.getY());
-                pp.setLocation(p.getX() + (numberOfActorSeen*10*randomGenerator.nextDouble()),
-                              p.getY() + (-numberOfActorSeen*10*randomGenerator.nextDouble()));
+                pp.setLocation(p.getX() + (numberOfActorSeen*50),
+                              p.getY() );
                 layout.setLocation(a+e.getLabel(), pp);
                 numberOfActorSeen++;
             }
-            p.setLocation(p.getX() + eventSpacingX, p.getY() + eventSpacingY);
+            p.setLocation(p.getX() , p.getY() + eventSpacingY);
         }
 
 
@@ -113,7 +124,11 @@ public class COMP30040 {
                 new EdgeShape.Line<String,String>());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-        graphMouse.setMode(edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode.PICKING);
+        graphMouse.setMode(ModalGraphMouse.Mode.PICKING);
+        
+        ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
+
+        vv.scaleToLayout(visualizationViewerScalingControl);
         
         vv.setGraphMouse(graphMouse);
         mainWindow.setVisible(false);
