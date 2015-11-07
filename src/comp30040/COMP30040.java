@@ -55,12 +55,13 @@ public class COMP30040 {
                         g.addEdge(a + e.getLabel() + aa + e.getLabel(), a + e.getLabel(), aa + e.getLabel());
                     }
                 }
-                if(i < theEvents.length -1 
-                       && !e.equals(theEvents[i+1]) 
-                        && theEvents[i+1].isActorAtEvent(a)){
-                        g.addEdge(a + e.getLabel() + theEvents[i+1].getLabel(),
-                                a + e.getLabel(), a + theEvents[i+1].getLabel());
-                }
+                for(int j = i+1; j < theEvents.length; j++)
+                    if(!e.equals(theEvents[j]) 
+                        && theEvents[j].isActorAtEvent(a)){
+                            g.addEdge(a + e.getLabel() + theEvents[j].getLabel(),
+                                    a + e.getLabel(), a + theEvents[j].getLabel());
+                            break;
+                    }
             }
         }
         /*
