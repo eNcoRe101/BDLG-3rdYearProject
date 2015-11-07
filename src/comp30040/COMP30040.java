@@ -25,6 +25,7 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import javax.swing.SwingUtilities;
 
 import comp30040.GraphImporter;
+import java.util.Random;
 
 /**
  *
@@ -39,21 +40,20 @@ public class COMP30040 {
         GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
         NetworkEvent[] theEvents = imp.getEvents();
         for(NetworkEvent e: theEvents){
-            g.addVertex(e.getLabel());
-            /*for(Actor a : e.getActorsAtEvent())
+            for(Actor a : e.getActorsAtEvent())
             {
-                //g.addVertex(a);
-                g.addEdge(e.getLabel() + a, e.getLabel(), a);
+                g.addVertex(a + e.getLabel());
+                
                 for(Actor aa : e.getActorsAtEvent())
                 {
                     if(!a.equals(aa)){
-                        g.addEdge("" + a + aa, a, aa);
+                        g.addEdge(a + e.getLabel() + aa + e.getLabel(), a + e.getLabel(), aa + e.getLabel());
                     }
                 }
-            }*/
+            }
         }
-        
-        /*//1
+        /*
+        //1
         g.addVertex("A1");
         //2
         g.addVertex("A2");
@@ -74,9 +74,9 @@ public class COMP30040 {
         g.addEdge("E6", "A3", "B3");
         g.addEdge("E62", "B3", "A3");
         g.addEdge("E7", "B2", "B3");*/
-
+        
         Layout<String, String> layout =  new DynamicLineGraphLayout<String, String>(g);
-        /*Point2D p = new Point2D.Double(40.0, 20.0);
+        /* p = new Point2D.Double(40.0, 20.0);
         layout.setLocation("A1", p);
         p = new Point2D.Double(40.0, 140.0);
         layout.setLocation("A2", p);
@@ -90,22 +90,31 @@ public class COMP30040 {
         p = new Point2D.Double(80.0, 240.0);
         layout.setLocation("B3", p);*/
         
-        double eventSpacing = imp.getEvents().length;
-        
+        double eventSpacingX = 1440/imp.getEvents().length*2;
+        double eventSpacingY = 900/imp.getEvents().length*2;
+        Random randomGenerator = new Random();
         for(NetworkEvent e : imp.getEvents()){
-            layout.setLocation(e.getLabel(), p);
-            p.setLocation(p.getX() + eventSpacing, p.getY() + eventSpacing);
+            int numberOfActorSeen = 0;
+            for(Actor a: e.getActorsAtEvent()){
+                Point2D pp = new Point2D.Double(p.getX(), p.getY());
+                pp.setLocation(p.getX() + (numberOfActorSeen*10*randomGenerator.nextDouble()),
+                              p.getY() + (-numberOfActorSeen*10*randomGenerator.nextDouble()));
+                layout.setLocation(a+e.getLabel(), pp);
+                numberOfActorSeen++;
+            }
+            p.setLocation(p.getX() + eventSpacingX, p.getY() + eventSpacingY);
         }
 
 
         DynamicLineGraphGUI mainWindow  = new DynamicLineGraphGUI();
 
-        VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout, new Dimension(600,600));
+        VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout, new Dimension(1440,900));
         vv.getRenderContext().setEdgeShapeTransformer(
                 new EdgeShape.Line<String,String>());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         graphMouse.setMode(edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode.PICKING);
+        
         vv.setGraphMouse(graphMouse);
         mainWindow.setVisible(false);
         mainWindow.setContentPane(vv);
