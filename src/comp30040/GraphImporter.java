@@ -86,6 +86,10 @@ public class GraphImporter {
         return actors;
     }
     
+    public int getNumberOfActors(){
+        return actors.length;
+    }
+    
     public NetworkEvent[] getEvents(){
         return events;
     }
