@@ -14,31 +14,37 @@ import java.util.Random;
  * @param <V>
  * @param <E>
  */
-public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, String> {    
+public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, String> {
+    private BiDynamicLineGraph dglGraph;
+    
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V, E> g){
         super(g);
+        dglGraph = g;
     }
 
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V, E> g, Dimension size){
         super(g, size);
+        dglGraph = g;
     }
 
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<String,Point2D> initializer){
         super(g, initializer);
+        dglGraph = g;
     }
 
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<String,Point2D> initializer,
     Dimension size) {
         super(g, initializer, size);
+        dglGraph = g;
     }
 
     @Override
     public void initialize() {
         Point2D p = new Point2D.Double(25, 25);
-        double eventSpacingX = (1440/graph.getNumberOfActors())*2.5;
-        double eventSpacingY = 900/graph.getNumberOfEvents()*2.5;
+        double eventSpacingX = (size.getWidth()/dglGraph.getNumberOfActors())*2.5;
+        double eventSpacingY = (size.getHeight()/dglGraph.getNumberOfEvents())*2.5;
         Random randomGenerator = new Random();
-        for(NetworkEvent e : graph.getEvents()){
+        for(NetworkEvent e : dglGraph.getEvents()){
             int numberOfActorSeen = 0;
             for(Actor a: e.getActorsAtEvent()){
                 Point2D pp = new Point2D.Double(p.getX(), p.getY());
@@ -49,6 +55,11 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, Strin
             }
             p.setLocation(p.getX(), p.getY() + eventSpacingY);
         }
+    }
+    
+    @Override
+    public BiDynamicLineGraph getGraph(){
+        return this.dglGraph;
     }
 
     @Override

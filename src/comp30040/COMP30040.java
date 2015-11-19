@@ -4,7 +4,7 @@
 
 package comp30040;
 
-import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.KPartiteGraph;
 import edu.uci.ics.jung.graph.OrderedKAryTree;
@@ -16,7 +16,7 @@ import java.awt.geom.Point2D;
 import java.io.FileNotFoundException;
 import javax.swing.JFrame;
 import GraphGUI.BiDynamicLineGraphGUI;
-import GraphGUI.NewFXMain;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -45,7 +45,7 @@ public class COMP30040 {
     public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
         Point2D p = new Point2D.Double(50.0, 0.0);
-        GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
+        GraphImporter imp = new GraphImporter("/home/mbax2rd2/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
         BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
         
         
@@ -71,7 +71,7 @@ public class COMP30040 {
         g.addEdge("E6", "A3", "B3");
         g.addEdge("E62", "B3", "A3");
         g.addEdge("E7", "B2", "B3");*/
-        
+        System.out.println(g);
         Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
         /* p = new Point2D.Double(40.0, 20.0);
         layout.setLocation("A1", p);

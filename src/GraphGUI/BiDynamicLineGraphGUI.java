@@ -62,14 +62,14 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             .add(OptionsPanelLayout.createSequentialGroup()
                 .add(38, 38, 38)
                 .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
                 .add(167, 167, 167)
                 .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(521, Short.MAX_VALUE))
+                .addContainerGap(528, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout GraphViewPanelLayout = new org.jdesktop.layout.GroupLayout(GraphViewPanel);
@@ -78,13 +78,13 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             GraphViewPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(GraphViewPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(OptionsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(OptionsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(715, Short.MAX_VALUE))
         );
         GraphViewPanelLayout.setVerticalGroup(
             GraphViewPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(GraphViewPanelLayout.createSequentialGroup()
-                .add(OptionsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(OptionsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
