@@ -5,8 +5,6 @@
  */
 package comp30040;
 
-import comp30040.NetworkEvent;
-
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 

@@ -4,35 +4,24 @@
 
 package comp30040;
 
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.KPartiteGraph;
-import edu.uci.ics.jung.graph.OrderedKAryTree;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.visualization.*;
-
-import java.awt.*;
-import java.awt.geom.Point2D;
-import java.io.FileNotFoundException;
-import javax.swing.JFrame;
 import GraphGUI.BiDynamicLineGraphGUI;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-
-import javax.swing.SwingUtilities;
-
-import edu.uci.ics.jung.graph.SparseGraph;
-import edu.uci.ics.jung.graph.util.Context;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
+
+import java.awt.BorderLayout;
+import java.awt.ScrollPane;
+import java.awt.Shape;
+
 import java.awt.geom.Ellipse2D;
-import java.util.Random;
+import java.io.FileNotFoundException;
+
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -46,7 +35,7 @@ public class COMP30040 {
     
     public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
-        GraphImporter imp = new GraphImporter("/home/mbax2rd2/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
+        GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
         BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
         
         System.out.println(g);
@@ -67,7 +56,7 @@ public class COMP30040 {
         Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
             public Shape transform(String s){
                 Ellipse2D circle;
-                return circle = new Ellipse2D.Double(-7, -7, 14, 14);
+                return circle = new Ellipse2D.Double(-3, -3, 6, 6);
             }
         };
 
