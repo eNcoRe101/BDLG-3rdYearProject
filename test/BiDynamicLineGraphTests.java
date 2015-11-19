@@ -18,7 +18,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({})
-public class DynamicLineGraphTests {
+public class BiDynamicLineGraphTests {
 
     @BeforeClass
     public static void setUpClass() throws Exception {

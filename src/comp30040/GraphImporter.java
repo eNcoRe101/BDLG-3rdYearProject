@@ -19,8 +19,8 @@ public class GraphImporter {
         theFile = new File(fileName);
         fileLineArray = readFile();
         getEventsFromFile();
-        for(NetworkEvent e : events)
-            System.out.println(e);
+        //for(NetworkEvent e : events)
+        //    System.out.println(e);
     }
 
     private ArrayList<String> readFile(){
@@ -67,7 +67,7 @@ public class GraphImporter {
         
         for(int i = 1; i < fileLineArray.size(); i++){
             String[] lineAsArray = fileLineArray.get(i).split(",");
-            for(String s : lineAsArray) System.out.println(s);
+            //for(String s : lineAsArray) System.out.println(s);
             Actor currentActor = new Actor(i, lineAsArray[0]);
             tempActors.add(currentActor);
             for(int j = 1; j < lineAsArray.length; j++)
