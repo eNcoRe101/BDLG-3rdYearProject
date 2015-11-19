@@ -33,6 +33,8 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.commons.collections15.Transformer;
 
@@ -48,12 +50,18 @@ public class COMP30040 {
         BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
         
         System.out.println(g);
+        //set theam Nimbus
         Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
-       
-        
-        
-
-
+        try {
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
         BiDynamicLineGraphGUI mainWindow  = new BiDynamicLineGraphGUI();
         
         Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
@@ -79,7 +87,7 @@ public class COMP30040 {
         
         vv.setGraphMouse(graphMouse);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
+//        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
         
         ScrollPane sp = new ScrollPane();
         sp.add(vv);

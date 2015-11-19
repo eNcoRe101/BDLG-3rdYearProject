@@ -4,7 +4,16 @@
  */
 package GraphGUI;
 
+import comp30040.BiDynamicLineGraph;
+import comp30040.BiDynamicLineGraphLayout;
+import comp30040.GraphImporter;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import java.awt.BorderLayout;
+import java.awt.ScrollPane;
+import java.io.File;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -47,7 +56,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bi-Dynamic Line Graph Viewer");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(1440, 900));
+        setMinimumSize(new java.awt.Dimension(800, 600));
         setName("Home Frame"); // NOI18N
         setPreferredSize(new java.awt.Dimension(1440, 900));
         setSize(new java.awt.Dimension(1400, 900));
@@ -74,7 +83,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             .add(OptionsPanelLayout.createSequentialGroup()
                 .add(167, 167, 167)
                 .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(496, Short.MAX_VALUE))
+                .addContainerGap(891, Short.MAX_VALUE))
         );
 
         getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
@@ -108,7 +117,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
+        final JFileChooser fc = new JFileChooser();
+        fc.showOpenDialog(MainMenu);
+        File newFile = fc.getSelectedFile();
+        System.out.println(newFile.getAbsoluteFile());
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
