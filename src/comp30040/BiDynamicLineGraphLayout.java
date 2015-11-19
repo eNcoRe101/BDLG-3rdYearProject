@@ -40,18 +40,16 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, Strin
 
     @Override
     public void initialize() {
-        Point2D p = new Point2D.Double(25, 25);
+        Point2D p = new Point2D.Double(10, 10);
         double eventSpacingX = (size.getWidth()/dglGraph.getNumberOfActors())*2.5;
         double eventSpacingY = (size.getHeight()/dglGraph.getNumberOfEvents())*2.5;
         Random randomGenerator = new Random();
         for(NetworkEvent e : dglGraph.getEvents()){
-            int numberOfActorSeen = 0;
             for(Actor a: e.getActorsAtEvent()){
                 Point2D pp = new Point2D.Double(p.getX(), p.getY());
                 pp.setLocation(p.getX() + (eventSpacingX*Integer.parseInt(a.getLabel().substring(1))),
                               p.getY() );
                 this.setLocation(a+e.getLabel(), pp);
-                numberOfActorSeen++;
             }
             p.setLocation(p.getX(), p.getY() + eventSpacingY);
         }

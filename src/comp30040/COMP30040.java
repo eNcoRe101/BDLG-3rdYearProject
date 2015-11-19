@@ -44,12 +44,55 @@ public class COMP30040 {
     
     public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
-        Point2D p = new Point2D.Double(50.0, 0.0);
         GraphImporter imp = new GraphImporter("/home/mbax2rd2/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
         BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
         
+        System.out.println(g);
+        Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
+       
         
-        /*
+        
+
+
+        BiDynamicLineGraphGUI mainWindow  = new BiDynamicLineGraphGUI();
+        
+        Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
+            public Shape transform(String s){
+                Ellipse2D circle;
+                return circle = new Ellipse2D.Double(-7, -7, 14, 14);
+            }
+        };
+
+        VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout);
+        /*Transformer<Context<Graph<String,String>,String>,Shape> drawEdges = Transformer<Context<Graph<String,String>,String>,javax.media.j3d.Node>(){
+        
+        };*/
+        vv.getRenderContext().setEdgeShapeTransformer(
+                new EdgeShape.Line<String,String>());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+        
+        ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
+
+        vv.scaleToLayout(visualizationViewerScalingControl);
+        
+        vv.setGraphMouse(graphMouse);
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
+        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
+        
+        ScrollPane sp = new ScrollPane();
+        sp.add(vv);
+        mainWindow.getContentPane().add(sp, BorderLayout.CENTER);
+        
+
+        mainWindow.setVisible(true);
+        mainWindow.revalidate();
+        mainWindow.repaint();
+    }
+}
+
+/*
         //1
         g.addVertex("A1");
         //2
@@ -71,9 +114,8 @@ public class COMP30040 {
         g.addEdge("E6", "A3", "B3");
         g.addEdge("E62", "B3", "A3");
         g.addEdge("E7", "B2", "B3");*/
-        System.out.println(g);
-        Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
-        /* p = new Point2D.Double(40.0, 20.0);
+
+ /* p = new Point2D.Double(40.0, 20.0);
         layout.setLocation("A1", p);
         p = new Point2D.Double(40.0, 140.0);
         layout.setLocation("A2", p);
@@ -86,44 +128,3 @@ public class COMP30040 {
         layout.setLocation("A3", p);
         p = new Point2D.Double(80.0, 240.0);
         layout.setLocation("B3", p);*/
-        
-        
-
-
-        BiDynamicLineGraphGUI mainWindow  = new BiDynamicLineGraphGUI();
-        
-        Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
-            public Shape transform(String s){
-                Ellipse2D circle;
-                return circle = new Ellipse2D.Double(-7, -7, 14, 14);
-            }
-        };
-
-        VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout, new Dimension(1400,900));
-        /*Transformer<Context<Graph<String,String>,String>,Shape> drawEdges = Transformer<Context<Graph<String,String>,String>,javax.media.j3d.Node>(){
-        
-        };*/
-        vv.getRenderContext().setEdgeShapeTransformer(
-                new EdgeShape.Line<String,String>());
-        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-        DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-        
-        ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
-
-        vv.scaleToLayout(visualizationViewerScalingControl);
-        
-        vv.setGraphMouse(graphMouse);
-        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
-
-        mainWindow.getContentPane().add(vv, BorderLayout.EAST);
-        
-
-        mainWindow.setVisible(true);
-        mainWindow.revalidate();
-        mainWindow.repaint();
- 
-        //mainWindow.drawWindow();
-    }
-}

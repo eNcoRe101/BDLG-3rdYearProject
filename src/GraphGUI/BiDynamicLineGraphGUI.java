@@ -36,7 +36,6 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        GraphViewPanel = new javax.swing.JPanel();
         OptionsPanel = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         MainMenu = new javax.swing.JMenuBar();
@@ -46,12 +45,18 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         EditMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Dynamic Line Graph Viewer");
+        setTitle("Bi-Dynamic Line Graph Viewer");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMinimumSize(new java.awt.Dimension(1440, 900));
         setName("Home Frame"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1440, 900));
         setSize(new java.awt.Dimension(1400, 900));
 
         OptionsPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        OptionsPanel.setPreferredSize(new java.awt.Dimension(250, 718));
+        OptionsPanel.setAlignmentX(0.0F);
+        OptionsPanel.setAlignmentY(0.0F);
+        OptionsPanel.setMaximumSize(new java.awt.Dimension(200, 32767));
+        OptionsPanel.setPreferredSize(new java.awt.Dimension(200, 718));
 
         jTextField1.setText("jTextField1");
 
@@ -62,33 +67,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             .add(OptionsPanelLayout.createSequentialGroup()
                 .add(38, 38, 38)
                 .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
                 .add(167, 167, 167)
                 .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(528, Short.MAX_VALUE))
+                .addContainerGap(496, Short.MAX_VALUE))
         );
 
-        org.jdesktop.layout.GroupLayout GraphViewPanelLayout = new org.jdesktop.layout.GroupLayout(GraphViewPanel);
-        GraphViewPanel.setLayout(GraphViewPanelLayout);
-        GraphViewPanelLayout.setHorizontalGroup(
-            GraphViewPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(GraphViewPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(OptionsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(715, Short.MAX_VALUE))
-        );
-        GraphViewPanelLayout.setVerticalGroup(
-            GraphViewPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(GraphViewPanelLayout.createSequentialGroup()
-                .add(OptionsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(GraphViewPanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
 
         FileMenu.setText("File");
 
@@ -129,7 +118,6 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;
     private javax.swing.JMenu FileMenu;
-    private javax.swing.JPanel GraphViewPanel;
     private javax.swing.JMenuBar MainMenu;
     private javax.swing.JPanel OptionsPanel;
     private javax.swing.JMenuItem jMenuItem1;
