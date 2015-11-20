@@ -4,14 +4,6 @@
  */
 package GraphGUI;
 
-import comp30040.BiDynamicLineGraph;
-import comp30040.BiDynamicLineGraphLayout;
-import comp30040.GraphImporter;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import java.awt.BorderLayout;
-import java.awt.ScrollPane;
 import java.io.File;
 import javax.swing.JFileChooser;
 
@@ -46,11 +38,12 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         OptionsPanel = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        refreshGraphButton = new javax.swing.JButton();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        importcvs = new javax.swing.JMenuItem();
+        export = new javax.swing.JMenuItem();
+        exit = new javax.swing.JMenuItem();
         EditMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -67,44 +60,47 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         OptionsPanel.setMaximumSize(new java.awt.Dimension(200, 32767));
         OptionsPanel.setPreferredSize(new java.awt.Dimension(200, 718));
 
-        jTextField1.setText("jTextField1");
+        refreshGraphButton.setText("Refresh");
 
         org.jdesktop.layout.GroupLayout OptionsPanelLayout = new org.jdesktop.layout.GroupLayout(OptionsPanel);
         OptionsPanel.setLayout(OptionsPanelLayout);
         OptionsPanelLayout.setHorizontalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
-                .add(38, 38, 38)
-                .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap()
+                .add(refreshGraphButton)
+                .addContainerGap(99, Short.MAX_VALUE))
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
-                .add(167, 167, 167)
-                .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(891, Short.MAX_VALUE))
+                .add(121, 121, 121)
+                .add(refreshGraphButton)
+                .addContainerGap(926, Short.MAX_VALUE))
         );
 
         getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
 
         FileMenu.setText("File");
 
-        jMenuItem1.setText("Import 2-mode CVS");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        importcvs.setText("Import 2-mode CVS");
+        importcvs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                importcvsActionPerformed(evt);
             }
         });
-        FileMenu.add(jMenuItem1);
+        FileMenu.add(importcvs);
 
-        jMenuItem2.setText("Exit");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        export.setText("Export");
+        FileMenu.add(export);
+
+        exit.setText("Exit");
+        exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                exitActionPerformed(evt);
             }
         });
-        FileMenu.add(jMenuItem2);
+        FileMenu.add(exit);
 
         MainMenu.add(FileMenu);
 
@@ -116,25 +112,26 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void importcvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importcvsActionPerformed
         final JFileChooser fc = new JFileChooser();
         fc.showOpenDialog(MainMenu);
         File newFile = fc.getSelectedFile();
         System.out.println(newFile.getAbsoluteFile());
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_importcvsActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_exitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;
     private javax.swing.JMenu FileMenu;
     private javax.swing.JMenuBar MainMenu;
     private javax.swing.JPanel OptionsPanel;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JMenuItem exit;
+    private javax.swing.JMenuItem export;
+    private javax.swing.JMenuItem importcvs;
+    private javax.swing.JButton refreshGraphButton;
     // End of variables declaration//GEN-END:variables
 
 }
