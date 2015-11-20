@@ -35,12 +35,12 @@ public class COMP30040 {
     
     public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
-        GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
-        BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
+        //GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
+        //BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
         
-        System.out.println(g);
+        //System.out.println(g);
         //set theam Nimbus
-        Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
+        //Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
         try {
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -60,26 +60,26 @@ public class COMP30040 {
             }
         };
 
-        VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout);
+        //VisualizationViewer<String, String> vv = new VisualizationViewer<>(layout);
         /*Transformer<Context<Graph<String,String>,String>,Shape> drawEdges = Transformer<Context<Graph<String,String>,String>,javax.media.j3d.Node>(){
         
         };*/
-        vv.getRenderContext().setEdgeShapeTransformer(
-                new EdgeShape.Line<String,String>());
-        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        //vv.getRenderContext().setEdgeShapeTransformer(
+        //        new EdgeShape.Line<String,String>());
+        //vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         
         ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
 
-        vv.scaleToLayout(visualizationViewerScalingControl);
+        //vv.scaleToLayout(visualizationViewerScalingControl);
         
-        vv.setGraphMouse(graphMouse);
-        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
+        //vv.setGraphMouse(graphMouse);
+        //vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 //        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
         
         ScrollPane sp = new ScrollPane();
-        sp.add(vv);
+        //sp.add(vv);
         mainWindow.getContentPane().add(sp, BorderLayout.CENTER);
         
 
