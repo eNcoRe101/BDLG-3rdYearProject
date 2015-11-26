@@ -19,7 +19,6 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<String, String> {
     
     public BiDynamicLineGraph(){
         super();
-        genrateGraphFromImp();
     }
     
     public BiDynamicLineGraph(GraphImporter imp){

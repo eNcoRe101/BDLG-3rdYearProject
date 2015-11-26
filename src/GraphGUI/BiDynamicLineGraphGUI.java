@@ -34,6 +34,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private Layout<String, String> layout = null;
     private VisualizationViewer<String, String> vv = null;
     private ScrollPane graphJPane = null;
+    private File currentCVSFile = null;
+    int currentIndexOfSelectedView = 0;
     
     /**
      * Creates new form DynamicLineGraphGUI
@@ -97,7 +99,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<>();
+        VisulizerPicker = new javax.swing.JComboBox<String>();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         importcvs = new javax.swing.JMenuItem();
@@ -117,12 +119,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         OptionsPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         OptionsPanel.setAlignmentX(0.0F);
         OptionsPanel.setAlignmentY(0.0F);
-        OptionsPanel.setMaximumSize(new java.awt.Dimension(200, 32767));
-        OptionsPanel.setPreferredSize(new java.awt.Dimension(200, 718));
+        OptionsPanel.setMaximumSize(new java.awt.Dimension(220, 32767));
+        OptionsPanel.setPreferredSize(new java.awt.Dimension(220, 718));
 
         refreshGraphButton.setText("Refresh");
 
-        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View" }));
+        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View" }));
+        VisulizerPicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VisulizerPickerActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout OptionsPanelLayout = new org.jdesktop.layout.GroupLayout(OptionsPanel);
         OptionsPanel.setLayout(OptionsPanelLayout);
@@ -132,18 +139,16 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(refreshGraphButton)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(OptionsPanelLayout.createSequentialGroup()
-                .add(VisulizerPicker, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 199, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 0, Short.MAX_VALUE))
+            .add(VisulizerPicker, 0, 223, Short.MAX_VALUE)
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
-                .add(40, 40, 40)
+                .addContainerGap()
                 .add(VisulizerPicker, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(54, 54, 54)
+                .add(82, 82, 82)
                 .add(refreshGraphButton)
-                .addContainerGap(926, Short.MAX_VALUE))
+                .addContainerGap(931, Short.MAX_VALUE))
         );
 
         getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
@@ -183,8 +188,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         final JFileChooser fc = new JFileChooser();
         fc.showOpenDialog(MainMenu);
         
-        File fileToImport = fc.getSelectedFile();
-        this.vv = genrateVisualizationViewer(fileToImport);
+        this.currentCVSFile = fc.getSelectedFile();
+        this.vv = genrateVisualizationViewer(currentCVSFile);
         if(graphJPane != null)
             this.remove(graphJPane);
         graphJPane = new ScrollPane();
@@ -194,12 +199,29 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         this.invalidate();
         this.repaint();
         this.pack();
-        System.out.println(fileToImport.getAbsoluteFile());
+        System.out.println(currentCVSFile.getAbsoluteFile());
     }//GEN-LAST:event_importcvsActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
+
+    private void VisulizerPickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisulizerPickerActionPerformed
+        int currentSelectedItem = this.VisulizerPicker.getSelectedIndex();
+        if(currentIndexOfSelectedView != currentSelectedItem)
+        {
+            currentIndexOfSelectedView = currentSelectedItem;
+            switch(currentSelectedItem){
+                case 0:
+                    
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
+        }
+    }//GEN-LAST:event_VisulizerPickerActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;

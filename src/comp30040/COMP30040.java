@@ -18,12 +18,6 @@ public class COMP30040 {
     
     public static void main(String[] args) throws FileNotFoundException{
         System.out.println("Starting Application");
-        //GraphImporter imp = new GraphImporter("/Users/rich/uni/COMP30040/SourceCode/COMP30040/data/mafia-2mode.csv");
-        //BiDynamicLineGraph g = new BiDynamicLineGraph(imp);
-        
-        //System.out.println(g);
-        //set theam Nimbus
-        //Layout<String, String> layout =  new BiDynamicLineGraphLayout<>(g);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
