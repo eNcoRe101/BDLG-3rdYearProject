@@ -12,6 +12,9 @@ import javax.swing.JFileChooser;
 import comp30040.GraphImporter;
 import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
@@ -25,6 +28,7 @@ import java.awt.Dimension;
 import java.awt.ScrollPane;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import javax.swing.SpringLayout;
 import org.apache.commons.collections15.Transformer;
 /**
  *
@@ -218,6 +222,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 case 1:
                     break;
                 case 2:
+                    BiDynamicLineGraph g = this.layout.getGraph();
+                    Graph<String, String> gg = g.getOneModeActorGraph();
+                    this.layout = new SpringLayout2<String, String>(gg);
+                    VisualizationViewer vv = new VisualizationViewer<>(this.layout);
+                    this.add(vv, BorderLayout.CENTER);
                     break;
             }
         }

@@ -30,7 +30,7 @@ public class GraphImporter {
 
     private ArrayList<String> readFile(){
         Scanner theFileScanner = null;
-        ArrayList<String> matrixHolder = new ArrayList<String>();
+        ArrayList<String> matrixHolder = new ArrayList<>();
         try{
             theFileScanner = new Scanner(theFile);
             while (theFileScanner.hasNextLine()){
@@ -47,7 +47,7 @@ public class GraphImporter {
     }
 
     private Actor[] getActorsFromFile(){
-        ArrayList<Actor> tempActors = new ArrayList<Actor>();
+        ArrayList<Actor> tempActors = new ArrayList<>();
         int currentActorID = 0;
         for(String line : fileLineArray) {
             String currentValue = line.split(",")[0];

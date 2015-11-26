@@ -5,6 +5,8 @@
  */
 package comp30040;
 
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
@@ -37,6 +39,26 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<String, String> {
     
     public NetworkEvent[] getEvents(){
         return this.imp.getEvents();
+    }
+    
+    public Graph<String, String> getOneModeActorGraph(){
+        Graph<String, String> newOneModeG = new SparseGraph<>();
+        for(Actor a : imp.getActors())
+        {
+            newOneModeG.addVertex(a.getLabel());
+            for(NetworkEvent e : imp.getEvents()){
+                if(e.isActorAtEvent(a))
+                {
+                    for(Actor acAtE : e.getActorsAtEvent()){
+                        if(!a.equals(acAtE))
+                            newOneModeG.addEdge(a.getLabel() + acAtE.getLabel(),
+                                    a.getLabel(), acAtE.getLabel());
+                    }
+                }
+            }
+                
+        }
+        return newOneModeG;
     }
     
     private void genrateGraphFromImp(){
