@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.commons.collections15.Transformer;
 
@@ -48,7 +49,7 @@ public class COMP30040 {
                     break;
                 }
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
         BiDynamicLineGraphGUI mainWindow  = new BiDynamicLineGraphGUI();
@@ -78,9 +79,6 @@ public class COMP30040 {
         //vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 //        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
         
-        ScrollPane sp = new ScrollPane();
-        //sp.add(vv);
-        mainWindow.getContentPane().add(sp, BorderLayout.CENTER);
         
 
         mainWindow.setVisible(true);

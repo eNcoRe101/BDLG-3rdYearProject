@@ -11,8 +11,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 /**
  *
  * @author rich
- * @param <String>
  * @param <V>
+ * @param <E>
  */
 public class BiDynamicLineGraph<V, E> extends SparseGraph<String, String> {
     private GraphImporter imp = null;
@@ -41,7 +41,6 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<String, String> {
     }
     
     private void genrateGraphFromImp(){
-        int numberOfActors = imp.getNumberOfActors();
         NetworkEvent[] theEvents = imp.getEvents();
         for(int i = 0; i < theEvents.length; i++){
             NetworkEvent e = theEvents[i];
@@ -52,7 +51,10 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<String, String> {
                 for(Actor aa : e.getActorsAtEvent())
                 {
                     if(!a.equals(aa)){
-                        this.addEdge(a + e.getLabel() + aa + e.getLabel(), a + e.getLabel(), aa + e.getLabel(), EdgeType.UNDIRECTED);
+                        this.addEdge(a + e.getLabel() + aa + e.getLabel(),
+                                    a + e.getLabel(),
+                                    aa + e.getLabel(),
+                                    EdgeType.UNDIRECTED);
                     }
                 }
                 for(int j = i+1; j < theEvents.length; j++)

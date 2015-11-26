@@ -4,14 +4,37 @@
  */
 package GraphGUI;
 
+
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import java.io.File;
 import javax.swing.JFileChooser;
 
+import comp30040.GraphImporter;
+import comp30040.BiDynamicLineGraph;
+import comp30040.BiDynamicLineGraphLayout;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ScalingControl;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.ScrollPane;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import org.apache.commons.collections15.Transformer;
 /**
  *
  * @author Richard de Mellow
  */
 public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
+    private Layout<String, String> layout = null;
+    private VisualizationViewer<String, String> vv = null;
+    private ScrollPane graphJPane = null;
+    
     /**
      * Creates new form DynamicLineGraphGUI
      */
@@ -22,10 +45,45 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     
     public void drawWindow(){
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new BiDynamicLineGraphGUI().setVisible(true);
             }
         });
+    }
+    
+    private VisualizationViewer genrateVisualizationViewer(File fileToUse){
+        GraphImporter gi = new GraphImporter(fileToUse);
+        BiDynamicLineGraph g = new BiDynamicLineGraph(gi);
+        this.layout = new BiDynamicLineGraphLayout<>(g);
+        Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
+            @Override
+            public Shape transform(String s){
+                Ellipse2D circle;
+                return circle = new Ellipse2D.Double(-3, -3, 6, 6);
+            }
+        };
+        VisualizationViewer vv = new VisualizationViewer<>(this.layout);
+        Transformer<String,EdgeShape> newEdgeTypes;
+        newEdgeTypes = new Transformer<String, EdgeShape>(){
+            @Override
+            public EdgeShape transform(String i) {
+                System.out.println(i);
+                return null;//new EdgeShape.Line<String,String>();
+            }
+        };
+        //vv.getRenderContext().setEdgeShapeTransformer(newEdgeTypes);
+                //new EdgeShape.Line<String,String>());
+        
+        DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+        ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        vv.scaleToLayout(visualizationViewerScalingControl);
+        vv.setGraphMouse(graphMouse);
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
+        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
+        return vv;
     }
 
     /**
@@ -48,6 +106,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bi-Dynamic Line Graph Viewer");
+        setAutoRequestFocus(false);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(800, 600));
         setName("Home Frame"); // NOI18N
@@ -115,8 +174,19 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private void importcvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importcvsActionPerformed
         final JFileChooser fc = new JFileChooser();
         fc.showOpenDialog(MainMenu);
-        File newFile = fc.getSelectedFile();
-        System.out.println(newFile.getAbsoluteFile());
+        
+        File fileToImport = fc.getSelectedFile();
+        this.vv = genrateVisualizationViewer(fileToImport);
+        if(graphJPane != null)
+            this.remove(graphJPane);
+        graphJPane = new ScrollPane();
+        graphJPane.add(vv);
+        graphJPane.setPreferredSize(new Dimension(2000, 2000));
+        this.getContentPane().add(graphJPane, BorderLayout.CENTER);
+        this.invalidate();
+        this.repaint();
+        this.pack();
+        System.out.println(fileToImport.getAbsoluteFile());
     }//GEN-LAST:event_importcvsActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
