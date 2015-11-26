@@ -97,6 +97,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
+        VisulizerPicker = new javax.swing.JComboBox<>();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         importcvs = new javax.swing.JMenuItem();
@@ -121,6 +122,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         refreshGraphButton.setText("Refresh");
 
+        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View" }));
+
         org.jdesktop.layout.GroupLayout OptionsPanelLayout = new org.jdesktop.layout.GroupLayout(OptionsPanel);
         OptionsPanel.setLayout(OptionsPanelLayout);
         OptionsPanelLayout.setHorizontalGroup(
@@ -128,12 +131,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             .add(OptionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(refreshGraphButton)
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(OptionsPanelLayout.createSequentialGroup()
+                .add(VisulizerPicker, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 199, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 0, Short.MAX_VALUE))
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
-                .add(121, 121, 121)
+                .add(40, 40, 40)
+                .add(VisulizerPicker, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(54, 54, 54)
                 .add(refreshGraphButton)
                 .addContainerGap(926, Short.MAX_VALUE))
         );
@@ -198,6 +206,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private javax.swing.JMenu FileMenu;
     private javax.swing.JMenuBar MainMenu;
     private javax.swing.JPanel OptionsPanel;
+    private javax.swing.JComboBox<String> VisulizerPicker;
     private javax.swing.JMenuItem exit;
     private javax.swing.JMenuItem export;
     private javax.swing.JMenuItem importcvs;
