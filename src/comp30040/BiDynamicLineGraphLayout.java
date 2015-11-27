@@ -56,6 +56,10 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, Strin
     public BiDynamicLineGraph getGraph(){
         return this.dglGraph;
     }
+    
+    public BiDynamicLineGraph getBiGraph(){
+        return this.dglGraph;
+    }
 
     @Override
     public void reset() {

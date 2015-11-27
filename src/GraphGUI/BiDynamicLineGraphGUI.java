@@ -12,9 +12,13 @@ import javax.swing.JFileChooser;
 import comp30040.GraphImporter;
 import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.DAGLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
@@ -28,7 +32,7 @@ import java.awt.Dimension;
 import java.awt.ScrollPane;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import javax.swing.SpringLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Transformer;
 /**
  *
@@ -39,6 +43,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private VisualizationViewer<String, String> vv = null;
     private ScrollPane graphJPane = null;
     private File currentCVSFile = null;
+    private BiDynamicLineGraph currentBidlg = null;
     int currentIndexOfSelectedView = 0;
     
     /**
@@ -61,6 +66,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private VisualizationViewer genrateVisualizationViewer(File fileToUse){
         GraphImporter gi = new GraphImporter(fileToUse);
         BiDynamicLineGraph g = new BiDynamicLineGraph(gi);
+        this.currentBidlg = g;
         this.layout = new BiDynamicLineGraphLayout<>(g);
         Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
             @Override
@@ -82,7 +88,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 //new EdgeShape.Line<String,String>());
         
         DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+        graphMouse.setMode(ModalGraphMouse.Mode.PICKING);
         ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.scaleToLayout(visualizationViewerScalingControl);
@@ -103,7 +109,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<String>();
+        VisulizerPicker = new javax.swing.JComboBox<>();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         importcvs = new javax.swing.JMenuItem();
@@ -128,7 +134,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         refreshGraphButton.setText("Refresh");
 
-        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View" }));
+        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View" }));
         VisulizerPicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VisulizerPickerActionPerformed(evt);
@@ -190,6 +196,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
     private void importcvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importcvsActionPerformed
         final JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILE","csv");
+        fc.setFileFilter(filter);
         fc.showOpenDialog(MainMenu);
         
         this.currentCVSFile = fc.getSelectedFile();
@@ -217,18 +225,34 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             currentIndexOfSelectedView = currentSelectedItem;
             switch(currentSelectedItem){
                 case 0:
-                    
+                    this.vv = genrateVisualizationViewer(currentCVSFile);
+                    if(graphJPane != null)
+                        this.remove(graphJPane);
+                    graphJPane = new ScrollPane();
+                    graphJPane.add(vv);
+                    graphJPane.setPreferredSize(new Dimension(2000, 2000));
+                    this.getContentPane().add(graphJPane, BorderLayout.CENTER);
                     break;
                 case 1:
                     break;
                 case 2:
-                    BiDynamicLineGraph g = this.layout.getGraph();
-                    Graph<String, String> gg = g.getOneModeActorGraph();
-                    this.layout = new SpringLayout2<String, String>(gg);
-                    VisualizationViewer vv = new VisualizationViewer<>(this.layout);
-                    this.add(vv, BorderLayout.CENTER);
+                    Graph<String, String> gg = this.currentBidlg.getOneModeActorGraph();
+                    this.layout = new KKLayout<>(gg);
+                    this.vv = new VisualizationViewer<>(this.layout);
+                    this.vv.setSize(new Dimension(2000, 2000));
+                    DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+                    graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+                    this.vv.setGraphMouse(graphMouse);
+                    this.remove(this.graphJPane);
+                    this.vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    this.graphJPane = new ScrollPane();
+                    this.graphJPane.add(this.vv);
+                    this.graphJPane.setPreferredSize(new Dimension(2000, 2000));
+                    this.add(graphJPane, BorderLayout.CENTER);
                     break;
             }
+            validate();
+            repaint();
         }
     }//GEN-LAST:event_VisulizerPickerActionPerformed
 
