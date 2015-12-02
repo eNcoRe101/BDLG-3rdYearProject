@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 
+import comp30040.Actor;
 import comp30040.GraphImporter;
+import comp30040.NetworkEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -94,5 +96,23 @@ public class GraphImporterTest {
         assertNotNull("Check that the GraphImporter Exists", this.imp);
         assertEquals("Checking number of Events are correct", 
                       (int)4, imp.getNumberOfEvents());
+    }
+    
+    @Test
+    public void testActorsAreCorrect(){
+        this.imp = new GraphImporter(this.cvsFile);
+        assertNotNull("Check that the GraphImporter Exists", this.imp);
+        Actor[] actors = imp.getActors();
+        for(int i = 0; i < 6; i++)
+            assertEquals("Checking actor N" + (i+1) + " exists", "N"+(i+1), actors[i].getLabel());
+    }
+    
+    @Test
+    public void testEventsAreCorrect(){
+        this.imp = new GraphImporter(this.cvsFile);
+        assertNotNull("Check that the GraphImporter Exists", this.imp);
+        NetworkEvent[] events = imp.getEvents();
+        for(int i = 0; i < 4; i++)
+            assertEquals("Checking actor E" + (i+1) + " exists", "E"+(i+1), events[i].getLabel());
     }
 }

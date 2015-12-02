@@ -67,20 +67,20 @@ public class GraphImporter {
         int numberOfEventsSeen = 0;
 
         for(String e : fileLineArray.get(0).split(",")){
-            //if(e.isEmpty()) continue;
+            if(e.isEmpty()) continue;
             numberOfEventsSeen++;
             tempArrayOfEvents.add(new NetworkEvent(numberOfEventsSeen, e));
         }
         
         for(int i = 1; i < fileLineArray.size(); i++){
             String[] lineAsArray = fileLineArray.get(i).split(",");
-            //for(String s : lineAsArray) System.out.println(s);
+
             Actor currentActor = new Actor(i, lineAsArray[0]);
             tempActors.add(currentActor);
             for(int j = 0; j < lineAsArray.length; j++)
             {
                 if(lineAsArray[j].equals("1"))
-                    tempArrayOfEvents.get(j).addActor(currentActor);
+                    tempArrayOfEvents.get(j-1).addActor(currentActor);
             }
         }
 
