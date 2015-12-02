@@ -93,6 +93,6 @@ public class GraphImporterTest {
         this.imp = new GraphImporter(this.cvsFile);
         assertNotNull("Check that the GraphImporter Exists", this.imp);
         assertEquals("Checking number of Events are correct", 
-                      (int)5, imp.getNumberOfEvents());
+                      (int)4, imp.getNumberOfEvents());
     }
 }
