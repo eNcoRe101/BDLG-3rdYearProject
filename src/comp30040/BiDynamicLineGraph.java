@@ -46,13 +46,36 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<String, String> {
         for(Actor a : imp.getActors())
         {
             newOneModeG.addVertex(a.getLabel());
-            for(NetworkEvent e : imp.getEvents()){
+            for(NetworkEvent e : imp.getEvents())
+            {
                 if(e.isActorAtEvent(a))
                 {
                     for(Actor acAtE : e.getActorsAtEvent()){
                         if(!a.equals(acAtE))
                             newOneModeG.addEdge(a.getLabel() + acAtE.getLabel(),
                                     a.getLabel(), acAtE.getLabel());
+                    }
+                }
+            }
+                
+        }
+        return newOneModeG;
+    }
+    
+    public Graph<String, String> getOneModeEventGraph(){
+        Graph<String, String> newOneModeG = new SparseGraph<>();
+        for(NetworkEvent e : imp.getEvents())
+        {
+            newOneModeG.addVertex(e.getLabel());
+            System.out.println(e);
+            for(Actor a : e.getActorsAtEvent())
+            {
+                for(NetworkEvent eOther : imp.getEvents()){
+                    if(!e.equals(eOther) && eOther.isActorAtEvent(a))
+                    {
+                        newOneModeG.addEdge(e.getLabel() + eOther.getLabel(),
+                                            e.getLabel(), eOther.getLabel());
+                        break;
                     }
                 }
             }

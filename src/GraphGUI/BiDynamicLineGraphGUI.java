@@ -77,18 +77,18 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         };
         VisualizationViewer vv = new VisualizationViewer<>(this.layout);
         Transformer<String,EdgeShape> newEdgeTypes;
-        newEdgeTypes = new Transformer<String, EdgeShape>(){
+        /*newEdgeTypes = new Transformer<String, EdgeShape>(){
             @Override
-            public EdgeShape transform(String i) {
+            public EdgeShape.Line<String, String> transform(String i) {
                 System.out.println(i);
-                return null;//new EdgeShape.Line<String,String>();
+                return new EdgeShape.Line<String,String>();
             }
-        };
-        //vv.getRenderContext().setEdgeShapeTransformer(newEdgeTypes);
-                //new EdgeShape.Line<String,String>());
+        };*/
+        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<String,String>());
+                
         
         DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-        graphMouse.setMode(ModalGraphMouse.Mode.PICKING);
+        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.scaleToLayout(visualizationViewerScalingControl);
@@ -222,6 +222,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         int currentSelectedItem = this.VisulizerPicker.getSelectedIndex();
         if(currentIndexOfSelectedView != currentSelectedItem)
         {
+            DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+            Graph<String, String> gg;
             currentIndexOfSelectedView = currentSelectedItem;
             switch(currentSelectedItem){
                 case 0:
@@ -236,11 +238,24 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 case 1:
                     break;
                 case 2:
-                    Graph<String, String> gg = this.currentBidlg.getOneModeActorGraph();
+                    gg = this.currentBidlg.getOneModeActorGraph();
                     this.layout = new KKLayout<>(gg);
                     this.vv = new VisualizationViewer<>(this.layout);
                     this.vv.setSize(new Dimension(2000, 2000));
-                    DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+                    graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+                    this.vv.setGraphMouse(graphMouse);
+                    this.remove(this.graphJPane);
+                    this.vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    this.graphJPane = new ScrollPane();
+                    this.graphJPane.add(this.vv);
+                    this.graphJPane.setPreferredSize(new Dimension(2000, 2000));
+                    this.add(graphJPane, BorderLayout.CENTER);
+                    break;
+                case 3:
+                    gg = this.currentBidlg.getOneModeEventGraph();
+                    this.layout = new KKLayout<>(gg);
+                    this.vv = new VisualizationViewer<>(this.layout);
+                    this.vv.setSize(new Dimension(2000, 2000));
                     graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
                     this.vv.setGraphMouse(graphMouse);
                     this.remove(this.graphJPane);

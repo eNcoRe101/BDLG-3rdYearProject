@@ -34,7 +34,7 @@ public class NetworkEvent {
     public boolean isActorAtEvent(Actor a){
         return this.actorsAtEvent.contains(a);
     }
-
+    
     public int getNumberOfActorsAtEvent(){
         return actorsAtEvent.size();
     }
