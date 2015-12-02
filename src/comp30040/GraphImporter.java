@@ -102,4 +102,8 @@ public class GraphImporter {
     public NetworkEvent[] getEvents(){
         return events;
     }
+    
+    public int getNumberOfEvents(){
+        return events.length;
+    }
 }
