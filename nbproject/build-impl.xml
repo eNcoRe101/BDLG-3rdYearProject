@@ -1416,4 +1416,16 @@ is divided into following sections:
             </propertyset>
         </ant>
     </target>
+    <target name="junit" depends="compile-test">
+        <junit printsummary="yes">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="application"/>
+            </classpath>
+            
+            <batchtest fork="yes">
+                <fileset dir="${test.src.dir}" includes="*Test.java"/>
+            </batchtest>
+        </junit>
+    </target>
 </project>
