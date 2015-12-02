@@ -2,6 +2,8 @@ package comp30040;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +17,8 @@ public class GraphImporter {
     private NetworkEvent[] events = null;
 
     public GraphImporter(String fileName) throws FileNotFoundException {
-        theFile = new File(fileName);
+        Path pathToFile = Paths.get(fileName);
+        theFile = new File(pathToFile.toString());
         fileLineArray = readFile();
         getEventsFromFile();
         //for(NetworkEvent e : events)
