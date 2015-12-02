@@ -21,8 +21,6 @@ public class GraphImporter {
         theFile = new File(pathToFile.toString());
         fileLineArray = readFile();
         getEventsFromFile();
-        //for(NetworkEvent e : events)
-        //    System.out.println(e);
     }
     
     public GraphImporter(File newFile){
