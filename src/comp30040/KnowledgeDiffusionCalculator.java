@@ -43,8 +43,10 @@ public class KnowledgeDiffusionCalculator {
         return 0.0;
     }
     
-    private void BiDynamicLineGraphBDS(){
+    public void biDynamicLineGraphBDS(){
          Collection<VertexBDLG> vertexs = graph.getVertices();
+         for(VertexBDLG v : vertexs)
+             System.out.println(v);
     }
     
     

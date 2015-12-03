@@ -8,6 +8,7 @@ package comp30040;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import java.util.ArrayList;
 
 /**
  *
@@ -60,7 +61,7 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<VertexBDLG, String> {
         }
         return newOneModeG;
     }
-    
+     
     public Graph<String, String> getOneModeEventGraph(){
         Graph<String, String> newOneModeG = new SparseGraph<>();
         for(NetworkEvent e : imp.getEvents())
@@ -82,30 +83,27 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<VertexBDLG, String> {
     }
     
     private void genrateGraphFromImp(){
-        NetworkEvent[] theEvents = imp.getEvents();
-        for(int i = 0; i < theEvents.length; i++){
-            NetworkEvent e = theEvents[i];
+        for(NetworkEvent e : imp.getEvents()){
             for(Actor a : e.getActorsAtEvent())
             {
-                VertexBDLG v = new VertexBDLG(a, e);
-                this.addVertex(v);
-                
-                for(Actor aa : e.getActorsAtEvent())
-                {
-                    if(!a.equals(aa)){
-                        this.addEdge(a + e.getLabel() + aa + e.getLabel(),
-                                     v,
-                                    new VertexBDLG(aa, e),
-                                    EdgeType.UNDIRECTED);
-                    }
+                this.addVertex(new VertexBDLG(a, e));
+            }
+            
+        }
+        for(VertexBDLG v : this.getVertices())
+        {
+            for(VertexBDLG vv : this.getVertices())
+            {
+                if(v.getEvent().equals(vv.getEvent())){
+                    this.addEdge(v.toString() + vv.toString(),
+                                 v, vv, EdgeType.UNDIRECTED);
                 }
-                for(int j = i+1; j < theEvents.length; j++)
-                    if(!e.equals(theEvents[j]) 
-                        && theEvents[j].isActorAtEvent(a)){
-                            this.addEdge(a + e.getLabel() + theEvents[j].getLabel(),
-                                    v, new VertexBDLG(a, theEvents[j]), EdgeType.DIRECTED);
-                            break;
-                    }
+                else if(v.getActor().equals(vv.getActor())
+                        && v.getEvent().getEventId() < vv.getEvent().getEventId())
+                {
+                    this.addEdge(v.toString() + vv.toString(),
+                                 v, vv, EdgeType.DIRECTED);
+                }
             }
         }
     }

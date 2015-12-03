@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
+import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
-import java.io.File;
+import comp30040.KnowledgeDiffusionCalculator;
 import java.io.FileNotFoundException;
-import java.net.URI;
 import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,9 +23,11 @@ import static org.junit.Assert.*;
 public class KnowledgeDiffusionCalculatorTest {
     private GraphImporter imp;
     private final String relativePathToTestData = "./data/sample-2mode.csv";
+    private BiDynamicLineGraph graph;
     
     public KnowledgeDiffusionCalculatorTest() throws FileNotFoundException{
         this.imp = new GraphImporter(Paths.get(this.relativePathToTestData).toString());
+        this.graph = new BiDynamicLineGraph(imp);
     }
     
     @BeforeClass
@@ -46,6 +48,8 @@ public class KnowledgeDiffusionCalculatorTest {
 
     @Test
     public void getKnowlageDiffusionForActor1(){
+        KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);
+        k.biDynamicLineGraphBDS();
         assertTrue(true);
     }
 }

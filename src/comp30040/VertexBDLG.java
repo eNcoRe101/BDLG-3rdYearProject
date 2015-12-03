@@ -5,6 +5,8 @@
  */
 package comp30040;
 
+import java.util.Objects;
+
 /**
  *
  * @author Richard de Mellow
@@ -29,5 +31,31 @@ public class VertexBDLG {
     @Override
     public String toString(){
         return a.getLabel() + e.getLabel();
+    }
+    
+    @Override
+    public int hashCode(){
+        return a.hashCode() + e.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final VertexBDLG other = (VertexBDLG) obj;
+        if (!Objects.equals(this.a, other.a)) {
+            return false;
+        }
+        if (!Objects.equals(this.e, other.e)) {
+            return false;
+        }
+        return true;
     }
 }

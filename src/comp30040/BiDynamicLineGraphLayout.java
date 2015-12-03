@@ -44,7 +44,7 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<VertexBDLG, S
         Point2D pp = new Point2D.Double(p.getX(), p.getY());
         for(NetworkEvent e : dglGraph.getEvents()){
             for(Actor a: e.getActorsAtEvent()){
-                pp.setLocation(p.getX() + (eventSpacingX*Integer.parseInt(a.getLabel().substring(1))),
+                pp.setLocation(p.getX() + (eventSpacingX*a.getId()),
                               p.getY() );
                 this.setLocation(new VertexBDLG(a, e), pp);
             }

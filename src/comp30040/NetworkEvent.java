@@ -7,8 +7,8 @@ import java.util.Arrays;
  * Created by rich on 27/10/2015.
  */
 public class NetworkEvent {
-    private int eventId;
-    private String eventLabel;
+    private final int eventId;
+    private final String eventLabel;
     private ArrayList<Actor> actorsAtEvent;
 
     public NetworkEvent(Actor[] theActors, int eventId, String eventLabel){
@@ -42,7 +42,12 @@ public class NetworkEvent {
     public String getLabel(){
         return eventLabel;
     }
-
+    
+    public int getEventId(){
+        return this.eventId;
+    }
+    
+    @Override
     public String toString(){
         return eventLabel + "\n" + actorsAtEvent;
     }
