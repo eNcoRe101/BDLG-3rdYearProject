@@ -5,6 +5,8 @@
  */
 package comp30040;
 
+import java.util.Collection;
+
 /**
  *
  * @author rich
@@ -17,6 +19,7 @@ public class KnowledgeDiffusionCalculator {
     
     public KnowledgeDiffusionCalculator(BiDynamicLineGraph graph){
         this.graph = graph;
+       this.finalKnowlageTable = new double[this.graph.getNumberOfActors()][this.graph.getNumberOfActors()];
     }
     
     public void updateAlphaGain(double alpha){
@@ -31,9 +34,17 @@ public class KnowledgeDiffusionCalculator {
         return this.finalKnowlageTable;
     }
     
+    public double getKnowlageFromActors(Actor aOne, Actor aTwo){
+        return this.finalKnowlageTable[aOne.getId()][aTwo.getId()];
+    }
+    
     private double findKnowlageDifusionBetweenVertexs(){
         //TODO: fill out stub, add path finding and prams
         return 0.0;
+    }
+    
+    private void BiDynamicLineGraphBDS(){
+         Collection<VertexBDLG> vertexs = graph.getVertices();
     }
     
     

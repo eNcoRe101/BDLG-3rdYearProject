@@ -12,7 +12,7 @@ import java.awt.geom.Point2D;
  * @param <V>
  * @param <E>
  */
-public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, String> {
+public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<VertexBDLG, String> {
     private BiDynamicLineGraph dglGraph;
     
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V, E> g){
@@ -25,12 +25,12 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, Strin
         dglGraph = g;
     }
 
-    public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<String,Point2D> initializer){
+    public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<VertexBDLG,Point2D> initializer){
         super(g, initializer);
         dglGraph = g;
     }
 
-    public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<String,Point2D> initializer,
+    public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<VertexBDLG,Point2D> initializer,
     Dimension size) {
         super(g, initializer, size);
         dglGraph = g;
@@ -46,7 +46,7 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<String, Strin
             for(Actor a: e.getActorsAtEvent()){
                 pp.setLocation(p.getX() + (eventSpacingX*Integer.parseInt(a.getLabel().substring(1))),
                               p.getY() );
-                this.setLocation(a+e.getLabel(), pp);
+                this.setLocation(new VertexBDLG(a, e), pp);
             }
             p.setLocation(p.getX(), p.getY() + eventSpacingY);
         }

@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 import comp30040.GraphImporter;
 import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
+import comp30040.VertexBDLG;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -37,8 +38,10 @@ import org.apache.commons.collections15.Transformer;
  * @author Richard de Mellow
  */
 public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
-    private Layout<String, String> layout = null;
-    private VisualizationViewer<String, String> vv = null;
+    private Layout<VertexBDLG, String> layout = null;
+    private Layout<String, String> layoutOneMode = null;
+    private VisualizationViewer<VertexBDLG, String> vv = null;
+    private VisualizationViewer<String, String> vvOneMode = null;
     private ScrollPane graphJPane = null;
     private File currentCVSFile = null;
     private BiDynamicLineGraph currentBidlg = null;
@@ -69,9 +72,9 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         BiDynamicLineGraph g = new BiDynamicLineGraph(gi);
         this.currentBidlg = g;
         this.layout = new BiDynamicLineGraphLayout<>(g);
-        Transformer<String,Shape> newVertexSize = new Transformer<String, Shape>(){
+        Transformer<VertexBDLG,Shape> newVertexSize = new Transformer<VertexBDLG, Shape>(){
             @Override
-            public Shape transform(String s){
+            public Shape transform(VertexBDLG v){
                 Ellipse2D circle;
                 return circle = new Ellipse2D.Double(-3, -3, 6, 6);
             }
@@ -249,29 +252,29 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     break;
                 case 2:
                     gg = this.currentBidlg.getOneModeActorGraph();
-                    this.layout = new KKLayout<>(gg);
-                    this.vv = new VisualizationViewer<>(this.layout);
-                    this.vv.setSize(new Dimension(2000, 2000));
+                    this.layoutOneMode = new KKLayout<>(gg);
+                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
+                    this.vvOneMode.setSize(new Dimension(2000, 2000));
                     graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-                    this.vv.setGraphMouse(graphMouse);
+                    this.vvOneMode.setGraphMouse(graphMouse);
                     this.remove(this.graphJPane);
-                    this.vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
                     this.graphJPane = new ScrollPane();
-                    this.graphJPane.add(this.vv);
+                    this.graphJPane.add(this.vvOneMode);
                     this.graphJPane.setPreferredSize(new Dimension(2000, 2000));
                     this.add(graphJPane, BorderLayout.CENTER);
                     break;
                 case 3:
                     gg = this.currentBidlg.getOneModeEventGraph();
-                    this.layout = new KKLayout<>(gg);
-                    this.vv = new VisualizationViewer<>(this.layout);
-                    this.vv.setSize(new Dimension(2000, 2000));
+                    this.layoutOneMode = new KKLayout<>(gg);
+                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
+                    this.vvOneMode.setSize(new Dimension(2000, 2000));
                     graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-                    this.vv.setGraphMouse(graphMouse);
+                    this.vvOneMode.setGraphMouse(graphMouse);
                     this.remove(this.graphJPane);
-                    this.vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
                     this.graphJPane = new ScrollPane();
-                    this.graphJPane.add(this.vv);
+                    this.graphJPane.add(this.vvOneMode);
                     this.graphJPane.setPreferredSize(new Dimension(2000, 2000));
                     this.add(graphJPane, BorderLayout.CENTER);
                     break;
