@@ -27,6 +27,9 @@ import java.awt.Dimension;
 import java.awt.ScrollPane;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Transformer;
 /**
@@ -58,7 +61,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         });
     }
     
-    private VisualizationViewer genrateVisualizationViewer(File fileToUse){
+    private VisualizationViewer genrateVisualizationViewer(File fileToUse) throws FileNotFoundException{
+        if(!fileToUse.exists())
+            throw new FileNotFoundException();
+        
         GraphImporter gi = new GraphImporter(fileToUse);
         BiDynamicLineGraph g = new BiDynamicLineGraph(gi);
         this.currentBidlg = g;
@@ -196,17 +202,22 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         fc.showOpenDialog(MainMenu);
         
         this.currentCVSFile = fc.getSelectedFile();
-        this.vv = genrateVisualizationViewer(currentCVSFile);
-        if(graphJPane != null)
+        try {
+            this.vv = genrateVisualizationViewer(currentCVSFile);
+            if(graphJPane != null)
             this.remove(graphJPane);
-        graphJPane = new ScrollPane();
-        graphJPane.add(vv);
-        graphJPane.setPreferredSize(new Dimension(2000, 2000));
-        this.getContentPane().add(graphJPane, BorderLayout.CENTER);
-        this.invalidate();
-        this.repaint();
-        this.pack();
-        System.out.println(currentCVSFile.getAbsoluteFile());
+            graphJPane = new ScrollPane();
+            graphJPane.add(vv);
+            graphJPane.setPreferredSize(new Dimension(2000, 2000));
+            this.getContentPane().add(graphJPane, BorderLayout.CENTER);
+            this.invalidate();
+            this.repaint();
+            this.pack();
+            System.out.println(currentCVSFile.getAbsoluteFile());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_importcvsActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
@@ -222,13 +233,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             currentIndexOfSelectedView = currentSelectedItem;
             switch(currentSelectedItem){
                 case 0:
-                    this.vv = genrateVisualizationViewer(currentCVSFile);
-                    if(graphJPane != null)
+                    try {
+                        this.vv = genrateVisualizationViewer(currentCVSFile);
+                        if(graphJPane != null)
                         this.remove(graphJPane);
-                    graphJPane = new ScrollPane();
-                    graphJPane.add(vv);
-                    graphJPane.setPreferredSize(new Dimension(2000, 2000));
-                    this.getContentPane().add(graphJPane, BorderLayout.CENTER);
+                        graphJPane = new ScrollPane();
+                        graphJPane.add(vv);
+                        graphJPane.setPreferredSize(new Dimension(2000, 2000));
+                        this.getContentPane().add(graphJPane, BorderLayout.CENTER);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 case 1:
                     break;
