@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+import comp30040.GraphImporter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URI;
+import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,8 +21,11 @@ import static org.junit.Assert.*;
  * @author rich
  */
 public class KnowledgeDiffusionCalculatorTest {
+    private GraphImporter imp;
+    private final String relativePathToTestData = "./data/sample-2mode.csv";
     
-    public KnowledgeDiffusionCalculatorTest() {
+    public KnowledgeDiffusionCalculatorTest() throws FileNotFoundException{
+        this.imp = new GraphImporter(Paths.get(this.relativePathToTestData).toString());
     }
     
     @BeforeClass
@@ -36,9 +44,8 @@ public class KnowledgeDiffusionCalculatorTest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    @Test
+    public void getKnowlageDiffusionForActor1(){
+        assertTrue(true);
+    }
 }

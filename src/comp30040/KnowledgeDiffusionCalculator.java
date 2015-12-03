@@ -10,7 +10,8 @@ package comp30040;
  * @author rich
  */
 public class KnowledgeDiffusionCalculator {
-    BiDynamicLineGraph graph;
+    private BiDynamicLineGraph graph;
+    private double[][] finalKnowlageTable = null;
     private double alphaEventKnowlageGain = 1;
     private double betaActorKnowlageDiffusionCoeffient = 0.5;
     
@@ -26,6 +27,14 @@ public class KnowledgeDiffusionCalculator {
         this.betaActorKnowlageDiffusionCoeffient = beta;
     }
     
+    public double[][] getKnowlageTable(){
+        return this.finalKnowlageTable;
+    }
+    
+    private double findKnowlageDifusionBetweenVertexs(){
+        //TODO: fill out stub, add path finding and prams
+        return 0.0;
+    }
     
     
 }
