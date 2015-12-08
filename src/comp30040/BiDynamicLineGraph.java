@@ -41,6 +41,10 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<VertexBDLG, String> {
         return this.imp.getEvents();
     }
     
+    public NetworkEvent[] getActorsEvents(Actor a){
+        return this.imp.getActorsEvents(a);
+    }
+    
     public Graph<String, String> getOneModeActorGraph(){
         Graph<String, String> newOneModeG = new SparseGraph<>();
         for(Actor a : imp.getActors())

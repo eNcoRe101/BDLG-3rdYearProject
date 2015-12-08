@@ -21,7 +21,7 @@ public class COMP30040 {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
+            
         }
         BiDynamicLineGraphGUI mainWindow  = new BiDynamicLineGraphGUI();
         mainWindow.setVisible(true);

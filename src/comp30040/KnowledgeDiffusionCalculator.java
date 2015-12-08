@@ -5,6 +5,7 @@
  */
 package comp30040;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -38,7 +39,7 @@ public class KnowledgeDiffusionCalculator {
         return this.finalKnowlageTable[aOne.getId()][aTwo.getId()];
     }
     
-    private double findKnowlageDifusionBetweenVertexs(){
+    private double findKnowlageDifusionActorToOther(Actor i, Actor j){
         //TODO: fill out stub, add path finding and prams
         return 0.0;
     }
@@ -49,5 +50,7 @@ public class KnowledgeDiffusionCalculator {
              System.out.println(v);
     }
     
-    
+    private ArrayList<ArrayList<VertexBDLG>> getShortestPathsFromVertexItoJ(VertexBDLG vI, VertexBDLG vJ){
+        return null;
+    }
 }

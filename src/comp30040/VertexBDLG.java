@@ -53,9 +53,6 @@ public class VertexBDLG {
         if (!Objects.equals(this.a, other.a)) {
             return false;
         }
-        if (!Objects.equals(this.e, other.e)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.e, other.e);
     }
 }

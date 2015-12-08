@@ -97,6 +97,15 @@ public class GraphImporter {
         return actors.length;
     }
     
+    public NetworkEvent[] getActorsEvents(Actor a){
+        ArrayList<NetworkEvent> aAttendsEvents = new ArrayList<>();
+        for(NetworkEvent e : this.events){
+            if(e.isActorAtEvent(a))
+                aAttendsEvents.add(e);
+        }
+        return aAttendsEvents.toArray(new NetworkEvent[aAttendsEvents.size()]);
+    }
+    
     public NetworkEvent[] getEvents(){
         return events;
     }
