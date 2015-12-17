@@ -20,12 +20,17 @@ public class PathFinder {
     public PathFinder(BiDynamicLineGraph g){
         this.graph = g;
     }
+    public void printPaths(){
+        for(String p : paths){
+            System.out.println(p);
+        }
+    }
     
-    public ArrayList<ArrayList<VertexBDLG>> getPathsFrom(VertexBDLG i, Actor j){
-         System.out.print("(");
+    private ArrayList<String> paths = new ArrayList<>();
+    public ArrayList<String> getPathsFrom(VertexBDLG i, Actor j, String currentPathString){
         Collection<VertexBDLG> currentVUndirectedEdges = graph.getSuccessors(i);
         if(currentVUndirectedEdges.size() < 1) return null;
-        ArrayList<ArrayList<VertexBDLG>> paths = new ArrayList<>();
+        
         //1.get all undirected edges
         //2.pick any vertical
         //3.if veriacl goes to actor go to 6
@@ -41,21 +46,20 @@ public class PathFinder {
                 //ArrayList<VertexBDLG> tmpArray = new ArrayList<>();
                 //tmpArray.add(v);
                 //paths.add(tmpArray);
-                    System.out.print(i + "-" + v + "|");
+                    currentPathString += i + "-" + v;
+                    paths.add(currentPathString);
                 }
                 else
                 {
                     for(Object vv: graph.getSuccessors(v)){
                         if(!v.equals(vv) && graph.getEdgeType(graph.findEdge(v, vv)) == EdgeType.DIRECTED){
-                            System.out.print("("+i + "-"+v+"->");
-                            getPathsFrom((VertexBDLG) vv, j);
-                            System.out.print(")");
+                            String s = i + "-" + v + "->";
+                            getPathsFrom((VertexBDLG) vv, j, currentPathString + s);
                         }
                     }
                 }
             }   
         }
-        System.out.print(")");
         return paths;
     }
 }
