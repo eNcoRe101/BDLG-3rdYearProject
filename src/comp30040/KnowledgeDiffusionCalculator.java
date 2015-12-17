@@ -5,6 +5,7 @@
  */
 package comp30040;
 
+import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -46,11 +47,16 @@ public class KnowledgeDiffusionCalculator {
     
     public void biDynamicLineGraphBDS(){
          Collection<VertexBDLG> vertexs = graph.getVertices();
+         
          for(VertexBDLG v : vertexs)
-             System.out.println(v);
+         {
+            Collection<String> es = graph.getEdges(EdgeType.DIRECTED);
+            System.out.println(v);
+         }
     }
     
     private ArrayList<ArrayList<VertexBDLG>> getShortestPathsFromVertexItoJ(VertexBDLG vI, VertexBDLG vJ){
+        
         return null;
     }
 }
