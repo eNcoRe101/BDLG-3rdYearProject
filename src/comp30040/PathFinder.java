@@ -38,22 +38,24 @@ public class PathFinder {
         //5.go to 2
         //6.end
         for(VertexBDLG v: currentVUndirectedEdges){
-            if(!i.equals(v)
-               && graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED)
+            if(graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED)
             {
                 if(j.equals(v.getActor()))
                 {
                 //ArrayList<VertexBDLG> tmpArray = new ArrayList<>();
                 //tmpArray.add(v);
                 //paths.add(tmpArray);
-                    currentPathString += i + "-" + v;
-                    paths.add(currentPathString);
+                    paths.add(currentPathString + i + "-" + v);
                 }
                 else
                 {
                     for(Object vv: graph.getSuccessors(v)){
-                        if(!v.equals(vv) && graph.getEdgeType(graph.findEdge(v, vv)) == EdgeType.DIRECTED){
-                            String s = i + "-" + v + "->";
+                        if(graph.getEdgeType(graph.findEdge(v, vv)) == EdgeType.DIRECTED){
+                            String s = ""; 
+                            if(!v.equals(i))
+                                s = i + "-" + v + "->";
+                            else
+                                s = v + "->";
                             getPathsFrom((VertexBDLG) vv, j, currentPathString + s);
                         }
                     }

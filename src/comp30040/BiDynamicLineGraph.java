@@ -8,7 +8,7 @@ package comp30040;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -16,17 +16,39 @@ import java.util.ArrayList;
  * @param <V>
  * @param <E>
  */
-public class BiDynamicLineGraph<V, E> extends SparseGraph<VertexBDLG, String> {
+public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     private GraphImporter imp = null;
     
     public BiDynamicLineGraph(){
-        super();
+        vertex_maps = new LinkedHashMap<>();
+        directed_edges = new LinkedHashMap<>();
+        undirected_edges = new LinkedHashMap<>();
     }
     
     public BiDynamicLineGraph(GraphImporter imp){
-        super();
+        vertex_maps = new LinkedHashMap<>();
+        directed_edges = new LinkedHashMap<>();
+        undirected_edges = new LinkedHashMap<>();
         this.imp = imp;
         genrateGraphFromImp();
+    }
+    
+    public V getVertex(Actor a, NetworkEvent e){
+        if (this.containsVertex((V) new VertexBDLG(a, e)))
+            return (V) new VertexBDLG(a, e);
+        return null;
+    }
+    
+    public int getInDegree(VertexBDLG v){
+        if (!containsVertex((V)v))
+            throw new IllegalArgumentException(v + " is not a vertex in this graph");
+        return vertex_maps.get(v)[INCOMING].keySet().size();
+    }
+    
+    public int getOutDegree(VertexBDLG v){
+        if (!containsVertex((V)v))
+            throw new IllegalArgumentException(v + " is not a vertex in this graph");
+        return vertex_maps.get(v)[OUTGOING].keySet().size();
     }
     
     public int getNumberOfActors(){
@@ -90,22 +112,24 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<VertexBDLG, String> {
         for(NetworkEvent e : imp.getEvents()){
             for(Actor a : e.getActorsAtEvent())
             {
-                this.addVertex(new VertexBDLG(a, e));
+                this.addVertex((V)new VertexBDLG(a, e));
             }
             
         }
-        for(VertexBDLG v : this.getVertices())
+        for(V v : this.getVertices())
         {
-            for(VertexBDLG vv : this.getVertices())
+            for(V vv : this.getVertices())
             {
-                if(v.getEvent().equals(vv.getEvent())){
-                    this.addEdge(v.toString() + vv.toString(),
+                if(((VertexBDLG) v).getEvent().equals(((VertexBDLG) vv).getEvent())){
+                    this.addEdge((E)(v.toString() + vv.toString()),
                                  v, vv, EdgeType.UNDIRECTED);
                 }
-                else if(v.getActor().equals(vv.getActor())
-                        && v.getEvent().getEventId() < vv.getEvent().getEventId())
+                else if( ((VertexBDLG) v).getActor().equals(((VertexBDLG) vv).getActor())
+                        && ((VertexBDLG) v).getEvent().getEventId() < ((VertexBDLG) vv).getEvent().getEventId()
+                        && this.getInDegree((VertexBDLG) v) <= 1
+                        && this.getOutDegree((VertexBDLG) v) < 1)
                 {
-                    this.addEdge(v.toString() + vv.toString(),
+                    this.addEdge((E)(v.toString() + vv.toString()),
                                  v, vv, EdgeType.DIRECTED);
                 }
             }

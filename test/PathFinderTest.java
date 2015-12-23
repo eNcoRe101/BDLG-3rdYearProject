@@ -11,7 +11,6 @@ import comp30040.VertexBDLG;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -58,7 +57,6 @@ public class PathFinderTest {
             if(((VertexBDLG) v).getActor().equals(imp.getActors()[1])
                 && (((VertexBDLG) v).getEvent().equals(imp.getEvents()[1]))){
                 p.getPathsFrom((VertexBDLG)v, imp.getActors()[0],"");
-                break;
             }
         }
         p.printPaths();

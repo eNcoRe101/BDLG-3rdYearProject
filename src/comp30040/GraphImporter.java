@@ -113,4 +113,11 @@ public class GraphImporter {
     public int getNumberOfEvents(){
         return events.length;
     }
+    
+    public NetworkEvent getNextEvent(Actor a, NetworkEvent e){
+        for(int i = e.getEventId()-1; i < this.events.length; i++)    
+            if(this.events[i].isActorAtEvent(a))
+                return this.events[i];
+        return null;
+    }
 }
