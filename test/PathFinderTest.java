@@ -57,6 +57,7 @@ public class PathFinderTest {
             if(((VertexBDLG) v).getActor().equals(imp.getActors()[1])
                 && (((VertexBDLG) v).getEvent().equals(imp.getEvents()[1]))){
                 p.getPathsFrom((VertexBDLG)v, imp.getActors()[0],"");
+                break;
             }
         }
         p.printPaths();

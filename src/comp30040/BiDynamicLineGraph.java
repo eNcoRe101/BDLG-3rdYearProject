@@ -8,7 +8,13 @@ package comp30040;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  *
@@ -106,6 +112,35 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
                 
         }
         return newOneModeG;
+    }
+    
+    @Override
+    public boolean addVertex(V v)
+    {
+        if(this.containsVertex(v) || v == null)
+            return false;
+        this.vertex_maps.put(v, new LinkedHashMap[]{new LinkedHashMap<>(), 
+                                                    new LinkedHashMap<>(),
+                                                    new LinkedHashMap<>()});
+        return true;
+    }
+    
+    public Collection<V> getSuccessors(V v, EdgeType ed)
+    {
+        if(!this.containsVertex(v))
+            return null;
+        Collection<V> allSuccessors  = new ArrayList<>();
+        if(ed == null || ed == EdgeType.DIRECTED)
+            allSuccessors.addAll(this.vertex_maps.get(v)[OUTGOING].keySet());
+        if(ed == null || ed == EdgeType.UNDIRECTED)
+            allSuccessors.addAll(this.vertex_maps.get(v)[INCIDENT].keySet());
+        return Collections.unmodifiableCollection(allSuccessors);
+    }
+    
+    @Override
+    public Collection<V> getSuccessors(V v)
+    {
+        return this.getSuccessors(v, null);
     }
     
     private void genrateGraphFromImp(){
