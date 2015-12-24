@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  */
 public class PathFinderTest {
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/sample-2mode.csv";
+    private final String relativePathToTestData = "./data/mafia-2mode.csv";
     private BiDynamicLineGraph graph;
     
     public PathFinderTest() throws FileNotFoundException{
@@ -54,9 +54,9 @@ public class PathFinderTest {
         PathFinder p = new PathFinder(graph);
         for(Object v : graph.getVertices())
         {
-            if(((VertexBDLG) v).getActor().equals(imp.getActors()[1])
-                && (((VertexBDLG) v).getEvent().equals(imp.getEvents()[1]))){
-                p.getPathsFrom((VertexBDLG)v, imp.getActors()[0],"");
+            if(((VertexBDLG) v).getActor().equals(imp.getActors()[24])
+                && (((VertexBDLG) v).getEvent().equals(imp.getEvents()[28]))){
+                p.getPathsFrom((VertexBDLG)v, imp.getActors()[1],"");
                 break;
             }
         }

@@ -13,7 +13,10 @@ import comp30040.GraphImporter;
 import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
 import comp30040.VertexBDLG;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -95,9 +98,9 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-        vv.scaleToLayout(visualizationViewerScalingControl);
+        //vv.scaleToLayout(visualizationViewerScalingControl);
         vv.setGraphMouse(graphMouse);
-        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
         vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
         return vv;
     }
@@ -200,7 +203,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
     private void importcvsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importcvsActionPerformed
         final JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILE","csv");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(".csv","csv");
         fc.setFileFilter(filter);
         fc.showOpenDialog(MainMenu);
         
@@ -244,6 +247,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                         graphJPane.add(vv);
                         graphJPane.setPreferredSize(new Dimension(2000, 2000));
                         this.getContentPane().add(graphJPane, BorderLayout.CENTER);
+                        this.layout.setSize(this.getSize());
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -252,7 +256,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     break;
                 case 2:
                     gg = this.currentBidlg.getOneModeActorGraph();
-                    this.layoutOneMode = new KKLayout<>(gg);
+                    this.layoutOneMode = new CircleLayout<>(gg);
                     this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
                     this.vvOneMode.setSize(new Dimension(2000, 2000));
                     graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
