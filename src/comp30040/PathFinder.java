@@ -21,15 +21,30 @@ public class PathFinder {
         this.graph = g;
     }
     public void printPaths(){
-        for(String p : paths){
-            System.out.println(p);
+        for(ArrayList<PathPair> p : paths){
+            for(PathPair pp : p){
+                System.out.print(pp.v.toString());
+                if(pp.et == null)
+                {
+                    continue;
+                }
+                switch (pp.et) {
+                    case DIRECTED:
+                        System.out.print("->");
+                        break;
+                    case UNDIRECTED:
+                        System.out.print("-");
+                        break;
+                }
+            }
+            System.out.println();
         }
     }
     
-    private ArrayList<String> paths = new ArrayList<>();
-    public ArrayList<String> getPathsFrom(VertexBDLG i, Actor j, String currentPathString){
+    private ArrayList< ArrayList<PathPair>> paths = new ArrayList<>();
+    public void getPathsFrom(VertexBDLG i, Actor j, ArrayList<PathPair> currentPath){
         Collection<VertexBDLG> currentVUndirectedEdges = graph.getSuccessors(i);
-        if(currentVUndirectedEdges.size() < 1) return null;
+        if(currentVUndirectedEdges.size() < 1) return;
         
         //1.get all undirected edges
         //2.pick any vertical
@@ -42,26 +57,29 @@ public class PathFinder {
             {
                 if(j.equals(v.getActor()))
                 {
-                //ArrayList<VertexBDLG> tmpArray = new ArrayList<>();
-                //tmpArray.add(v);
-                //paths.add(tmpArray);
-                    paths.add(currentPathString + i + "-" + v);
+                    ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
+                    tmp.add(new PathPair(i, EdgeType.UNDIRECTED));
+                    tmp.add(new PathPair(v, null));
+                    paths.add(tmp);
                 }
                 else
                 {
                     for(Object vv: graph.getSuccessors(v)){
                         if(graph.getEdgeType(graph.findEdge(v, vv)) == EdgeType.DIRECTED){
-                            String s = ""; 
-                            if(!v.equals(i))
-                                s = i + "-" + v + "->";
+                            ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
+                            if(!v.equals(i)){
+                                tmp.add(new PathPair(i, EdgeType.UNDIRECTED));
+                                tmp.add(new PathPair(v, EdgeType.DIRECTED));
+                            }
                             else
-                                s = v + "->";
-                            getPathsFrom((VertexBDLG) vv, j, currentPathString + s);
+                            {
+                                tmp.add(new PathPair(v, EdgeType.DIRECTED));  
+                            }
+                            getPathsFrom((VertexBDLG) vv, j, tmp);
                         }
                     }
                 }
             }   
         }
-        return paths;
     }
 }

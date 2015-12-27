@@ -143,6 +143,12 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         return this.getSuccessors(v, null);
     }
     
+    public EdgeType getEdgeType(V vOne, V vTwo){
+        if(this.vertex_maps.get(vOne)[INCIDENT].containsKey(vTwo))
+            return EdgeType.UNDIRECTED;
+        return EdgeType.DIRECTED;
+    }
+    
     private void genrateGraphFromImp(){
         for(NetworkEvent e : imp.getEvents()){
             for(Actor a : e.getActorsAtEvent())
