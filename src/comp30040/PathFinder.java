@@ -9,6 +9,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -17,7 +18,7 @@ import java.util.Collections;
 
 public class PathFinder {
     private BiDynamicLineGraph graph = null;
-    private ArrayList< ArrayList<PathPair>> paths = new ArrayList<>();
+    private ArrayList< List<PathPair>> paths = new ArrayList<>();
     
     public PathFinder(BiDynamicLineGraph g){
         this.graph = g;
@@ -25,7 +26,7 @@ public class PathFinder {
     public String printPaths(){
         Collections.sort(paths, new PathLengthComparator());
         String stringAsPaths = "";
-        for(ArrayList<PathPair> p : paths){
+        for(List<PathPair> p : paths){
             for(PathPair pp : p){
                 stringAsPaths += pp.v.toString();
                 if(pp.et == null)
@@ -47,7 +48,7 @@ public class PathFinder {
         return stringAsPaths;
     }
     
-    public ArrayList<ArrayList<PathPair>> getPaths(){
+    public ArrayList<List<PathPair>> getPaths(){
         Collections.sort(paths, new PathLengthComparator());
         return paths;
     }
@@ -76,7 +77,7 @@ public class PathFinder {
                     ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
                     tmp.add(new PathPair(i, EdgeType.UNDIRECTED));
                     tmp.add(new PathPair(v, null));
-                    paths.add(tmp);
+                    paths.add(Collections.unmodifiableList(tmp));
                 }
                 else
                 {

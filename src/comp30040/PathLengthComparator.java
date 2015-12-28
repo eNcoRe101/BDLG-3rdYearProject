@@ -5,17 +5,17 @@
  */
 package comp30040;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
  * @author Rich
  */
-public class PathLengthComparator implements Comparator<ArrayList<PathPair>>{
+public class PathLengthComparator implements Comparator<List<PathPair>>{
     
     @Override
-    public int compare(ArrayList<PathPair> one, ArrayList<PathPair> two){
+    public int compare(List<PathPair> one, List<PathPair> two){
         return one.size() - two.size();
     }
 }
