@@ -61,6 +61,17 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         return this.imp.getNumberOfActors();
     }
     
+    public Actor[] getActors(){
+        return this.imp.getActors();
+    }
+    
+    public boolean isActorAtEvent(Actor a, NetworkEvent e){
+        for(NetworkEvent event : imp.getActorsEvents(a))
+            if(e.equals(event))
+                return true;
+        return false;
+    }
+    
     public int getNumberOfEvents(){
         return this.imp.getEvents().length;
     }

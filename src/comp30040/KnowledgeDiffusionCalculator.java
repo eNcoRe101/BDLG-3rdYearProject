@@ -41,18 +41,27 @@ public class KnowledgeDiffusionCalculator {
     }
     
     private double findKnowlageDifusionActorToOther(Actor i, Actor j){
+        double[][] knowlageMatrix = new double[graph.getNumberOfActors()][graph.getNumberOfEvents()];
+        for(int index = 0; index < graph.getNumberOfActors(); index++){
+            knowlageMatrix[0][index] = 0;
+        }
         //TODO: fill out stub, add path finding and prams
+        int k = 1; // k == (2-1) dude to compsie index starting at 0
+        while(k < graph.getNumberOfEvents()){
+            if(graph.isActorAtEvent(i, graph.getEvents()[k])){
+                PathFinder pathF = new PathFinder(this.graph);
+                pathF.getPathsFrom(new VertexBDLG(i, graph.getEvents()[k]), j, new ArrayList<PathPair>());
+                ArrayList<ArrayList<PathPair>> pathsToUse = pathF.getPaths();
+                //caculater knowlage for I at K event
+                knowlageMatrix[1][k] = knowlageMatrix[1][k-1] + this.alphaEventKnowlageGain;
+                //get paths from this actor at this event to any event J attends
+                    //caculate knowlage transfer 
+                    //place path on ferbiden list
+            }
+            k++;
+        }
+        
         return 0.0;
-    }
-    
-    public void biDynamicLineGraphBDS(){
-         Collection<VertexBDLG> vertexs = graph.getVertices();
-         
-         for(VertexBDLG v : vertexs)
-         {
-            Collection<String> es = graph.getEdges(EdgeType.DIRECTED);
-            System.out.println(v);
-         }
     }
     
     private ArrayList<ArrayList<VertexBDLG>> getShortestPathsFromVertexItoJ(VertexBDLG vI, VertexBDLG vJ){

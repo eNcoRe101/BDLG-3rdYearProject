@@ -49,7 +49,6 @@ public class KnowledgeDiffusionCalculatorTest {
     @Test
     public void getKnowlageDiffusionForActor1(){
         KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);
-        k.biDynamicLineGraphBDS();
         assertTrue(true);
     }
 }

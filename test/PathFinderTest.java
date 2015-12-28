@@ -63,7 +63,10 @@ public class PathFinderTest {
                 break;
             }
         }
-        p.printPaths();
-        assertTrue(true);
+
+        assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
+                                     "N2E2-N4E2->N4E3-N1E3\n" +
+                                     "N2E2-N4E2->N4E3->N4E4-N1E4\n" +
+                                     "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n");
     }
 }

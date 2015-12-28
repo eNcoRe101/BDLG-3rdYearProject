@@ -8,6 +8,7 @@ package comp30040;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  *
@@ -16,34 +17,48 @@ import java.util.Collection;
 
 public class PathFinder {
     private BiDynamicLineGraph graph = null;
+    private ArrayList< ArrayList<PathPair>> paths = new ArrayList<>();
     
     public PathFinder(BiDynamicLineGraph g){
         this.graph = g;
     }
-    public void printPaths(){
+    public String printPaths(){
+        Collections.sort(paths, new PathLengthComparator());
+        String stringAsPaths = "";
         for(ArrayList<PathPair> p : paths){
             for(PathPair pp : p){
-                System.out.print(pp.v.toString());
+                stringAsPaths += pp.v.toString();
                 if(pp.et == null)
                 {
                     continue;
                 }
                 switch (pp.et) {
                     case DIRECTED:
-                        System.out.print("->");
+                        stringAsPaths += "->";
                         break;
                     case UNDIRECTED:
-                        System.out.print("-");
+                        stringAsPaths += '-';
                         break;
                 }
             }
-            System.out.println();
+            stringAsPaths += '\n';
         }
+        System.out.print(stringAsPaths);
+        return stringAsPaths;
     }
     
-    private ArrayList< ArrayList<PathPair>> paths = new ArrayList<>();
+    public ArrayList<ArrayList<PathPair>> getPaths(){
+        Collections.sort(paths, new PathLengthComparator());
+        return paths;
+    }
+    
     public void getPathsFrom(VertexBDLG i, Actor j, ArrayList<PathPair> currentPath){
-        Collection<VertexBDLG> currentVUndirectedEdges = graph.getSuccessors(i);
+        Collection<VertexBDLG> currentVUndirectedEdges;
+        if(currentPath.isEmpty()) 
+            currentVUndirectedEdges = graph.getSuccessors(i, EdgeType.UNDIRECTED);
+        else 
+            currentVUndirectedEdges = graph.getSuccessors(i);
+        
         if(currentVUndirectedEdges.size() < 1) return;
         
         //1.get all undirected edges
@@ -53,7 +68,8 @@ public class PathFinder {
         //5.go to 2
         //6.end
         for(VertexBDLG v: currentVUndirectedEdges){
-            if(graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED)
+            if(i.equals(v) && currentPath.isEmpty()) continue;
+            if( graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED)
             {
                 if(j.equals(v.getActor()))
                 {
