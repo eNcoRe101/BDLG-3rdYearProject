@@ -35,7 +35,7 @@ public class VertexBDLG {
     
     @Override
     public int hashCode(){
-        return a.hashCode() + e.hashCode();
+        return a.hashCode() ^ e.hashCode();
     }
 
     @Override

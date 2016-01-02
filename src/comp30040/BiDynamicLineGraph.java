@@ -160,6 +160,14 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         return EdgeType.DIRECTED;
     }
     
+    public boolean isOutEdge(V vOne, V vTwo){
+        return this.vertex_maps.get(vOne)[OUTGOING].containsKey(vTwo);
+    }
+    
+    boolean hasDirectedOut(VertexBDLG v) {
+       return !this.vertex_maps.get(v)[OUTGOING].isEmpty();
+    }
+    
     private void genrateGraphFromImp(){
         for(NetworkEvent e : imp.getEvents()){
             for(Actor a : e.getActorsAtEvent())
@@ -172,6 +180,7 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         {
             for(V vv : this.getVertices())
             {
+                if(v.equals(vv)) continue;
                 if(((VertexBDLG) v).getEvent().equals(((VertexBDLG) vv).getEvent())){
                     this.addEdge((E)(v.toString() + vv.toString()),
                                  v, vv, EdgeType.UNDIRECTED);
