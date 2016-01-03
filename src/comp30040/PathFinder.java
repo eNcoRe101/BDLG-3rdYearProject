@@ -80,7 +80,7 @@ public class PathFinder {
                 ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
                 tmp.add(new PathPair(i, EdgeType.UNDIRECTED));
                 tmp.add(new PathPair(v, null));
-                paths.add(Collections.unmodifiableList(tmp));
+                paths.add(tmp);
             } else if(!i.equals(v)){
                 ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
                 if (graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED){

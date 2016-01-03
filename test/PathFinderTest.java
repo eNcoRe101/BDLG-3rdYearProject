@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import comp30040.Actor;
 import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
 import comp30040.PathFinder;
@@ -26,7 +27,7 @@ import static org.junit.Assert.*;
  */
 public class PathFinderTest {
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/sample-2mode.csv";
+    private final String relativePathToTestData = "./data/mafia-2mode.csv";
     private BiDynamicLineGraph graph;
     
     public PathFinderTest() throws FileNotFoundException{
@@ -53,20 +54,29 @@ public class PathFinderTest {
     
     @Test
     public void getPathForVertexToActor(){
-        PathFinder p = new PathFinder(graph);
-        ArrayList<PathPair> pairs = new ArrayList<>();
+        PathFinder p;
+        ArrayList<PathPair> pairs = new ArrayList<>(1000);
+        for(Actor a : graph.getActors())
+            {
+                p = new PathFinder(graph);
+        System.out.println("2->" + a.getLabel());
         for(Object v : graph.getVertices())
         {
-            if(((VertexBDLG) v).getActor().equals(imp.getActors()[1])
-                && (((VertexBDLG) v).getEvent().equals(imp.getEvents()[1]))){
-                p.getPathsFrom((VertexBDLG)v, imp.getActors()[0],pairs );
-                break;
+            
+            
+                if(((VertexBDLG) v).getActor().equals(imp.getActors()[1]) 
+                    && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])){
+                    
+                    p.getPathsFrom((VertexBDLG)v, a,pairs );
+                   
+                }
             }
+         p.printPaths();
         }
 
-        assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
+        /*assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
                                      "N2E2-N4E2->N4E3-N1E3\n" +
                                      "N2E2-N4E2->N4E3->N4E4-N1E4\n" +
-                                     "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n");
+                                     "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n");*/
     }
 }

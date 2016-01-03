@@ -18,11 +18,13 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<V, E> {
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V, E> g){
         super(g);
         dglGraph = g;
+        initialize();
     }
 
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V, E> g, Dimension size){
         super(g, size);
         dglGraph = g;
+        initialize();
     }
 
     public BiDynamicLineGraphLayout(BiDynamicLineGraph<V,E> g, Transformer<V,Point2D> initializer){
@@ -39,7 +41,7 @@ public class BiDynamicLineGraphLayout<V, E> extends AbstractLayout<V, E> {
     @Override
     public void initialize() {
         Point2D p = new Point2D.Double(10, 10);
-        System.out.println("W" + size.getWidth() + " H " + size.getHeight());
+        System.out.println("W" + this.size.getWidth() + " H " + this.size.getHeight());
         double eventSpacingX = (this.size.getWidth()/dglGraph.getNumberOfActors());
         double eventSpacingY = (this.size.getHeight()/dglGraph.getNumberOfEvents());
         System.out.println("W" + eventSpacingX + " H " + eventSpacingY);
