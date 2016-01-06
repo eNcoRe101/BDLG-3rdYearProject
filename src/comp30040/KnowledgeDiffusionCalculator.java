@@ -76,7 +76,9 @@ public class KnowledgeDiffusionCalculator {
                     knowlageMatrix[1][k] += ((knowlageMatrix[0][k]) * demominator);
                     System.out.println("Diffused " + (knowlageMatrix[0][k]) * demominator);
                     knowlageMatrix[0][k] -= knowlageMatrix[1][k];
-                    
+                    System.out.println("left over knowlage : " + knowlageMatrix[0][k]);
+                    if(knowlageMatrix[0][k] < 0)
+                        knowlageMatrix[0][k] = 0;
                 }
                 
                     //place path on ferbiden list
