@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
  */
 public class PathFinderTest {
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/mafia-2mode.csv";
+    private final String relativePathToTestData = "./data/sample-2mode.csv";
     private BiDynamicLineGraph graph;
     
     public PathFinderTest() throws FileNotFoundException{

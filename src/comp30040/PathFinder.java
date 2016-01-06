@@ -23,27 +23,21 @@ public class PathFinder {
     public PathFinder(BiDynamicLineGraph g) {
         this.graph = g;
     }
-
+    
+    public String printPath(List<PathPair> p){
+        String stringAsPaths = "";
+        for (PathPair pp : p) {
+            stringAsPaths += pp.toString();
+        }
+        stringAsPaths += '\n';
+        return stringAsPaths;
+    }
+    
     public String printPaths() {
         Collections.sort(paths, new PathLengthComparator());
         String stringAsPaths = "";
-        for (List<PathPair> p : paths) {
-            for (PathPair pp : p) {
-                stringAsPaths += pp.v.toString();
-                if (pp.et == null) {
-                    continue;
-                }
-                switch (pp.et) {
-                    case DIRECTED:
-                        stringAsPaths += "->";
-                        break;
-                    case UNDIRECTED:
-                        stringAsPaths += '-';
-                        break;
-                }
-            }
-            stringAsPaths += '\n';
-        }
+        for(List<PathPair> path : paths)
+            stringAsPaths += printPath(path);
         System.out.print(stringAsPaths);
         return stringAsPaths;
     }

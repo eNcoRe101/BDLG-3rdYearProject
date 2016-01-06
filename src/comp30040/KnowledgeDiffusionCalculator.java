@@ -45,8 +45,8 @@ public class KnowledgeDiffusionCalculator {
     private double[] findKnowlageDifusionActorToOther(Actor i, Actor j){
         double[][] knowlageMatrix = new double[2][graph.getNumberOfEvents()];
         for(int index = 0; index < graph.getNumberOfEvents(); index++){
-            knowlageMatrix[0][index] = 0;
-            knowlageMatrix[1][index] = 0;
+            knowlageMatrix[0][index] = 0;//knowlage carred forward
+            knowlageMatrix[1][index] = 0;//diffused knowlage to actor J at event K
         }
         //TODO: fill out stub, add path finding and prams
         int k = 1; // k == (2-1) dude to compsie index starting at 0
@@ -54,22 +54,29 @@ public class KnowledgeDiffusionCalculator {
             knowlageMatrix[0][k] = knowlageMatrix[0][k-1];
             if(graph.isActorAtEvent(i, graph.getEvents()[k])){
                 //caculater knowlage for I at K event
-                knowlageMatrix[0][k] += this.alphaEventKnowlageGain;
+                if(!graph.isActorsFirstEvent(i, graph.getEvents()[k]))
+                    knowlageMatrix[0][k] += this.alphaEventKnowlageGain;
                 //get paths from this actor at this event to any event J attends
                 PathFinder pathF = new PathFinder(this.graph);
                 pathF.getPathsFrom(new VertexBDLG(i, graph.getEvents()[k]), j, new ArrayList<PathPair>());
                 ArrayList<List<PathPair>> pathsToUse = pathF.getPaths();
                 //caculate knowlage transfer 
                 double knowlageGainForThisPath = knowlageMatrix[0][k];
+                double demominator;
                 for(List<PathPair> pp : pathsToUse){
-                    
+                    System.out.print(pathF.printPath(pp));
+                    System.out.println("Inistal K : " + knowlageMatrix[0][k]);
+                    demominator = 1;
                     for(PathPair p : pp){
                         if(p.et == null) break;
                         if(p.et == EdgeType.UNDIRECTED)
-                            knowlageGainForThisPath *= this.betaActorKnowlageDiffusionCoeffient;
+                            demominator *= this.betaActorKnowlageDiffusionCoeffient;
                     }
-                    knowlageMatrix[1][k] += knowlageGainForThisPath;
-                    knowlageGainForThisPath = knowlageMatrix[0][k] - knowlageMatrix[1][k];
+                    System.out.println("Dem : " + demominator);
+                    knowlageMatrix[1][k] += ((knowlageMatrix[0][k]) * demominator);
+                    System.out.println("Diffused " + (knowlageMatrix[0][k]) * demominator);
+                    knowlageMatrix[0][k] -= knowlageMatrix[1][k];
+                    
                 }
                 
                     //place path on ferbiden list

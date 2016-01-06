@@ -19,4 +19,14 @@ public class PathPair {
         this.v = v;
         this.et = et;
     }
+    
+    @Override
+    public String toString(){
+        String path = "->";
+        if(et == null)
+            path = "";
+        else if(et == EdgeType.UNDIRECTED)
+            path = "-";
+        return this.v.toString() + path;
+    }
 }
