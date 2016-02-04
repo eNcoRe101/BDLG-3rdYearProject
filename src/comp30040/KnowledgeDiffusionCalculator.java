@@ -9,6 +9,9 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import javax.swing.JTable;
 
 /**
  *
@@ -23,6 +26,18 @@ public class KnowledgeDiffusionCalculator {
     public KnowledgeDiffusionCalculator(BiDynamicLineGraph graph){
         this.graph = graph;
        this.finalKnowlageTable = new double[this.graph.getNumberOfActors()][this.graph.getNumberOfActors()];
+       for(Actor aOne : graph.getActors()){
+           for(Actor aTwo : graph.getActors()){
+                if(aOne.equals(aTwo)){
+                   this.finalKnowlageTable[aOne.getId()-1][aTwo.getId()-1] = 0.0;
+                   continue;
+                }
+                double[] tmpKnowlage = findKnowlageDifusionActorToOther(aOne, aTwo);
+                for(int i = 0; i < tmpKnowlage.length; i++)
+                    this.finalKnowlageTable[aOne.getId()-1][aTwo.getId()-1] += tmpKnowlage[i];
+          
+           }
+       }
     }
     
     public void updateAlphaGain(double alpha){
@@ -37,17 +52,25 @@ public class KnowledgeDiffusionCalculator {
         return this.finalKnowlageTable;
     }
     
-    public double[] getKnowlageFromActors(Actor aOne, Actor aTwo){
+    public JTable getKnowlageTableAsJTable(){
+        JTable tableToReturn = new JTable();
+        return tableToReturn;
+    }
+    
+    public double getKnowlageFromActors(Actor aOne, Actor aTwo){
+        return this.finalKnowlageTable[aOne.getId()-1][aTwo.getId()-1];
+    }
+    
+    public double[] getKnowlageFromActorsAsArray(Actor aOne, Actor aTwo){
         return findKnowlageDifusionActorToOther(aOne, aTwo);
-        //return this.finalKnowlageTable[aOne.getId()][aTwo.getId()];
     }
     
     private double[] findKnowlageDifusionActorToOther(Actor i, Actor j){
-        double[][] knowlageMatrix = new double[2][graph.getNumberOfEvents()];
-        for(int index = 0; index < graph.getNumberOfEvents(); index++){
-            knowlageMatrix[0][index] = 0;//knowlage carred forward
-            knowlageMatrix[1][index] = 0;//diffused knowlage to actor J at event K
-        }
+        
+        double[][] knowlageMatrix = new double[2][graph.getNumberOfEvents()]; //knowlage carred forward && 
+                                                                              //diffused knowlage to actor J at event K
+        if(i.equals(j)) return knowlageMatrix[1];
+        
         //TODO: fill out stub, add path finding and prams
         int k = 1; // k == (2-1) dude to compsie index starting at 0
         while(k < graph.getNumberOfEvents()){
@@ -88,10 +111,5 @@ public class KnowledgeDiffusionCalculator {
         }
         
         return knowlageMatrix[1];
-    }
-    
-    private ArrayList<ArrayList<VertexBDLG>> getShortestPathsFromVertexItoJ(VertexBDLG vI, VertexBDLG vJ){
-        
-        return null;
     }
 }

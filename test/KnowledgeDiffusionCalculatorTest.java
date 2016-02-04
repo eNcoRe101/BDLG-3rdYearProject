@@ -58,7 +58,7 @@ public class KnowledgeDiffusionCalculatorTest {
             int jj = 0;
             for(Actor j : imp.getActors()){
                 System.out.println("" + i + " to " + j);
-                double[] tmp = k.getKnowlageFromActors(i, j);
+                double[] tmp = k.getKnowlageFromActorsAsArray(i, j);
                 double tmp2 = 0;
                 for(double d : tmp)
                     tmp2 += d;
@@ -73,10 +73,24 @@ public class KnowledgeDiffusionCalculatorTest {
         for(int i = 0; i < tmp3.length; i++){
             System.out.print("[" + (i+1) + "|");
             for(int j = 0; j < tmp3.length; j++){
-                if(i == j) System.out.printf("%.2f, ",0.0);
-                else System.out.printf("%.2f, ",tmp3[i][j]);
+                System.out.printf("%.2f, ",tmp3[i][j]);
             }
             System.out.println("]");
+        }
+        assertTrue(true);
+    }
+    @Test
+    public void getKnowlageDiffusionForActor2(){
+        KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);
+        int i = 0;
+        for(Actor a : imp.getActors())
+        {
+            System.out.print("[" + (i+1) + "|");
+            for(Actor aa : imp.getActors()){
+                System.out.printf("%.2f, ", k.getKnowlageFromActors(a, aa));
+            }
+             System.out.println("]");
+            i++;
         }
         assertTrue(true);
     }

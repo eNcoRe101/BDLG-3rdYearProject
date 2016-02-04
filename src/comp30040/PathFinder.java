@@ -89,4 +89,47 @@ public class PathFinder {
             }
         }
     }
+    
+    public void getPathsFromFast(VertexBDLG i, Actor j, ArrayList<PathPair> currentPath) {
+        Collection<VertexBDLG> currentVUndirectedEdges;
+        if (currentPath.isEmpty()) {
+            currentVUndirectedEdges = graph.getSuccessors(i, EdgeType.UNDIRECTED);
+        } else {
+            currentVUndirectedEdges = graph.getSuccessors(i);
+        }
+
+        if (currentVUndirectedEdges.size() < 1) {
+            return;
+        }
+
+        //1.get all undirected edges
+        //2.pick any vertical
+        //3.if veriacl goes to actor go to 6
+        //4.pick undirected
+        //5.go to 2
+        //6.end
+        for (VertexBDLG v : currentVUndirectedEdges) {
+            if (i.equals(v) && currentPath.isEmpty()) {
+                continue;
+            }
+            if (graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED
+                    && j.equals(v.getActor())) {
+                ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
+                tmp.add(new PathPair(i, EdgeType.UNDIRECTED));
+                tmp.add(new PathPair(v, null));
+                paths.add(tmp);
+            } else if(!i.equals(v)){
+                ArrayList<PathPair> tmp = new ArrayList<>(currentPath);
+                if (graph.getEdgeType(graph.findEdge(i, v)) == EdgeType.UNDIRECTED){
+                    tmp.add(new PathPair(i, EdgeType.UNDIRECTED));
+                    tmp.add(new PathPair(v, EdgeType.DIRECTED));
+                    for(Object vv : graph.getSuccessors(v, EdgeType.DIRECTED))
+                        getPathsFrom((VertexBDLG) vv, j, tmp);
+                } else if (graph.isOutEdge(i, v)) {
+                    tmp.add(new PathPair(i, EdgeType.DIRECTED));
+                    getPathsFrom((VertexBDLG) v, j, tmp);
+                }
+            }
+        }
+    }
 }

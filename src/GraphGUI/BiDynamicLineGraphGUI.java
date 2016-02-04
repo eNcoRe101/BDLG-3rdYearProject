@@ -287,6 +287,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
                     this.add(graphJPane, BorderLayout.CENTER);
                     break;
+                case 4:
+                    
             }
             validate();
             repaint();
