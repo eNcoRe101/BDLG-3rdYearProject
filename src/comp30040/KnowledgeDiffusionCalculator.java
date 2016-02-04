@@ -7,10 +7,7 @@ package comp30040;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import javax.swing.JTable;
 
 /**

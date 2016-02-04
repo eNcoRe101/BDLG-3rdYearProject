@@ -13,6 +13,7 @@ import javax.swing.JFileChooser;
 import comp30040.GraphImporter;
 import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
+import comp30040.KnowledgeDiffusionCalculator;
 import comp30040.VertexBDLG;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
@@ -50,6 +51,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private ScrollPane graphJPane = null;
     private File currentCVSFile = null;
     private BiDynamicLineGraph currentBidlg = null;
+    private KnowledgeDiffusionCalculator kDC = null;
     int currentIndexOfSelectedView = 0;
     
     /**
@@ -288,7 +290,14 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.add(graphJPane, BorderLayout.CENTER);
                     break;
                 case 4:
-                    
+                    this.remove(this.graphJPane);
+                    this.graphJPane = new ScrollPane();
+                    if(this.kDC == null)
+                        this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
+                    this.graphJPane.add(this.kDC.getKnowlageTableAsJTable());
+                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                    this.add(graphJPane, BorderLayout.CENTER);
+                    break;
             }
             validate();
             repaint();
