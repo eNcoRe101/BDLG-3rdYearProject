@@ -15,9 +15,7 @@ import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
 import comp30040.KnowledgeDiffusionCalculator;
 import comp30040.VertexBDLG;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
-import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -33,11 +31,9 @@ import java.awt.Dimension;
 import java.awt.ScrollPane;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import static java.awt.geom.Point2D.distance;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Transformer;
 /**
@@ -83,8 +79,14 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         Transformer<VertexBDLG,Shape> newVertexSize = new Transformer<VertexBDLG, Shape>(){
             @Override
             public Shape transform(VertexBDLG v){
+                double radius;
+                System.out.println("This v's k = " +  g.getVertexKnowlage(v));
+                if(g.getVertexKnowlage(v) != 0)
+                    radius = 60/(double)g.getVertexKnowlage(v);
+                else
+                    radius = 6;
                 Ellipse2D circle;
-                return circle = new Ellipse2D.Double(-3, -3, 6, 6);
+                return circle = new Ellipse2D.Double(-3, -3, radius, radius);
             }
         };
         VisualizationViewer vv = new VisualizationViewer<>(this.layout);

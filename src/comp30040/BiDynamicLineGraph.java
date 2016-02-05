@@ -22,17 +22,20 @@ import java.util.Map;
  */
 public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     private GraphImporter imp = null;
+    private Map<V, Double> vertex_knowlage_map;
     
     public BiDynamicLineGraph(){
         vertex_maps = new LinkedHashMap<>();
         directed_edges = new LinkedHashMap<>();
         undirected_edges = new LinkedHashMap<>();
+        vertex_knowlage_map = new LinkedHashMap<>();
     }
     
     public BiDynamicLineGraph(GraphImporter imp){
         vertex_maps = new LinkedHashMap<>();
         directed_edges = new LinkedHashMap<>();
         undirected_edges = new LinkedHashMap<>();
+        vertex_knowlage_map = new LinkedHashMap<>();
         this.imp = imp;
         genrateGraphFromImp();
     }
@@ -137,6 +140,7 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         this.vertex_maps.put(v, new LinkedHashMap[]{new LinkedHashMap<>(), 
                                                     new LinkedHashMap<>(),
                                                     new LinkedHashMap<>()});
+        this.vertex_knowlage_map.put(v, 0.0);
         return true;
     }
     
@@ -172,10 +176,12 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
        return !this.vertex_maps.get(v)[OUTGOING].isEmpty();
     }
     
-    public void setVertexKnowlage(VertexBDLG newV, double newKnowlage){
-        Map<V, E>[] value = this.vertex_maps.get(newV);
-        newV.setKnowlage(newKnowlage);
-        this.vertex_maps.put((V)newV, value);
+    public void setVertexKnowlage(VertexBDLG v, double newKnowlage){
+        this.vertex_knowlage_map.put((V) v, newKnowlage);
+    }
+    
+    public double getVertexKnowlage(VertexBDLG v){
+        return this.vertex_knowlage_map.get(v);
     }
     
     private void genrateGraphFromImp(){

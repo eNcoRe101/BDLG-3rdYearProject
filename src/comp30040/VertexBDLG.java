@@ -29,18 +29,6 @@ public class VertexBDLG {
         return e;
     }
     
-    public boolean setKnowlage(double newKnowlage){
-        if(this.currentKnowlage <= newKnowlage){
-            this.currentKnowlage = newKnowlage;
-            return true;
-        }
-        return false;
-    }
-    
-    public double getKnowlage(){
-        return this.currentKnowlage;
-    }
-    
     @Override
     public String toString(){
         return a.getLabel() + e.getLabel();

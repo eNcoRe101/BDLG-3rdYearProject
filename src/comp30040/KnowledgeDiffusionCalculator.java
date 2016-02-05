@@ -55,8 +55,9 @@ public class KnowledgeDiffusionCalculator {
     
     public JScrollPane getKnowlageTableAsJTable(){
         String[] headers = new String[graph.getNumberOfActors()];
+        headers[0] = "Actors";
         String[][] tableArray = new String[this.finalKnowlageTable.length][this.finalKnowlageTable.length];
-        for(int i = 0; i < tableArray.length; i++){
+        for(int i = 1; i < tableArray.length; i++){
              headers[i] = "" + i;
             for(int j = 0; j < tableArray[i].length; j++){
                 tableArray[i][j] = Double.toString(finalKnowlageTable[i][j]);
@@ -72,7 +73,7 @@ public class KnowledgeDiffusionCalculator {
         JScrollPane pane = new JScrollPane(tableToReturn);
         JList<String> rowHeaders  = new JList<>(headers);
         rowHeaders.setFixedCellWidth(50);
-        rowHeaders.setFixedCellHeight(tableToReturn.getRowHeight() + tableToReturn.getRowMargin());
+        rowHeaders.setFixedCellHeight(tableToReturn.getRowHeight());
         pane.setRowHeaderView(rowHeaders);
         return pane;
     }
@@ -123,6 +124,7 @@ public class KnowledgeDiffusionCalculator {
                     System.out.println("left over knowlage : " + knowlageMatrix[0][k]);
                     if(knowlageMatrix[0][k] < 0)
                         knowlageMatrix[0][k] = 0;
+                    graph.setVertexKnowlage(vetex,knowlageMatrix[0][k]);
                 }
                 
                     //place path on ferbiden list
