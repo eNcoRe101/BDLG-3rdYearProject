@@ -37,6 +37,7 @@ import static java.awt.geom.Point2D.distance;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Transformer;
 /**
@@ -135,8 +136,6 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(800, 600));
         setName("Home Frame"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(1440, 900));
-        setSize(new java.awt.Dimension(1400, 900));
 
         OptionsPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         OptionsPanel.setAlignmentX(0.0F);
@@ -146,7 +145,12 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         refreshGraphButton.setText("Refresh");
 
-        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View" }));
+        VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View", "View Knowlage Difusion"}));
+        VisulizerPicker.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                VisulizerPickerItemStateChanged(evt);
+            }
+        });
         VisulizerPicker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VisulizerPickerActionPerformed(evt);
@@ -294,7 +298,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.graphJPane = new ScrollPane();
                     if(this.kDC == null)
                         this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
-                    this.graphJPane.add(this.kDC.getKnowlageTableAsJTable());
+                    this.graphJPane.add(new JScrollPane(this.kDC.getKnowlageTableAsJTable()));
                     this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
                     this.add(graphJPane, BorderLayout.CENTER);
                     break;
@@ -303,6 +307,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             repaint();
         }
     }//GEN-LAST:event_VisulizerPickerActionPerformed
+
+    private void VisulizerPickerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_VisulizerPickerItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_VisulizerPickerItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;

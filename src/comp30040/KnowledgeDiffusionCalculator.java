@@ -7,8 +7,10 @@ package comp30040;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -50,7 +52,22 @@ public class KnowledgeDiffusionCalculator {
     }
     
     public JTable getKnowlageTableAsJTable(){
-        JTable tableToReturn = new JTable();
+        String[] headers = new String[graph.getNumberOfActors()];
+        String[][] tableArray = new String[this.finalKnowlageTable.length][this.finalKnowlageTable.length];
+        for(int i = 0; i < tableArray.length; i++){
+             headers[i] = "" + i;
+            for(int j = 0; j < tableArray[i].length; j++){
+                tableArray[i][j] = Double.toString(finalKnowlageTable[i][j]);
+            }
+        }
+        DefaultTableModel newtableMod = new DefaultTableModel(tableArray, headers){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            };
+        };
+        JTable tableToReturn = new JTable(newtableMod);
+        
         return tableToReturn;
     }
     
