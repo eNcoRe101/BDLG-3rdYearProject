@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -169,6 +170,12 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     
     boolean hasDirectedOut(VertexBDLG v) {
        return !this.vertex_maps.get(v)[OUTGOING].isEmpty();
+    }
+    
+    public void setVertexKnowlage(VertexBDLG newV, double newKnowlage){
+        Map<V, E>[] value = this.vertex_maps.get(newV);
+        newV.setKnowlage(newKnowlage);
+        this.vertex_maps.put((V)newV, value);
     }
     
     private void genrateGraphFromImp(){

@@ -14,6 +14,7 @@ import java.util.Objects;
 public class VertexBDLG {
     private Actor a = null;
     private NetworkEvent e = null;
+    private double currentKnowlage = 0;
     
     public VertexBDLG(Actor a, NetworkEvent e){
         this.a = a;
@@ -26,6 +27,18 @@ public class VertexBDLG {
     
     public NetworkEvent getEvent(){
         return e;
+    }
+    
+    public boolean setKnowlage(double newKnowlage){
+        if(this.currentKnowlage <= newKnowlage){
+            this.currentKnowlage = newKnowlage;
+            return true;
+        }
+        return false;
+    }
+    
+    public double getKnowlage(){
+        return this.currentKnowlage;
     }
     
     @Override

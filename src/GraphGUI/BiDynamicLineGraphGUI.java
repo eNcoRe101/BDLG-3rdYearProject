@@ -298,7 +298,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.graphJPane = new ScrollPane();
                     if(this.kDC == null)
                         this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
-                    this.graphJPane.add(new JScrollPane(this.kDC.getKnowlageTableAsJTable()));
+                    this.graphJPane.add(this.kDC.getKnowlageTableAsJTable());
                     this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
                     this.add(graphJPane, BorderLayout.CENTER);
                     break;

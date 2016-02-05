@@ -9,6 +9,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -51,7 +53,7 @@ public class KnowledgeDiffusionCalculator {
         return this.finalKnowlageTable;
     }
     
-    public JTable getKnowlageTableAsJTable(){
+    public JScrollPane getKnowlageTableAsJTable(){
         String[] headers = new String[graph.getNumberOfActors()];
         String[][] tableArray = new String[this.finalKnowlageTable.length][this.finalKnowlageTable.length];
         for(int i = 0; i < tableArray.length; i++){
@@ -67,8 +69,12 @@ public class KnowledgeDiffusionCalculator {
             };
         };
         JTable tableToReturn = new JTable(newtableMod);
-        
-        return tableToReturn;
+        JScrollPane pane = new JScrollPane(tableToReturn);
+        JList<String> rowHeaders  = new JList<>(headers);
+        rowHeaders.setFixedCellWidth(50);
+        rowHeaders.setFixedCellHeight(tableToReturn.getRowHeight() + tableToReturn.getRowMargin());
+        pane.setRowHeaderView(rowHeaders);
+        return pane;
     }
     
     public double getKnowlageFromActors(Actor aOne, Actor aTwo){
@@ -95,7 +101,8 @@ public class KnowledgeDiffusionCalculator {
                     knowlageMatrix[0][k] += this.alphaEventKnowlageGain;
                 //get paths from this actor at this event to any event J attends
                 PathFinder pathF = new PathFinder(this.graph);
-                pathF.getPathsFrom(new VertexBDLG(i, graph.getEvents()[k]), j, new ArrayList<PathPair>());
+                VertexBDLG vetex = new VertexBDLG(i, graph.getEvents()[k]);
+                pathF.getPathsFrom(vetex, j, new ArrayList<PathPair>());
                 ArrayList<List<PathPair>> pathsToUse = pathF.getPaths();
                 //caculate knowlage transfer 
                 double knowlageGainForThisPath = knowlageMatrix[0][k];
