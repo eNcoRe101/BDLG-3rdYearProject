@@ -73,16 +73,18 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             throw new FileNotFoundException();
         
         GraphImporter gi = new GraphImporter(fileToUse);
-        BiDynamicLineGraph g = new BiDynamicLineGraph(gi);
-        this.currentBidlg = g;
-        this.layout = new BiDynamicLineGraphLayout<>(g, new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+        this.currentBidlg = new BiDynamicLineGraph(gi);
+        if(this.kDC == null)
+            this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
+        this.currentBidlg = this.kDC.getGraph();
+        this.layout = new BiDynamicLineGraphLayout<>(this.currentBidlg, new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
         Transformer<VertexBDLG,Shape> newVertexSize = new Transformer<VertexBDLG, Shape>(){
             @Override
             public Shape transform(VertexBDLG v){
                 double radius;
-                System.out.println("This v's k = " +  g.getVertexKnowlage(v));
-                if(g.getVertexKnowlage(v) != 0)
-                    radius = 60/(double)g.getVertexKnowlage(v);
+                System.out.println("This v's k = " +  v.getKnowlage());
+                if(v.getKnowlage() != 0)
+                    radius = 60/(double)v.getKnowlage();
                 else
                     radius = 6;
                 Ellipse2D circle;
@@ -298,8 +300,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 case 4:
                     this.remove(this.graphJPane);
                     this.graphJPane = new ScrollPane();
-                    if(this.kDC == null)
-                        this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
+                    
                     this.graphJPane.add(this.kDC.getKnowlageTableAsJTable());
                     this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
                     this.add(graphJPane, BorderLayout.CENTER);

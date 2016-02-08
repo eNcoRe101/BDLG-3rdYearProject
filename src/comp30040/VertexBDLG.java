@@ -29,6 +29,14 @@ public class VertexBDLG {
         return e;
     }
     
+    public void setKnowlage(double newK){
+        this.currentKnowlage = newK;
+    }
+    
+    public double getKnowlage(){
+        return this.currentKnowlage;
+    }
+    
     @Override
     public String toString(){
         return a.getLabel() + e.getLabel();
