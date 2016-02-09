@@ -52,6 +52,12 @@ public class KnowledgeDiffusionCalculatorTest {
     public void getKnowlageDiffusionForActor1(){
         KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);
         double[][] tmp3 = new double[imp.getNumberOfActors()][imp.getNumberOfActors()];
+        double[][] KnowlageTable = {{0.0, 0.0, 0.5, 1.25, 1.125, 0.0},
+                                    {0.630859375, 0.0, 0.625, 0.671875, 0.49755859375, 0.5},
+                                    {0.625, 0.0, 0.0, 0.625, 0.4375, 0.0},
+                                    {1.25, 0.0, 0.5, 0.0, 1.125, 0.0},
+                                    {0.5, 0.0, 0.0, 0.5, 0.0, 0.0},
+                                    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
         int ii = 0;
         for(Actor i : imp.getActors())
         {
@@ -63,6 +69,10 @@ public class KnowledgeDiffusionCalculatorTest {
                 for(double d : tmp)
                     tmp2 += d;
                 tmp3[ii][jj] = tmp2;
+                assertEquals("Checking that actors " + i  + " and " + j + " are correct",
+                             KnowlageTable[i.getId()-1][j.getId()-1], 
+                             tmp2,
+                             0.00001);
                 System.out.println(Arrays.toString(tmp));
                 System.out.println(tmp2);
                 jj++;
@@ -82,16 +92,25 @@ public class KnowledgeDiffusionCalculatorTest {
     @Test
     public void getKnowlageDiffusionForActor2(){
         KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);
+        double[][] KnowlageTable = {{0.0, 0.0, 0.5, 1.25, 1.125, 0.0},
+                                    {0.630859375, 0.0, 0.625, 0.671875, 0.49755859375, 0.5},
+                                    {0.625, 0.0, 0.0, 0.625, 0.4375, 0.0},
+                                    {1.25, 0.0, 0.5, 0.0, 1.125, 0.0},
+                                    {0.5, 0.0, 0.0, 0.5, 0.0, 0.0},
+                                    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
         int i = 0;
         for(Actor a : imp.getActors())
         {
             System.out.print("[" + (i+1) + "|");
             for(Actor aa : imp.getActors()){
+                assertEquals("Checking that actors " + a  + " and " + aa + " are correct",
+                             KnowlageTable[a.getId()-1][aa.getId()-1], 
+                             k.getKnowlageFromActors(a, aa),
+                             0.00001);
                 System.out.printf("%.2f, ", k.getKnowlageFromActors(a, aa));
             }
              System.out.println("]");
             i++;
         }
-        assertTrue(true);
     }
 }
