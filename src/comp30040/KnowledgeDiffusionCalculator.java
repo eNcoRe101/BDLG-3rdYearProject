@@ -7,13 +7,13 @@ package comp30040;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,9 +27,11 @@ public class KnowledgeDiffusionCalculator {
     private double[][] finalKnowlageTable = null;
     private double alphaEventKnowlageGain = 1;
     private double betaActorKnowlageDiffusionCoeffient = 0.5;
+    private HashMap<Actor, Double[]> actorEventKnowlageMap;
 
     public KnowledgeDiffusionCalculator(BiDynamicLineGraph graph) {
         this.graph = graph;
+        this.actorEventKnowlageMap = new HashMap<>();
         this.finalKnowlageTable = new double[this.graph.getNumberOfActors()][this.graph.getNumberOfActors()];
         for (Actor aOne : graph.getActors()) {
             for (Actor aTwo : graph.getActors()) {
@@ -49,9 +51,17 @@ public class KnowledgeDiffusionCalculator {
     public void updateAlphaGain(double alpha) {
         this.alphaEventKnowlageGain = alpha;
     }
+    
+    public double getAlphaGainValue(){
+        return this.alphaEventKnowlageGain;
+    }
 
     public void updateBetaCoeffient(double beta) {
         this.betaActorKnowlageDiffusionCoeffient = beta;
+    }
+    
+    public double getBetaKnowlageDifussionCoeffient(){
+        return this.betaActorKnowlageDiffusionCoeffient;
     }
 
     public double[][] getKnowlageTable() {
@@ -92,7 +102,7 @@ public class KnowledgeDiffusionCalculator {
     public double[] getKnowlageFromActorsAsArray(Actor aOne, Actor aTwo) {
         return findKnowlageDifusionActorToOther(aOne, aTwo);
     }
-    
+        
     public BiDynamicLineGraph getGraph(){
         return this.graph;
     }
@@ -104,7 +114,7 @@ public class KnowledgeDiffusionCalculator {
         if (i.equals(j)) {
             return knowlageMatrix[1];
         }
-
+        double vertexKnowloage = 0;
         //TODO: fill out stub, add path finding and prams
         int k = 1; // k == (2-1) dude to compsie index starting at 0
         while (k < graph.getNumberOfEvents()) {
@@ -142,20 +152,17 @@ public class KnowledgeDiffusionCalculator {
                     if (knowlageMatrix[0][k] < 0) {
                         knowlageMatrix[0][k] = 0;
                     }
-                    double vertexKnowloage = 0;
-                    for(int currentEvent = 1; currentEvent <= k; currentEvent++){
-                        vertexKnowloage += knowlageMatrix[1][currentEvent];
-                    }
-                    //vertexKnowloage += graph.getVertexKnowlage(vetex);
-                    graph.setVertexKnowlage(vetex, vertexKnowloage);
+                    
+                    
                 }
 
                 //place path on ferbiden list
+                vertexKnowloage += knowlageMatrix[1][k];
+                graph.setVertexKnowlage(vetex, vertexKnowloage + graph.getVertexKnowlage(vetex));
             }
             k++;
 
         }
-
         return knowlageMatrix[1];
     }
     

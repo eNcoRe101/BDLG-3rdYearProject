@@ -17,13 +17,13 @@ import java.util.Map;
 /**
  *
  * @author rich
- * @param <V>
- * @param <E>
+ * @param <V> Vertex object type
+ * @param <E> Edge object type
  */
 public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
 
     private GraphImporter imp = null;
-    private Map<V, Double> vertex_knowlage_map;
+    private final Map<V, Double> vertex_knowlage_map;
 
     public BiDynamicLineGraph() {
         vertex_maps = new LinkedHashMap<>();
@@ -187,8 +187,8 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         this.vertex_maps.remove((V)v);
         this.vertex_maps.put((V) v, tmpValue);
     }
-
-    public double getVertexKnowlage(VertexBDLG v) {
+    
+    public double getVertexKnowlage(VertexBDLG v){
         return this.vertex_knowlage_map.get((V) v);
     }
 

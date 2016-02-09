@@ -28,6 +28,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Paint;
 import java.awt.ScrollPane;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
@@ -74,8 +75,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         
         GraphImporter gi = new GraphImporter(fileToUse);
         this.currentBidlg = new BiDynamicLineGraph(gi);
-        if(this.kDC == null)
+        if(this.kDC == null){
             this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
+            jTextFieldBetaKinput.setText(Double.toString(this.kDC.getBetaKnowlageDifussionCoeffient()));
+            jTextFieldAlphaKinput.setText(Double.toString(this.kDC.getAlphaGainValue()));
+        }
         this.currentBidlg = this.kDC.getGraph();
         this.layout = new BiDynamicLineGraphLayout<>(this.currentBidlg, new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
         Transformer<VertexBDLG,Shape> newVertexSize = new Transformer<VertexBDLG, Shape>(){
@@ -84,11 +88,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 double radius;
                 System.out.println("This v's k = " +  v.getKnowlage());
                 if(v.getKnowlage() != 0)
-                    radius = 6/(double)v.getKnowlage();
+                    radius = 6 + 3 * v.getKnowlage();
                 else
                     radius = 6;
                 Ellipse2D circle;
                 return circle = new Ellipse2D.Double(-radius/2, -radius/2, radius, radius);
+            }
+        };
+        Transformer<VertexBDLG,Paint> newVertexColour = new Transformer<VertexBDLG, Paint>(){
+            @Override
+            public Paint transform(VertexBDLG v){
+                return (Paint) v.getActor().getColor();
             }
         };
         VisualizationViewer vv = new VisualizationViewer<>(this.layout);
@@ -112,6 +122,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         vv.setGraphMouse(graphMouse);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
         vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
+        vv.getRenderContext().setVertexFillPaintTransformer(newVertexColour);
         return vv;
     }
 
@@ -126,7 +137,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<>();
+        VisulizerPicker = new javax.swing.JComboBox<String>();
+        jTextFieldBetaKinput = new javax.swing.JTextField();
+        jTextFieldAlphaKinput = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         importcvs = new javax.swing.JMenuItem();
@@ -148,6 +163,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         OptionsPanel.setPreferredSize(new java.awt.Dimension(220, 718));
 
         refreshGraphButton.setText("Refresh");
+        refreshGraphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshGraphButtonActionPerformed(evt);
+            }
+        });
 
         VisulizerPicker.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BiDynamic Grid Layout", "BiDynamic Cluster Layout", "One-Mode Actor View", "One-Mode Event View", "View Knowlage Difusion"}));
         VisulizerPicker.addItemListener(new java.awt.event.ItemListener() {
@@ -161,24 +181,75 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldBetaKinput.setText("");
+
+        jTextFieldAlphaKinput.setText("");
+
+        jTextField4.setEditable(false);
+        jTextField4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField4.setText("Alpha K:");
+        jTextField4.setAutoscrolls(false);
+        jTextField4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jTextField4.setFocusable(false);
+        jTextField4.setOpaque(false);
+        jTextField4.setRequestFocusEnabled(false);
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+
+        jTextField5.setEditable(false);
+        jTextField5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField5.setText("Beta  K:");
+        jTextField5.setAutoscrolls(false);
+        jTextField5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jTextField5.setFocusable(false);
+        jTextField5.setOpaque(false);
+        jTextField5.setRequestFocusEnabled(false);
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout OptionsPanelLayout = new org.jdesktop.layout.GroupLayout(OptionsPanel);
         OptionsPanel.setLayout(OptionsPanelLayout);
         OptionsPanelLayout.setHorizontalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(VisulizerPicker, 0, 216, Short.MAX_VALUE)
             .add(OptionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(refreshGraphButton)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(VisulizerPicker, 0, 223, Short.MAX_VALUE)
+                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(OptionsPanelLayout.createSequentialGroup()
+                        .add(refreshGraphButton)
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(OptionsPanelLayout.createSequentialGroup()
+                        .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jTextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jTextField5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 64, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jTextFieldBetaKinput)
+                            .add(jTextFieldAlphaKinput))))
+                .addContainerGap())
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(OptionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(VisulizerPicker, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(82, 82, 82)
+                .add(18, 18, 18)
+                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jTextFieldAlphaKinput)
+                    .add(jTextField4))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jTextFieldBetaKinput)
+                    .add(jTextField5))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(refreshGraphButton)
-                .addContainerGap(931, Short.MAX_VALUE))
+                .addContainerGap(921, Short.MAX_VALUE))
         );
 
         getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
@@ -315,6 +386,18 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_VisulizerPickerItemStateChanged
 
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void refreshGraphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshGraphButtonActionPerformed
+        
+    }//GEN-LAST:event_refreshGraphButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;
     private javax.swing.JMenu FileMenu;
@@ -324,6 +407,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem exit;
     private javax.swing.JMenuItem export;
     private javax.swing.JMenuItem importcvs;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextFieldAlphaKinput;
+    private javax.swing.JTextField jTextFieldBetaKinput;
     private javax.swing.JButton refreshGraphButton;
     // End of variables declaration//GEN-END:variables
 

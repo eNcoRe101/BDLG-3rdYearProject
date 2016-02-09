@@ -26,52 +26,48 @@ import static org.junit.Assert.*;
  * @author rich
  */
 public class PathFinderTest {
+
     private GraphImporter imp;
     private final String relativePathToTestData = "./data/sample-2mode.csv";
     private BiDynamicLineGraph graph;
-    
-    public PathFinderTest() throws FileNotFoundException{
+
+    public PathFinderTest() throws FileNotFoundException {
         this.imp = new GraphImporter(Paths.get(this.relativePathToTestData).toString());
         this.graph = new BiDynamicLineGraph(imp);
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
 
-    
     @Test
-    public void getPathForVertexToActor(){
-        PathFinder p;
+    public void getPathForVertexToActor() {
+        PathFinder p = new PathFinder(graph);
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
-        for(Actor a : graph.getActors())
-            {
-                p = new PathFinder(graph);
-        System.out.println("2->" + a.getLabel());
-        for(Object v : graph.getVertices())
-        {
-            
-            
-                if(((VertexBDLG) v).getActor().equals(imp.getActors()[1]) 
-                    && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])){
-                    
-                    p.getPathsFrom((VertexBDLG)v, a,pairs );
-                   
+        for (Actor a : graph.getActors()) {
+            System.out.println("2->" + a.getLabel());
+            for (Object v : graph.getVertices()) {
+
+                if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
+                        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
+
+                    p.getPathsFrom((VertexBDLG) v, a, pairs);
+
                 }
             }
-         p.printPaths();
+            p.printPaths();
         }
 
         /*assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
