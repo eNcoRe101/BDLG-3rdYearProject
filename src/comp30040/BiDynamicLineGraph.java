@@ -183,6 +183,9 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     public void setVertexKnowlage(VertexBDLG v, double newKnowlage) {
         this.vertex_knowlage_map.put((V) v, newKnowlage);
         v.setKnowlage(newKnowlage);
+        Map<V, E>[] tmpValue = this.vertex_maps.get((V)v);
+        this.vertex_maps.remove((V)v);
+        this.vertex_maps.put((V) v, tmpValue);
     }
 
     public double getVertexKnowlage(VertexBDLG v) {

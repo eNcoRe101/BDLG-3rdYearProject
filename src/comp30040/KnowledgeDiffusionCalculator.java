@@ -8,9 +8,13 @@ package comp30040;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -56,20 +60,18 @@ public class KnowledgeDiffusionCalculator {
 
     public JScrollPane getKnowlageTableAsJTable() {
         String[] headers = new String[graph.getNumberOfActors()];
-        headers[0] = "Actors";
         String[][] tableArray = new String[this.finalKnowlageTable.length][this.finalKnowlageTable.length];
-        for (int i = 1; i < tableArray.length; i++) {
-            headers[i] = "" + i;
+        for (int i = 0; i < tableArray.length; i++) {
+            headers[i] = "" + (i + 1);
             for (int j = 0; j < tableArray[i].length; j++) {
-                tableArray[i][j] = Double.toString(finalKnowlageTable[i][j]);
+                tableArray[i][j] = String.format("%.2f", finalKnowlageTable[i][j]);
             }
         }
         DefaultTableModel newtableMod = new DefaultTableModel(tableArray, headers) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }
-        ;
+            };
         };
         JTable tableToReturn = new JTable(newtableMod);
         JScrollPane pane = new JScrollPane(tableToReturn);
@@ -77,6 +79,9 @@ public class KnowledgeDiffusionCalculator {
         rowHeaders.setFixedCellWidth(50);
         rowHeaders.setFixedCellHeight(tableToReturn.getRowHeight());
         pane.setRowHeaderView(rowHeaders);
+        Border emptyBoarder = BorderFactory.createEmptyBorder();
+        TitledBorder title = BorderFactory.createTitledBorder(emptyBoarder, "Actor Knowlage Defsuion from Actor to Actor");
+        pane.setBorder(title);
         return pane;
     }
 
@@ -137,7 +142,12 @@ public class KnowledgeDiffusionCalculator {
                     if (knowlageMatrix[0][k] < 0) {
                         knowlageMatrix[0][k] = 0;
                     }
-                    graph.setVertexKnowlage(vetex, knowlageMatrix[0][k]);
+                    double vertexKnowloage = 0;
+                    for(int currentEvent = 1; currentEvent <= k; currentEvent++){
+                        vertexKnowloage += knowlageMatrix[1][currentEvent];
+                    }
+                    //vertexKnowloage += graph.getVertexKnowlage(vetex);
+                    graph.setVertexKnowlage(vetex, vertexKnowloage);
                 }
 
                 //place path on ferbiden list

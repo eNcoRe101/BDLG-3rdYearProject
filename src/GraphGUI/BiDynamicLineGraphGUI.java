@@ -84,11 +84,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 double radius;
                 System.out.println("This v's k = " +  v.getKnowlage());
                 if(v.getKnowlage() != 0)
-                    radius = 60/(double)v.getKnowlage();
+                    radius = 6/(double)v.getKnowlage();
                 else
                     radius = 6;
                 Ellipse2D circle;
-                return circle = new Ellipse2D.Double(-3, -3, radius, radius);
+                return circle = new Ellipse2D.Double(-radius/2, -radius/2, radius, radius);
             }
         };
         VisualizationViewer vv = new VisualizationViewer<>(this.layout);
