@@ -32,20 +32,7 @@ public class KnowledgeDiffusionCalculator {
     public KnowledgeDiffusionCalculator(BiDynamicLineGraph graph) {
         this.graph = graph;
         this.actorEventKnowlageMap = new HashMap<>();
-        this.finalKnowlageTable = new double[this.graph.getNumberOfActors()][this.graph.getNumberOfActors()];
-        for (Actor aOne : graph.getActors()) {
-            for (Actor aTwo : graph.getActors()) {
-                if (aOne.equals(aTwo)) {
-                    this.finalKnowlageTable[aOne.getId() - 1][aTwo.getId() - 1] = 0.0;
-                    continue;
-                }
-                double[] tmpKnowlage = findKnowlageDifusionActorToOther(aOne, aTwo);
-                for (int i = 0; i < tmpKnowlage.length; i++) {
-                    this.finalKnowlageTable[aOne.getId() - 1][aTwo.getId() - 1] += tmpKnowlage[i];
-                }
-
-            }
-        }
+        findKnowlageDifusionBetweenAllActors();
     }
 
     public void updateAlphaGain(double alpha) {
@@ -67,7 +54,11 @@ public class KnowledgeDiffusionCalculator {
     public double[][] getKnowlageTable() {
         return this.finalKnowlageTable;
     }
-
+    
+    public void refreshKnowlageDifusionValues(){
+        this.findKnowlageDifusionBetweenAllActors();
+    }
+    
     public JScrollPane getKnowlageTableAsJTable() {
         String[] headers = new String[graph.getNumberOfActors()];
         String[][] tableArray = new String[this.finalKnowlageTable.length][this.finalKnowlageTable.length];
@@ -105,6 +96,23 @@ public class KnowledgeDiffusionCalculator {
         
     public BiDynamicLineGraph getGraph(){
         return this.graph;
+    }
+    
+    private void findKnowlageDifusionBetweenAllActors(){
+        this.finalKnowlageTable = new double[this.graph.getNumberOfActors()][this.graph.getNumberOfActors()];
+        for (Actor aOne : graph.getActors()) {
+            for (Actor aTwo : graph.getActors()) {
+                if (aOne.equals(aTwo)) {
+                    this.finalKnowlageTable[aOne.getId() - 1][aTwo.getId() - 1] = 0.0;
+                    continue;
+                }
+                double[] tmpKnowlage = findKnowlageDifusionActorToOther(aOne, aTwo);
+                for (int i = 0; i < tmpKnowlage.length; i++) {
+                    this.finalKnowlageTable[aOne.getId() - 1][aTwo.getId() - 1] += tmpKnowlage[i];
+                }
+
+            }
+        }
     }
 
     private double[] findKnowlageDifusionActorToOther(Actor i, Actor j) {

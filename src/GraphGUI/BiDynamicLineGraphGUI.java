@@ -86,7 +86,6 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             @Override
             public Shape transform(VertexBDLG v){
                 double radius;
-                System.out.println("This v's k = " +  v.getKnowlage());
                 if(v.getKnowlage() != 0)
                     radius = 6 + 3 * v.getKnowlage();
                 else
@@ -124,6 +123,74 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
         vv.getRenderContext().setVertexFillPaintTransformer(newVertexColour);
         return vv;
+    }
+    
+    private void updateJpanels(int currentSelectedItem, boolean refresh){
+        if(currentIndexOfSelectedView != currentSelectedItem
+           || refresh)
+        {
+            DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+            Graph<String, String> gg;
+            currentIndexOfSelectedView = currentSelectedItem;
+            switch(currentSelectedItem){
+                case 0:
+                    try {
+                        this.vv = genrateVisualizationViewer(currentCVSFile);
+                        //if(graphJPane != null)
+                            this.remove(graphJPane);
+                        graphJPane = new ScrollPane();
+                        graphJPane.add(vv);
+                        graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                        this.getContentPane().add(graphJPane, BorderLayout.CENTER);
+                        this.layout.setSize(this.getSize());
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    gg = this.currentBidlg.getOneModeActorGraph();
+                    this.layoutOneMode = new KKLayout<>(gg);
+                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
+                    this.vvOneMode.setSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                    graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+                    this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
+                    this.vvOneMode.setGraphMouse(graphMouse);
+                    this.remove(this.graphJPane);
+                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    this.graphJPane = new ScrollPane();
+                    this.graphJPane.add(this.vvOneMode);
+                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                    this.add(graphJPane, BorderLayout.CENTER);
+                    break;
+                case 3:
+                    gg = this.currentBidlg.getOneModeEventGraph();
+                    this.layoutOneMode = new KKLayout<>(gg);
+                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
+                    this.vvOneMode.setSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                    graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+                    this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
+                    this.vvOneMode.setGraphMouse(graphMouse);
+                    this.remove(this.graphJPane);
+                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    this.graphJPane = new ScrollPane();
+                    this.graphJPane.add(this.vvOneMode);
+                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                    this.add(graphJPane, BorderLayout.CENTER);
+                    break;
+                case 4:
+                    this.remove(this.graphJPane);
+                    this.graphJPane = new ScrollPane();
+                    
+                    this.graphJPane.add(this.kDC.getKnowlageTableAsJTable());
+                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
+                    this.add(graphJPane, BorderLayout.CENTER);
+                    break;
+            }
+            validate();
+            repaint();
+        }
     }
 
     /**
@@ -316,70 +383,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
     private void VisulizerPickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisulizerPickerActionPerformed
         int currentSelectedItem = this.VisulizerPicker.getSelectedIndex();
-        if(currentIndexOfSelectedView != currentSelectedItem)
-        {
-            DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-            Graph<String, String> gg;
-            currentIndexOfSelectedView = currentSelectedItem;
-            switch(currentSelectedItem){
-                case 0:
-                    try {
-                        this.vv = genrateVisualizationViewer(currentCVSFile);
-                        if(graphJPane != null)
-                            this.remove(graphJPane);
-                        graphJPane = new ScrollPane();
-                        graphJPane.add(vv);
-                        graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
-                        this.getContentPane().add(graphJPane, BorderLayout.CENTER);
-                        this.layout.setSize(this.getSize());
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    gg = this.currentBidlg.getOneModeActorGraph();
-                    this.layoutOneMode = new KKLayout<>(gg);
-                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
-                    this.vvOneMode.setSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
-                    graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-                    this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
-                    this.vvOneMode.setGraphMouse(graphMouse);
-                    this.remove(this.graphJPane);
-                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-                    this.graphJPane = new ScrollPane();
-                    this.graphJPane.add(this.vvOneMode);
-                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
-                    this.add(graphJPane, BorderLayout.CENTER);
-                    break;
-                case 3:
-                    gg = this.currentBidlg.getOneModeEventGraph();
-                    this.layoutOneMode = new KKLayout<>(gg);
-                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
-                    this.vvOneMode.setSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
-                    graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-                    this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
-                    this.vvOneMode.setGraphMouse(graphMouse);
-                    this.remove(this.graphJPane);
-                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-                    this.graphJPane = new ScrollPane();
-                    this.graphJPane.add(this.vvOneMode);
-                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
-                    this.add(graphJPane, BorderLayout.CENTER);
-                    break;
-                case 4:
-                    this.remove(this.graphJPane);
-                    this.graphJPane = new ScrollPane();
-                    
-                    this.graphJPane.add(this.kDC.getKnowlageTableAsJTable());
-                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
-                    this.add(graphJPane, BorderLayout.CENTER);
-                    break;
-            }
-            validate();
-            repaint();
-        }
+        this.updateJpanels(currentSelectedItem, false);
     }//GEN-LAST:event_VisulizerPickerActionPerformed
 
     private void VisulizerPickerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_VisulizerPickerItemStateChanged
@@ -395,9 +399,15 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void refreshGraphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshGraphButtonActionPerformed
-        
+        if(this.kDC != null){
+            this.kDC.updateAlphaGain(Double.parseDouble(this.jTextFieldAlphaKinput.getText()));
+            this.kDC.updateBetaCoeffient(Double.parseDouble(this.jTextFieldBetaKinput.getText()));
+            this.kDC.refreshKnowlageDifusionValues();
+            int currentSelectedItem = this.VisulizerPicker.getSelectedIndex();
+            this.updateJpanels(currentSelectedItem, true);
+        }
     }//GEN-LAST:event_refreshGraphButtonActionPerformed
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;
     private javax.swing.JMenu FileMenu;
