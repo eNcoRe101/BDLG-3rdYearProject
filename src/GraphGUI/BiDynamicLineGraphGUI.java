@@ -125,6 +125,12 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
+        vv.setVertexToolTipTransformer(new Transformer<VertexBDLG, String>(){
+            @Override
+            public String transform(VertexBDLG v) {
+                return "Vertex " + v.toString() + " knowlage: " + Double.toString(v.getKnowlage());
+            }
+        });
         //vv.scaleToLayout(visualizationViewerScalingControl);
         vv.setGraphMouse(graphMouse);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
