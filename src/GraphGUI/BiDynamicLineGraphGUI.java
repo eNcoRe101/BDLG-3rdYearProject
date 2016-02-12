@@ -17,6 +17,7 @@ import comp30040.KnowledgeDiffusionCalculator;
 import comp30040.VertexBDLG;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
@@ -139,13 +140,15 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 case 0:
                     try {
                         this.vv = genrateVisualizationViewer(currentCVSFile);
-                        //if(graphJPane != null)
+                        if(graphJPane != null || refresh)
                             this.remove(graphJPane);
                         graphJPane = new ScrollPane();
                         graphJPane.add(vv);
                         graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
                         this.getContentPane().add(graphJPane, BorderLayout.CENTER);
                         this.layout.setSize(this.getSize());
+                        GraphZoomScrollPane graphZoom = new GraphZoomScrollPane(this.vv);
+                        //this.OptionsPanel.add(graphZoom);
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -162,6 +165,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.vvOneMode.setGraphMouse(graphMouse);
                     this.remove(this.graphJPane);
                     this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    //this.vvOneMode.getRenderContext().setVertexFillPaintTransformer(this.newVertexColour);
                     this.graphJPane = new ScrollPane();
                     this.graphJPane.add(this.vvOneMode);
                     this.graphJPane.setPreferredSize(new Dimension(this.getWidth()-OptionsPanel.getWidth(), this.getHeight()));
@@ -198,10 +202,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     
     private void updateVvMouseMode(){
         ModalGraphMouse graphMouse;
-        if(this.currentMouseMode == ModalGraphMouse.Mode.EDITING)
-            graphMouse = new EditingModalGraphMouse();
-        else
-            graphMouse = new DefaultModalGraphMouse();
+        /*if(this.currentMouseMode == ModalGraphMouse.Mode.EDITING)
+            graphMouse = new EditingModalGraphMouse(vv.getRenderContext(),
+                                                    this.currentBidlg);
+        else*/
+        graphMouse = new DefaultModalGraphMouse();
         graphMouse.setMode(this.currentMouseMode);
         if(this.vv != null)
             vv.setGraphMouse(graphMouse);
