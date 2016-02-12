@@ -188,6 +188,12 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         this.vertex_maps.put((V) v, tmpValue);
     }
     
+    public void resetVertexKnowlage(){
+        for(V v : this.vertex_knowlage_map.keySet()){
+            this.setVertexKnowlage((VertexBDLG) v, 0.0);
+        }
+    }
+    
     public double getVertexKnowlage(VertexBDLG v){
         return this.vertex_knowlage_map.get((V) v);
     }

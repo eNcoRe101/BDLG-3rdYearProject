@@ -100,6 +100,7 @@ public class KnowledgeDiffusionCalculator {
     
     private void findKnowlageDifusionBetweenAllActors(){
         this.finalKnowlageTable = new double[this.graph.getNumberOfActors()][this.graph.getNumberOfActors()];
+        this.graph.resetVertexKnowlage();
         for (Actor aOne : graph.getActors()) {
             for (Actor aTwo : graph.getActors()) {
                 if (aOne.equals(aTwo)) {
