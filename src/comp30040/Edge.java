@@ -33,4 +33,9 @@ public class Edge {
     public VertexBDLG getSecondVertex() {
         return secondV;
     }
+    
+    @Override
+    public String toString(){
+        return this.firstV.toString() + this.secondV.toString();
+    }
 }
