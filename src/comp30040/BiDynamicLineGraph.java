@@ -211,14 +211,14 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
                     continue;
                 }
                 if (((VertexBDLG) v).getEvent().equals(((VertexBDLG) vv).getEvent())) {
-                    this.addEdge((E) (v.toString() + vv.toString()),
+                    this.addEdge((E) new Edge(EdgeType.UNDIRECTED, v, vv),
                             v, vv, EdgeType.UNDIRECTED);
                 } else if (((VertexBDLG) v).getActor().equals(((VertexBDLG) vv).getActor())
                         && ((VertexBDLG) v).getEvent().getEventId() < ((VertexBDLG) vv).getEvent().getEventId()
                         && this.getInDegree((VertexBDLG) v) <= 1
                         && this.getOutDegree((VertexBDLG) v) < 1) {
-                    this.addEdge((E) (v.toString() + vv.toString()),
-                            v, vv, EdgeType.DIRECTED);
+                    this.addEdge((E) new Edge(EdgeType.DIRECTED, v, vv),
+                                 v, vv, EdgeType.DIRECTED);
                 }
             }
         }

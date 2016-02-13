@@ -11,12 +11,12 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  *
  * @author rich
  */
-public class Edge {
+public class Edge<V> {
     private final EdgeType et;
-    private final VertexBDLG firstV;
-    private final VertexBDLG secondV;
+    private final V firstV;
+    private final V secondV;
     
-    public Edge(EdgeType et, VertexBDLG v, VertexBDLG vv){
+    public Edge(EdgeType et, V v, V vv){
         this.et = et;
         this.firstV = v;
         this.secondV = vv;
@@ -26,11 +26,11 @@ public class Edge {
         return et;
     }
 
-    public VertexBDLG getFirstVertex() {
+    public V getFirstVertex() {
         return firstV;
     }
 
-    public VertexBDLG getSecondVertex() {
+    public V getSecondVertex() {
         return secondV;
     }
     

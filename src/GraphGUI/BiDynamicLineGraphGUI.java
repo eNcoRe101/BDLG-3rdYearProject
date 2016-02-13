@@ -13,10 +13,13 @@ import javax.swing.JFileChooser;
 import comp30040.GraphImporter;
 import comp30040.BiDynamicLineGraph;
 import comp30040.BiDynamicLineGraphLayout;
+import comp30040.Edge;
 import comp30040.KnowledgeDiffusionCalculator;
 import comp30040.VertexBDLG;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Context;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -49,13 +52,13 @@ import org.apache.commons.collections15.Transformer;
  */
 public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
-    private Layout<VertexBDLG, String> layout = null;
+    private Layout<VertexBDLG, Edge> layout = null;
     private Layout<String, String> layoutOneMode = null;
-    private VisualizationViewer<VertexBDLG, String> vv = null;
+    private VisualizationViewer<VertexBDLG, Edge> vv = null;
     private VisualizationViewer<String, String> vvOneMode = null;
     private ScrollPane graphJPane = null;
     private File currentCVSFile = null;
-    private BiDynamicLineGraph currentBidlg = null;
+    private BiDynamicLineGraph<VertexBDLG, Edge> currentBidlg = null;
     private KnowledgeDiffusionCalculator kDC = null;
     private int currentIndexOfSelectedView = 0;
     private Mode currentMouseMode = ModalGraphMouse.Mode.TRANSFORMING;
@@ -83,7 +86,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         }
 
         GraphImporter gi = new GraphImporter(fileToUse);
-        this.currentBidlg = new BiDynamicLineGraph(gi);
+        this.currentBidlg = new BiDynamicLineGraph<>(gi);
         if (this.kDC == null) {
             this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
             jTextFieldBetaKinput.setText(Double.toString(this.kDC.getBetaKnowlageDifussionCoeffient()));
@@ -109,34 +112,35 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 return (Paint) v.getActor().getColor();
             }
         };
-        VisualizationViewer vv = new VisualizationViewer<>(this.layout);
-        Transformer<String, EdgeShape> newEdgeTypes;
-        /*newEdgeTypes = new Transformer<String, EdgeShape>(){
+        VisualizationViewer<VertexBDLG, Edge> vvTmp = new VisualizationViewer<>(this.layout);
+
+        Transformer<Context<Graph<VertexBDLG, Edge>, Edge>, Shape> newEdgeTypes = new Transformer<Context<Graph<VertexBDLG, Edge>, Edge>, Shape>() {
             @Override
-            public EdgeShape.Line<String, String> transform(String i) {
-                System.out.println(i);
-                return new EdgeShape.Line<String,String>();
+            public Shape transform(Context<Graph<VertexBDLG, Edge>, Edge> e) {
+                if(e.element.getEdgeType() == EdgeType.DIRECTED)
+                    return (new EdgeShape.Line<VertexBDLG, Edge>()).transform(e);
+                return (new EdgeShape.BentLine<VertexBDLG, Edge>()).transform(e);
             }
-        };*/
-        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<VertexBDLG, VertexBDLG>());
+        };
+        vvTmp.getRenderContext().setEdgeShapeTransformer(newEdgeTypes);
 
         DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         graphMouse.setMode(this.currentMouseMode);
         ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
-        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
-        vv.setVertexToolTipTransformer(new Transformer<VertexBDLG, String>(){
+        vvTmp.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        vvTmp.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
+        vvTmp.setVertexToolTipTransformer(new Transformer<VertexBDLG, String>() {
             @Override
             public String transform(VertexBDLG v) {
                 return "Vertex " + v.toString() + " knowlage: " + Double.toString(v.getKnowlage());
             }
         });
         //vv.scaleToLayout(visualizationViewerScalingControl);
-        vv.setGraphMouse(graphMouse);
-        vv.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
-        vv.getRenderContext().setVertexShapeTransformer(newVertexSize);
-        vv.getRenderContext().setVertexFillPaintTransformer(newVertexColour);
-        return vv;
+        vvTmp.setGraphMouse(graphMouse);
+        vvTmp.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
+        vvTmp.getRenderContext().setVertexShapeTransformer(newVertexSize);
+        vvTmp.getRenderContext().setVertexFillPaintTransformer(newVertexColour);
+        return vvTmp;
     }
 
     private void updateJpanels(int currentSelectedItem, boolean refresh) {
