@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
+import org.junit.Ignore;
 
 /**
  *
@@ -51,13 +53,13 @@ public class PathFinderTest {
     @After
     public void tearDown() {
     }
-
+    /*
     @Test
     public void getPathForVertexToActor() {
         
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         for (Actor a : graph.getActors()) {
-            System.out.println("\nN2E2->" + a.getLabel());
+            System.out.println("\nN2->" + a.getLabel());
             PathFinder p = new PathFinder(graph);
             for (Object v : graph.getVertices()) {
 
@@ -65,6 +67,8 @@ public class PathFinderTest {
                         && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
 
                     p.getPathsFrom((VertexBDLG) v, a,pairs);
+                    p.printPaths();
+                    p.clearPaths();
 
                 }
             }
@@ -75,9 +79,9 @@ public class PathFinderTest {
                                      "N2E2-N4E2->N4E3-N1E3\n" +
                                      "N2E2-N4E2->N4E3->N4E4-N1E4\n" +
                                      "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n");*/
-    }
-    
-    /*@Test
+    //}
+    /*
+    @Test
     public void getPathForVertexToactorFast(){
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         PathFinder p = new PathFinder(graph);
@@ -93,7 +97,8 @@ public class PathFinderTest {
         }
     }
     
-    @Test
+    
+    @Test 
     public void getPathForVertexToactorFast(){
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         PathFinder p = new PathFinder(graph);
@@ -104,4 +109,25 @@ public class PathFinderTest {
             p.clearPaths();
         }
     }*/
+    
+    
+    @Test
+    public void getPathForVertexToactorFast(){
+        for(Actor a : graph.getActors()){
+            System.out.println("\nN2->" + a.getLabel());
+            PathFinder p = new PathFinder(graph);
+            for (Object v : graph.getVertices()) {
+                //System.out.println(((VertexBDLG)));
+                if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
+                        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
+                    p.bfsParthsAll((VertexBDLG)v, a);
+                    p.printPaths();
+                    p.clearPaths();
+                    //break;
+                }
+                
+            }
+            System.out.println();
+        }
+    }
 }

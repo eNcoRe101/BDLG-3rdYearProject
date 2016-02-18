@@ -20,6 +20,22 @@ public class PathPair {
         this.et = et;
     }
     
+    public VertexBDLG getVertex(){
+        return v;
+    }
+    
+    public EdgeType getEdgeType(){
+        return et;
+    }
+    
+    public void setVertex(VertexBDLG v){
+        this.v = v;
+    }
+    
+    public void setEdgeType(EdgeType et){
+        this.et = et;
+    }
+    
     @Override
     public String toString(){
         String path = "->";
