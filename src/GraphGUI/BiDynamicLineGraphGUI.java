@@ -119,7 +119,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             public Shape transform(Context<Graph<VertexBDLG, Edge>, Edge> e) {
                 if(e.element.getEdgeType() == EdgeType.DIRECTED)
                     return (new EdgeShape.Line<VertexBDLG, Edge>()).transform(e);
-                return (new EdgeShape.BentLine<VertexBDLG, Edge>()).transform(e);
+                return (new EdgeShape.QuadCurve<VertexBDLG, Edge>()).transform(e);
             }
         };
         vvTmp.getRenderContext().setEdgeShapeTransformer(newEdgeTypes);

@@ -15,6 +15,13 @@ public class VertexBDLG {
     private Actor a = null;
     private NetworkEvent e = null;
     private double currentKnowlage = 0;
+    private int id;
+    
+    public VertexBDLG(Actor a, NetworkEvent e, int id){
+        this.a = a;
+        this.e = e;
+        this.id = id;
+    }
     
     public VertexBDLG(Actor a, NetworkEvent e){
         this.a = a;
@@ -33,8 +40,16 @@ public class VertexBDLG {
         this.currentKnowlage = newK;
     }
     
+    public void setId(int id){
+        this.id = id;
+    }
+    
     public double getKnowlage(){
         return this.currentKnowlage;
+    }
+    
+    public int getId(){
+        return this.id;
     }
     
     @Override

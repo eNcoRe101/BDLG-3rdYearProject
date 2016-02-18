@@ -199,9 +199,11 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     }
 
     private void genrateGraphFromImp() {
+        int numberOfV = 0;
         for (NetworkEvent e : imp.getEvents()) {
             for (Actor a : e.getActorsAtEvent()) {
-                this.addVertex((V) new VertexBDLG(a, e));
+                this.addVertex((V) new VertexBDLG(a, e, numberOfV));
+                numberOfV++;
             }
 
         }

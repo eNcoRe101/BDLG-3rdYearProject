@@ -54,25 +54,54 @@ public class PathFinderTest {
 
     @Test
     public void getPathForVertexToActor() {
-        PathFinder p = new PathFinder(graph);
+        
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         for (Actor a : graph.getActors()) {
-            System.out.println("2->" + a.getLabel());
+            System.out.println("\nN2E2->" + a.getLabel());
+            PathFinder p = new PathFinder(graph);
             for (Object v : graph.getVertices()) {
 
                 if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
                         && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
 
-                    p.getPathsFrom((VertexBDLG) v, a, pairs);
+                    p.getPathsFrom((VertexBDLG) v, a,pairs);
 
                 }
             }
             p.printPaths();
         }
-
-        /*assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
+        /*
+        assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
                                      "N2E2-N4E2->N4E3-N1E3\n" +
                                      "N2E2-N4E2->N4E3->N4E4-N1E4\n" +
                                      "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n");*/
     }
+    
+    /*@Test
+    public void getPathForVertexToactorFast(){
+        ArrayList<PathPair> pairs = new ArrayList<>(1000);
+        PathFinder p = new PathFinder(graph);
+        p.FloydWarshallWithPathReconstruction();
+        for (Object u : graph.getVertices()) {
+            for (Object v : graph.getVertices()) {
+                p.Path((VertexBDLG)u,(VertexBDLG)v);
+                p.printPaths();
+                p.clearPaths();
+                
+            }
+            
+        }
+    }
+    
+    @Test
+    public void getPathForVertexToactorFast(){
+        ArrayList<PathPair> pairs = new ArrayList<>(1000);
+        PathFinder p = new PathFinder(graph);
+        p.FloydWarshallWithPathReconstruction();
+        for (Object u : graph.getVertices()) {
+            p.bfsParths((VertexBDLG)u);
+            p.printPaths();
+            p.clearPaths();
+        }
+    }*/
 }
