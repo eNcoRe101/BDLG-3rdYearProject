@@ -180,49 +180,44 @@ public class PathFinder {
             dist[i] = Integer.MAX_VALUE;
         }
         dist[v.getId()] = 0;
-        
-        ArrayList startingPath = new ArrayList<PathPair>();
+
+        ArrayList startingPath = new ArrayList<>();
         startingPath.add(new PathPair(v, null));
         q.add(startingPath);
 
         while (!q.isEmpty()) {
             ArrayList<PathPair> currentPath = q.remove();
             PathPair currentVP = currentPath.get(currentPath.size() - 1);
-            for (Object dest : graph.getSuccessors(currentVP.getVertex())) {
-                
+            for (VertexBDLG dest : (Collection<VertexBDLG>)graph.getSuccessors(currentVP.v)) {
                 ArrayList<PathPair> currentPath2 = new ArrayList<>(currentPath);
-                if (((VertexBDLG) dest).equals(currentVP.v)
-                    || ((currentVP.et == EdgeType.UNDIRECTED) 
-                     && (graph.getEdgeType(currentVP.getVertex(), (VertexBDLG)dest)) == EdgeType.UNDIRECTED)) {
-                    //System.out.println(graph.getEdgeType(currentVP.getVertex(), (VertexBDLG)dest));
-                
+                EdgeType currentEt = graph.getEdgeType(currentVP.v, dest);
+                if ( dest.equals(currentVP.v)
+                        || (currentPath2.size() > 1)
+                        && (currentPath2.get(currentPath2.size() - 2).et == EdgeType.UNDIRECTED)
+                        && (currentEt == EdgeType.UNDIRECTED)) {
                     continue;
                 }
-                if (((VertexBDLG) dest).getActor().equals(a)
-                        && (!((VertexBDLG) dest).equals(currentVP.v))) {
-                    currentPath2.remove(currentPath2.size() - 1);
+                if (dest.getActor().equals(a)) {
+                    dist[dest.getId()] = dist[currentVP.getVertex().getId()] + 1;
+                    
+                    PathPair pptmp2= currentPath2.remove(currentPath2.size() - 1);
                     PathPair pptmp = new PathPair(currentVP.v, currentVP.et);
-                    pptmp.setEdgeType(graph.getEdgeType(currentVP.getVertex(), (VertexBDLG) dest));
+                    pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
                     currentPath2.add(pptmp);
                     currentPath2.add(new PathPair((VertexBDLG) dest, null));
                     this.paths.add(new ArrayList<>(currentPath2));
                     continue;
-                    //PrintPath((VertexBDLG)dest, parent);
-                }
-                if (dist[((VertexBDLG) dest).getId()] == Integer.MAX_VALUE
-                        && (!((VertexBDLG) dest).equals(currentVP.v))) {
-                    dist[((VertexBDLG) dest).getId()] = dist[currentVP.getVertex().getId()] + 1;
-                    currentPath2.remove(currentPath.size() - 1);
+                } else {
+                    dist[dest.getId()] = dist[currentVP.getVertex().getId()] + 1;
+                    PathPair pptmp2= currentPath2.remove(currentPath2.size() - 1);
                     PathPair pptmp = new PathPair(currentVP.v, currentVP.et);
-                    pptmp.setEdgeType(graph.getEdgeType(currentVP.getVertex(), (VertexBDLG) dest));
+                    pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
                     currentPath2.add(pptmp);
-                    currentPath2.add(new PathPair((VertexBDLG) dest, null));
+                    currentPath2.add(new PathPair( dest, null));
                     q.add(new ArrayList<>(currentPath2));
-                    //this.paths.add(new ArrayList<PathPair>(currentPath));
                 }
             }
         }
-        System.out.print("");
     }
 
     private void PrintPath(VertexBDLG v, ArrayList<Queue<VertexBDLG>> p) {

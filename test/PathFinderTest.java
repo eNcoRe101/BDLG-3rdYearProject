@@ -8,20 +8,15 @@ import comp30040.Actor;
 import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
 import comp30040.PathFinder;
-import comp30040.PathPair;
 import comp30040.VertexBDLG;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Test;
-import org.junit.Ignore;
 
 /**
  *
@@ -30,7 +25,7 @@ import org.junit.Ignore;
 public class PathFinderTest {
 
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/sample-2mode.csv";
+    private final String relativePathToTestData = "./data/mafia-2mode.csv";
     private BiDynamicLineGraph graph;
 
     public PathFinderTest() throws FileNotFoundException {
@@ -118,13 +113,13 @@ public class PathFinderTest {
             PathFinder p = new PathFinder(graph);
             for (Object v : graph.getVertices()) {
                 //System.out.println(((VertexBDLG)));
-                if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
-                        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
+                //if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
+                //        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
                     p.bfsParthsAll((VertexBDLG)v, a);
                     p.printPaths();
                     p.clearPaths();
-                    //break;
-                }
+                //    break;
+                //}
                 
             }
             System.out.println();
