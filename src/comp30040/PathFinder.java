@@ -26,11 +26,26 @@ public class PathFinder {
     private ArrayList< List<PathPair>> paths = new ArrayList<>();
     private double[][] dist;
     private VertexBDLG[][] next;
+    private int maxPathLength = -1; // value that sets the depth of the max length of a path to look for
+    // were -1 reprosents that paths can be any length
+    private boolean stopPathFinding = false;
 
     public PathFinder(BiDynamicLineGraph g) {
         this.graph = g;
         this.next = new VertexBDLG[this.graph.getVertexCount()][this.graph.getVertexCount()];
         this.dist = new double[this.graph.getVertexCount()][this.graph.getVertexCount()];
+    }
+    
+    public void setMaxPathLength(int max){
+        this.maxPathLength = max;
+    }
+    
+    public int getMaxPathLength(){
+        return this.maxPathLength;
+    }
+    
+    public void stopPathFinding(){
+        this.stopPathFinding = true;
     }
 
     public String printPath(List<PathPair> p) {
@@ -59,6 +74,7 @@ public class PathFinder {
 
     public void clearPaths() {
         paths.clear();
+        System.gc();
     }
 
     public void getPathsFrom(VertexBDLG i, Actor j, ArrayList<PathPair> currentPath) {
@@ -174,18 +190,20 @@ public class PathFinder {
         System.out.print("");
     }
     Set<ArrayList<PathPair>> seen;
-    private boolean stuck(VertexBDLG v, Actor a){
+
+    private boolean stuck(VertexBDLG v, Actor a) {
         Stack<VertexBDLG> q = new Stack<>();
         int i = 0;
         q.push(v);
-        while(!q.isEmpty()){
+        while (!q.isEmpty()) {
             VertexBDLG vTmp = q.pop();
-            if (v.getActor().equals(a))
+            if (v.getActor().equals(a)) {
                 return false;
-            for (VertexBDLG y : (Collection<VertexBDLG>)graph.getSuccessors(v)) {
+            }
+            for (VertexBDLG y : (Collection<VertexBDLG>) graph.getSuccessors(v)) {
                 ArrayList<PathPair> currentPath = new ArrayList<>();
                 currentPath.add(new PathPair(y, null));
-                if(!seen.contains(currentPath)){
+                if (!seen.contains(currentPath)) {
                     seen.add(currentPath);
                     q.push(y);
                 }
@@ -195,11 +213,10 @@ public class PathFinder {
         return true;
     }
     Queue<ArrayList<PathPair>> q = new LinkedList<>();
+
     public void bfsParthsAll(VertexBDLG v, Actor a) {
         int numberOfVertexs = graph.getVertexCount();
         double[] distL = new double[numberOfVertexs];
-        seen = new HashSet<>();
-        Set<Edge> seen2 = new HashSet<>();
         for (int i = 0; i < numberOfVertexs; i++) {
             distL[i] = Integer.MAX_VALUE;
         }
@@ -209,18 +226,24 @@ public class PathFinder {
         startingPath.add(new PathPair(v, null));
         q.add(startingPath);
 
-        while (!q.isEmpty()) {
-            
+        while (!q.isEmpty() && !stopPathFinding) {
+
             ArrayList<PathPair> currentPath = q.remove();
             PathPair currentVP = currentPath.get(currentPath.size() - 1);
-            if(seen.contains(currentPath)  || currentPath.size() > 10)
+            if (((this.maxPathLength != -1) && (currentPath.size() > this.maxPathLength))) {
                 continue;
-            seen.add(currentPath);
-            for (VertexBDLG dest : (Collection<VertexBDLG>)graph.getSuccessors(currentVP.v)) {
+            }
+            Collection<VertexBDLG> neighbours;
+            if(currentVP.v.equals(v))
+                neighbours = graph.getSuccessors(currentVP.v, EdgeType.UNDIRECTED);
+            else
+                neighbours = graph.getSuccessors(currentVP.v);
+            for (VertexBDLG dest : neighbours) {
                 ArrayList<PathPair> currentPath2 = new ArrayList<>(currentPath);
                 EdgeType currentEt = graph.getEdgeType(currentVP.v, dest);
-                if ( dest.equals(currentVP.v)
+                if (dest.equals(currentVP.v)
                         || (currentPath2.size() > 1)
+                        //|| stopPathFinding
                         && (currentPath2.get(currentPath2.size() - 2).et == EdgeType.UNDIRECTED)
                         && (currentEt == EdgeType.UNDIRECTED)
                         && distL[dest.getId()] != Integer.MAX_VALUE) {
@@ -228,24 +251,27 @@ public class PathFinder {
                 }
                 if (dest.getActor().equals(a)) {
                     distL[dest.getId()] = distL[currentVP.getVertex().getId()] + 1;
-                    
-                    PathPair pptmp2= currentPath2.remove(currentPath2.size() - 1);
+
+                    PathPair pptmp2 = currentPath2.remove(currentPath2.size() - 1);
                     PathPair pptmp = new PathPair(currentVP.v, currentVP.et);
                     pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
                     currentPath2.add(pptmp);
                     currentPath2.add(new PathPair((VertexBDLG) dest, null));
-                    this.paths.add(new ArrayList<>(currentPath2));
+                    if((this.maxPathLength != -1) || (currentPath2.size() <= this.maxPathLength))
+                        this.paths.add(new ArrayList<>(currentPath2));
                 } else {
                     distL[dest.getId()] = distL[currentVP.getVertex().getId()] + 1;
-                    PathPair pptmp2= currentPath2.remove(currentPath2.size() - 1);
+                    PathPair pptmp2 = currentPath2.remove(currentPath2.size() - 1);
                     PathPair pptmp = new PathPair(currentVP.v, currentVP.et);
                     pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
                     currentPath2.add(pptmp);
-                    currentPath2.add(new PathPair( dest, null));
-                    q.add(new ArrayList<>(currentPath2));
+                    currentPath2.add(new PathPair(dest, null));
+                    if((this.maxPathLength != -1) || (currentPath2.size() <= this.maxPathLength))
+                        q.add(new ArrayList<>(currentPath2));
                 }
             }
         }
+        this.stopPathFinding = false;
     }
 
     private void PrintPath(VertexBDLG v, ArrayList<Queue<VertexBDLG>> p) {

@@ -8,10 +8,12 @@ import comp30040.Actor;
 import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
 import comp30040.PathFinder;
+import comp30040.PathPair;
 import comp30040.VertexBDLG;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,7 +27,7 @@ import org.junit.Test;
 public class PathFinderTest {
 
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/mafia-2mode.csv";
+    private final String relativePathToTestData = "./data/sample-2mode.csv";
     private BiDynamicLineGraph graph;
 
     public PathFinderTest() throws FileNotFoundException {
@@ -108,24 +110,31 @@ public class PathFinderTest {
 
     @Test
     public void getPathForVertexToactorFast() {
-
+        long numberOfPaths = 0;
         PathFinder p = new PathFinder(graph);
-        
         for (Actor a : graph.getActors()) {
-            for (Object v : graph.getVertices()) {
-                if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
-                        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
+        for (Object v : graph.getVertices()) {
+        
+            
+                //if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
+                //        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
                     System.out.println("\n" + ((VertexBDLG) v).toString() + " to " + a.getLabel());
-                    p.bfsParthsAll((VertexBDLG) v, a);
+                    //p.bfsParthsAll((VertexBDLG) v, a);
+                    p.getPathsFrom((VertexBDLG) v, a, new ArrayList<PathPair>());
                     p.printPaths();
+                    numberOfPaths += p.getPaths().size();
                     p.clearPaths();
-                    break;
-                }
+                    
+                //    break;
+                //}
+                
 
             }
             System.out.println();
         }
+        
         System.out.println("Vertexs: " + graph.getVertexCount());
         System.out.println("Edges: " + graph.getEdgeCount());
+        System.out.println("Paths Num: " + numberOfPaths);
     }
 }

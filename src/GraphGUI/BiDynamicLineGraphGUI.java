@@ -91,6 +91,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
             jTextFieldBetaKinput.setText(Double.toString(this.kDC.getBetaKnowlageDifussionCoeffient()));
             jTextFieldAlphaKinput.setText(Double.toString(this.kDC.getAlphaGainValue()));
+            this.maxPathLengthJField.setText(Integer.toString(this.kDC.getMaxPathLength()));
         }
         this.currentBidlg = this.kDC.getGraph();
         this.layout = new BiDynamicLineGraphLayout<>(this.currentBidlg, new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
@@ -241,14 +242,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<>();
+        VisulizerPicker = new javax.swing.JComboBox<String>();
         jTextFieldBetaKinput = new javax.swing.JTextField();
         jTextFieldAlphaKinput = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        mouseModeChanger = new javax.swing.JComboBox<>();
+        mouseModeChanger = new javax.swing.JComboBox<String>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        maxPathLengthJField = new javax.swing.JTextField();
+        stopKDiffsuin = new javax.swing.JButton();
         MainMenu = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         importcvs = new javax.swing.JMenuItem();
@@ -292,7 +296,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         jTextFieldAlphaKinput.setText("");
 
-        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Transforming", "Picking", "Annotating", "Edditing" }));
+        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Transforming", "Picking", "Annotating", "Edditing" }));
         mouseModeChanger.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mouseModeChangerActionPerformed(evt);
@@ -305,19 +309,25 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         jLabel3.setText("Beta  K:");
 
+        jLabel4.setText("Max Path Length:");
+
+        maxPathLengthJField.setText("");
+
+        stopKDiffsuin.setText("Stop Knowlage Diffusion");
+        stopKDiffsuin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopKDiffsuinActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout OptionsPanelLayout = new org.jdesktop.layout.GroupLayout(OptionsPanel);
         OptionsPanel.setLayout(OptionsPanelLayout);
         OptionsPanelLayout.setHorizontalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(VisulizerPicker, 0, 216, Short.MAX_VALUE)
             .add(OptionsPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(OptionsPanelLayout.createSequentialGroup()
-                        .add(6, 6, 6)
-                        .add(jLabel1)
-                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(OptionsPanelLayout.createSequentialGroup()
+                        .addContainerGap()
                         .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(OptionsPanelLayout.createSequentialGroup()
                                 .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
@@ -328,11 +338,19 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jTextFieldBetaKinput)
                                     .add(jTextFieldAlphaKinput)))
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator1)
+                            .add(mouseModeChanger, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(OptionsPanelLayout.createSequentialGroup()
-                                .add(refreshGraphButton)
-                                .add(0, 0, Short.MAX_VALUE))
-                            .add(mouseModeChanger, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                                .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(maxPathLengthJField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 76, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(OptionsPanelLayout.createSequentialGroup()
+                                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jLabel1)
+                                    .add(refreshGraphButton)
+                                    .add(stopKDiffsuin))
+                                .add(0, 0, Short.MAX_VALUE))))
+                    .add(VisulizerPicker, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         OptionsPanelLayout.setVerticalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -347,15 +365,21 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jTextFieldBetaKinput, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel3))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel4)
+                    .add(maxPathLengthJField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(7, 7, 7)
                 .add(refreshGraphButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(stopKDiffsuin)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(mouseModeChanger, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(853, Short.MAX_VALUE))
+                .addContainerGap(420, Short.MAX_VALUE))
         );
 
         getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
@@ -399,6 +423,9 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         this.currentCVSFile = fc.getSelectedFile();
         try {
+            this.layout = null;
+            this.currentBidlg = null;
+            this.kDC = null;
             this.vv = genrateVisualizationViewer(currentCVSFile);
             if (graphJPane != null) {
                 this.remove(graphJPane);
@@ -434,6 +461,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         if (this.kDC != null) {
             this.kDC.updateAlphaGain(Double.parseDouble(this.jTextFieldAlphaKinput.getText()));
             this.kDC.updateBetaCoeffient(Double.parseDouble(this.jTextFieldBetaKinput.getText()));
+            this.kDC.updateMaxPathLength(Integer.parseInt(this.maxPathLengthJField.getText()));
             this.kDC.refreshKnowlageDifusionValues();
             this.updateJpanels(this.VisulizerPicker.getSelectedIndex(), true);
         }
@@ -443,6 +471,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         this.currentMouseMode = ModalGraphMouse.Mode.values()[this.mouseModeChanger.getSelectedIndex()];
         this.updateVvMouseMode();
     }//GEN-LAST:event_mouseModeChangerActionPerformed
+
+    private void stopKDiffsuinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopKDiffsuinActionPerformed
+        if(this.kDC != null)
+            this.kDC.stopKnowlageCalculation();
+    }//GEN-LAST:event_stopKDiffsuinActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;
@@ -456,11 +489,14 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldAlphaKinput;
     private javax.swing.JTextField jTextFieldBetaKinput;
+    private javax.swing.JTextField maxPathLengthJField;
     private javax.swing.JComboBox<String> mouseModeChanger;
     private javax.swing.JButton refreshGraphButton;
+    private javax.swing.JButton stopKDiffsuin;
     // End of variables declaration//GEN-END:variables
 
 }

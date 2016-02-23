@@ -28,10 +28,12 @@ public class KnowledgeDiffusionCalculator {
     private double alphaEventKnowlageGain = 1;
     private double betaActorKnowlageDiffusionCoeffient = 0.5;
     private HashMap<Actor, Double[]> actorEventKnowlageMap;
+    private PathFinder pathF;
 
     public KnowledgeDiffusionCalculator(BiDynamicLineGraph graph) {
         this.graph = graph;
         this.actorEventKnowlageMap = new HashMap<>();
+        this.pathF = new PathFinder(this.graph);
         findKnowlageDifusionBetweenAllActors();
     }
 
@@ -45,6 +47,18 @@ public class KnowledgeDiffusionCalculator {
 
     public void updateBetaCoeffient(double beta) {
         this.betaActorKnowlageDiffusionCoeffient = beta;
+    }
+    
+    public void updateMaxPathLength(int max){
+        this.pathF.setMaxPathLength(max);
+    }
+    
+    public int getMaxPathLength(){
+        return this.pathF.getMaxPathLength();
+    }
+    
+    public void stopKnowlageCalculation(){
+        this.pathF.stopPathFinding();
     }
     
     public double getBetaKnowlageDifussionCoeffient(){
@@ -134,9 +148,9 @@ public class KnowledgeDiffusionCalculator {
                     knowlageMatrix[0][k] += this.alphaEventKnowlageGain;
                 }
                 //get paths from this actor at this event to any event J attends
-                PathFinder pathF = new PathFinder(this.graph);
+                pathF.clearPaths();
                 VertexBDLG vetex = new VertexBDLG(i, graph.getEvents()[k]);
-                pathF.getPathsFrom(vetex, j, new ArrayList<PathPair>());
+                pathF.bfsParthsAll(vetex, j);
                 ArrayList<List<PathPair>> pathsToUse = pathF.getPaths();
                 //caculate knowlage transfer 
                 double knowlageGainForThisPath = knowlageMatrix[0][k];
