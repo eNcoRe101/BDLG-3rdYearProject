@@ -48,6 +48,7 @@ public class PathFinderTest {
     @After
     public void tearDown() {
     }
+
     /*
     @Test
     public void getPathForVertexToActor() {
@@ -104,25 +105,27 @@ public class PathFinderTest {
             p.clearPaths();
         }
     }*/
-    
-    
+
     @Test
-    public void getPathForVertexToactorFast(){
-        for(Actor a : graph.getActors()){
-            System.out.println("\nN2->" + a.getLabel());
-            PathFinder p = new PathFinder(graph);
+    public void getPathForVertexToactorFast() {
+
+        PathFinder p = new PathFinder(graph);
+        
+        for (Actor a : graph.getActors()) {
             for (Object v : graph.getVertices()) {
-                //System.out.println(((VertexBDLG)));
-                //if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
-                //        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
-                    p.bfsParthsAll((VertexBDLG)v, a);
+                if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
+                        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
+                    System.out.println("\n" + ((VertexBDLG) v).toString() + " to " + a.getLabel());
+                    p.bfsParthsAll((VertexBDLG) v, a);
                     p.printPaths();
                     p.clearPaths();
-                //    break;
-                //}
-                
+                    break;
+                }
+
             }
             System.out.println();
         }
+        System.out.println("Vertexs: " + graph.getVertexCount());
+        System.out.println("Edges: " + graph.getEdgeCount());
     }
 }

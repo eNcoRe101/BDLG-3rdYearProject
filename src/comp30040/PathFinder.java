@@ -9,9 +9,11 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -171,34 +173,61 @@ public class PathFinder {
         }
         System.out.print("");
     }
-
+    Set<ArrayList<PathPair>> seen;
+    private boolean stuck(VertexBDLG v, Actor a){
+        Stack<VertexBDLG> q = new Stack<>();
+        int i = 0;
+        q.push(v);
+        while(!q.isEmpty()){
+            VertexBDLG vTmp = q.pop();
+            if (v.getActor().equals(a))
+                return false;
+            for (VertexBDLG y : (Collection<VertexBDLG>)graph.getSuccessors(v)) {
+                ArrayList<PathPair> currentPath = new ArrayList<>();
+                currentPath.add(new PathPair(y, null));
+                if(!seen.contains(currentPath)){
+                    seen.add(currentPath);
+                    q.push(y);
+                }
+            }
+            i++;
+        }
+        return true;
+    }
+    Queue<ArrayList<PathPair>> q = new LinkedList<>();
     public void bfsParthsAll(VertexBDLG v, Actor a) {
         int numberOfVertexs = graph.getVertexCount();
-        double[] dist = new double[numberOfVertexs];
-        Queue<ArrayList<PathPair>> q = new LinkedList<>();
+        double[] distL = new double[numberOfVertexs];
+        seen = new HashSet<>();
+        Set<Edge> seen2 = new HashSet<>();
         for (int i = 0; i < numberOfVertexs; i++) {
-            dist[i] = Integer.MAX_VALUE;
+            distL[i] = Integer.MAX_VALUE;
         }
-        dist[v.getId()] = 0;
+        distL[v.getId()] = 0;
 
         ArrayList startingPath = new ArrayList<>();
         startingPath.add(new PathPair(v, null));
         q.add(startingPath);
 
         while (!q.isEmpty()) {
+            
             ArrayList<PathPair> currentPath = q.remove();
             PathPair currentVP = currentPath.get(currentPath.size() - 1);
+            if(seen.contains(currentPath)  || currentPath.size() > 10)
+                continue;
+            seen.add(currentPath);
             for (VertexBDLG dest : (Collection<VertexBDLG>)graph.getSuccessors(currentVP.v)) {
                 ArrayList<PathPair> currentPath2 = new ArrayList<>(currentPath);
                 EdgeType currentEt = graph.getEdgeType(currentVP.v, dest);
                 if ( dest.equals(currentVP.v)
                         || (currentPath2.size() > 1)
                         && (currentPath2.get(currentPath2.size() - 2).et == EdgeType.UNDIRECTED)
-                        && (currentEt == EdgeType.UNDIRECTED)) {
+                        && (currentEt == EdgeType.UNDIRECTED)
+                        && distL[dest.getId()] != Integer.MAX_VALUE) {
                     continue;
                 }
                 if (dest.getActor().equals(a)) {
-                    dist[dest.getId()] = dist[currentVP.getVertex().getId()] + 1;
+                    distL[dest.getId()] = distL[currentVP.getVertex().getId()] + 1;
                     
                     PathPair pptmp2= currentPath2.remove(currentPath2.size() - 1);
                     PathPair pptmp = new PathPair(currentVP.v, currentVP.et);
@@ -206,9 +235,8 @@ public class PathFinder {
                     currentPath2.add(pptmp);
                     currentPath2.add(new PathPair((VertexBDLG) dest, null));
                     this.paths.add(new ArrayList<>(currentPath2));
-                    continue;
                 } else {
-                    dist[dest.getId()] = dist[currentVP.getVertex().getId()] + 1;
+                    distL[dest.getId()] = distL[currentVP.getVertex().getId()] + 1;
                     PathPair pptmp2= currentPath2.remove(currentPath2.size() - 1);
                     PathPair pptmp = new PathPair(currentVP.v, currentVP.et);
                     pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
