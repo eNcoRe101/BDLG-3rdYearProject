@@ -14,11 +14,17 @@ import comp30040.VertexBDLG;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertArrayEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -51,35 +57,32 @@ public class PathFinderTest {
     public void tearDown() {
     }
 
-    /*
     @Test
     public void getPathForVertexToActor() {
-        
-        ArrayList<PathPair> pairs = new ArrayList<>(1000);
         for (Actor a : graph.getActors()) {
-            System.out.println("\nN2->" + a.getLabel());
             PathFinder p = new PathFinder(graph);
             for (Object v : graph.getVertices()) {
 
                 if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
                         && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
-
-                    p.getPathsFrom((VertexBDLG) v, a,pairs);
+                    System.out.println("\n" + ((VertexBDLG) v).toString() + " to " + a.getLabel());
+                    p.getPathsFrom((VertexBDLG) v, a, new ArrayList<PathPair>());
                     p.printPaths();
+                    assertEquals("Checking paths are correct",
+                            "N2E2-N3E2->N3E3-N1E3\n"
+                            + "N2E2-N4E2->N4E3-N1E3\n"
+                            + "N2E2-N4E2->N4E3->N4E4-N1E4\n"
+                            + "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n"
+                            + "", p.toString());
                     p.clearPaths();
-
+                    return;
                 }
             }
             p.printPaths();
         }
-        /*
-        assertEquals(p.printPaths(), "N2E2-N3E2->N3E3-N1E3\n" +
-                                     "N2E2-N4E2->N4E3-N1E3\n" +
-                                     "N2E2-N4E2->N4E3->N4E4-N1E4\n" +
-                                     "N2E2-N3E2->N3E3-N4E3->N4E4-N1E4\n");*/
-    //}
-    /*
-    @Test
+    }
+
+    /*@Test
     public void getPathForVertexToactorFast(){
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         PathFinder p = new PathFinder(graph);
@@ -87,52 +90,48 @@ public class PathFinderTest {
         for (Object u : graph.getVertices()) {
             for (Object v : graph.getVertices()) {
                 p.Path((VertexBDLG)u,(VertexBDLG)v);
-                p.printPaths();
+                p.pathsToString();
                 p.clearPaths();
                 
             }
             
         }
-    }
-    
-    
-    @Test 
+    }*/
+ /*@Test 
     public void getPathForVertexToactorFast(){
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         PathFinder p = new PathFinder(graph);
         p.FloydWarshallWithPathReconstruction();
         for (Object u : graph.getVertices()) {
             p.bfsParths((VertexBDLG)u);
-            p.printPaths();
+            p.pathsToString();
             p.clearPaths();
         }
     }*/
-
     @Test
     public void getPathForVertexToactorFast() {
         long numberOfPaths = 0;
         PathFinder p = new PathFinder(graph);
-        for (Actor a : graph.getActors()) {
+        PathFinder pp = new PathFinder(graph);
         for (Object v : graph.getVertices()) {
-        
-            
-                //if (((VertexBDLG) v).getActor().equals(imp.getActors()[1])
-                //        && ((VertexBDLG) v).getEvent().getEventId() > 1 && !a.equals(imp.getActors()[1])) {
+            for (Actor a : graph.getActors()) {
+                if (((VertexBDLG) v).getEvent().getEventId() > 1) {
                     System.out.println("\n" + ((VertexBDLG) v).toString() + " to " + a.getLabel());
-                    //p.bfsParthsAll((VertexBDLG) v, a);
-                    p.getPathsFrom((VertexBDLG) v, a, new ArrayList<PathPair>());
-                    p.printPaths();
+                    p.bfsParthsAll((VertexBDLG) v, a);
                     numberOfPaths += p.getPaths().size();
-                    p.clearPaths();
-                    
-                //    break;
-                //}
-                
+                    pp.getPathsFrom((VertexBDLG) v, a, new ArrayList<PathPair>());
 
+                    p.printPaths();
+                    System.out.println();
+                    pp.printPaths();
+                    assertEquals("Checking Paths are the same", p.toString(), pp.toString());
+                    p.clearPaths();
+                    pp.clearPaths();
+                }
             }
             System.out.println();
         }
-        
+
         System.out.println("Vertexs: " + graph.getVertexCount());
         System.out.println("Edges: " + graph.getEdgeCount());
         System.out.println("Paths Num: " + numberOfPaths);

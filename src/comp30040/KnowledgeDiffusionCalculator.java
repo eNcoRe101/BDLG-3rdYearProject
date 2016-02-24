@@ -156,7 +156,7 @@ public class KnowledgeDiffusionCalculator {
                 double knowlageGainForThisPath = knowlageMatrix[0][k];
                 double demominator;
                 for (List<PathPair> pp : pathsToUse) {
-                    System.out.print(pathF.printPath(pp));
+                    System.out.print(pathF.pathToString(pp));
                     System.out.println("Inistal K : " + knowlageMatrix[0][k]);
                     demominator = 1;
                     for (PathPair p : pp) {
@@ -189,7 +189,7 @@ public class KnowledgeDiffusionCalculator {
         return knowlageMatrix[1];
     }
     
-    private double[] findKnowlageDifusionActorToOtherFast(Actor i, Actor j) {
+    private double[] findKnowlageDifusionActorToOtherOld(Actor i, Actor j) {
 
         double[][] knowlageMatrix = new double[2][graph.getNumberOfEvents()]; //knowlage carred forward && 
         //diffused knowlage to actor J at event K
@@ -215,7 +215,7 @@ public class KnowledgeDiffusionCalculator {
                 double knowlageGainForThisPath = knowlageMatrix[0][k];
                 double demominator;
                 for (List<PathPair> pp : pathsToUse) {
-                    System.out.print(pathF.printPath(pp));
+                    System.out.print(pathF.pathToString(pp));
                     System.out.println("Inistal K : " + knowlageMatrix[0][k]);
                     demominator = 1;
                     for (PathPair p : pp) {

@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  */
 public class KnowledgeDiffusionCalculatorTest {
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/mafia-2mode.csv";
+    private final String relativePathToTestData = "./data/sample-2mode.csv";
     private BiDynamicLineGraph graph;
     
     public KnowledgeDiffusionCalculatorTest() throws FileNotFoundException{
@@ -48,10 +48,9 @@ public class KnowledgeDiffusionCalculatorTest {
     public void tearDown() {
     }
 
-    /*@Test
+    @Test
     public void getKnowlageDiffusionForActor1(){
         KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);
-        k.updateMaxPathLength(1);
         double[][] tmp3 = new double[imp.getNumberOfActors()][imp.getNumberOfActors()];
         double[][] KnowlageTable = {{0.0, 0.0, 0.5, 1.25, 1.125, 0.0},
                                     {0.630859375, 0.0, 0.625, 0.671875, 0.49755859375, 0.5},
@@ -70,12 +69,13 @@ public class KnowledgeDiffusionCalculatorTest {
                 for(double d : tmp)
                     tmp2 += d;
                 tmp3[ii][jj] = tmp2;
+                System.out.println(Arrays.toString(tmp));
+                System.out.println(tmp2);
                 assertEquals("Checking that actors " + i  + " and " + j + " are correct",
                              KnowlageTable[i.getId()-1][j.getId()-1], 
                              tmp2,
                              0.00001);
-                System.out.println(Arrays.toString(tmp));
-                System.out.println(tmp2);
+                
                 jj++;
             }
             ii++;
@@ -89,7 +89,8 @@ public class KnowledgeDiffusionCalculatorTest {
             System.out.println("]");
         }
         assertTrue(true);
-    }*/
+    }
+    
     @Test
     public void getKnowlageDiffusionForActor2(){
         KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph);

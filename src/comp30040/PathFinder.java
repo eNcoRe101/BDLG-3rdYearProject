@@ -48,7 +48,7 @@ public class PathFinder {
         this.stopPathFinding = true;
     }
 
-    public String printPath(List<PathPair> p) {
+    public String pathToString(List<PathPair> p) {
         String stringAsPaths = "";
         for (PathPair pp : p) {
             stringAsPaths += pp.toString();
@@ -56,15 +56,13 @@ public class PathFinder {
         stringAsPaths += '\n';
         return stringAsPaths;
     }
+    
+    public void printPath(List<PathPair> p){
+        System.out.println(pathToString(p));
+    }
 
-    public String printPaths() {
-        Collections.sort(paths, new PathLengthComparator());
-        String stringAsPaths = "";
-        for (List<PathPair> path : paths) {
-            stringAsPaths += printPath(path);
-        }
-        System.out.print(stringAsPaths);
-        return stringAsPaths;
+    public void printPaths(){
+        System.out.print(this.toString());
     }
 
     public ArrayList<List<PathPair>> getPaths() {
@@ -78,6 +76,8 @@ public class PathFinder {
     }
 
     public void getPathsFrom(VertexBDLG i, Actor j, ArrayList<PathPair> currentPath) {
+        if(i.getActor().equals(j))
+            return;
         Collection<VertexBDLG> currentVUndirectedEdges;
         if (currentPath.isEmpty()) {
             currentVUndirectedEdges = graph.getSuccessors(i, EdgeType.UNDIRECTED);
@@ -215,6 +215,8 @@ public class PathFinder {
     Queue<ArrayList<PathPair>> q = new LinkedList<>();
 
     public void bfsParthsAll(VertexBDLG v, Actor a) {
+        if(v.getActor().equals(a))
+            return;
         int numberOfVertexs = graph.getVertexCount();
         double[] distL = new double[numberOfVertexs];
         for (int i = 0; i < numberOfVertexs; i++) {
@@ -230,7 +232,7 @@ public class PathFinder {
 
             ArrayList<PathPair> currentPath = q.remove();
             PathPair currentVP = currentPath.get(currentPath.size() - 1);
-            if (((this.maxPathLength != -1) && (currentPath.size() > this.maxPathLength))) {
+            if (((this.maxPathLength != -1) && (currentPath.size() >= this.maxPathLength))) {
                 continue;
             }
             Collection<VertexBDLG> neighbours;
@@ -243,7 +245,6 @@ public class PathFinder {
                 EdgeType currentEt = graph.getEdgeType(currentVP.v, dest);
                 if (dest.equals(currentVP.v)
                         || (currentPath2.size() > 1)
-                        //|| stopPathFinding
                         && (currentPath2.get(currentPath2.size() - 2).et == EdgeType.UNDIRECTED)
                         && (currentEt == EdgeType.UNDIRECTED)
                         && distL[dest.getId()] != Integer.MAX_VALUE) {
@@ -257,7 +258,7 @@ public class PathFinder {
                     pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
                     currentPath2.add(pptmp);
                     currentPath2.add(new PathPair((VertexBDLG) dest, null));
-                    if((this.maxPathLength != -1) || (currentPath2.size() <= this.maxPathLength))
+                    if((this.maxPathLength == -1) || (currentPath2.size() <= this.maxPathLength))
                         this.paths.add(new ArrayList<>(currentPath2));
                 } else {
                     distL[dest.getId()] = distL[currentVP.getVertex().getId()] + 1;
@@ -266,7 +267,7 @@ public class PathFinder {
                     pptmp.setEdgeType(graph.getEdgeType(pptmp2.getVertex(), dest));
                     currentPath2.add(pptmp);
                     currentPath2.add(new PathPair(dest, null));
-                    if((this.maxPathLength != -1) || (currentPath2.size() <= this.maxPathLength))
+                    if((this.maxPathLength == -1) || (currentPath2.size() <= this.maxPathLength))
                         q.add(new ArrayList<>(currentPath2));
                 }
             }
@@ -291,5 +292,15 @@ public class PathFinder {
             aPath.add(s.pop());
         }
         this.paths.add(aPath);
+    }
+    
+    @Override
+    public String toString(){
+        Collections.sort(paths, new PathLengthComparator());
+        String stringAsPaths = "";
+        for (List<PathPair> path : paths) {
+            stringAsPaths += pathToString(path);
+        }
+        return stringAsPaths;
     }
 }
