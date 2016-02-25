@@ -7,6 +7,7 @@
 import comp30040.Actor;
 import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
+import comp30040.NetworkEvent;
 import comp30040.PathFinder;
 import comp30040.PathPair;
 import comp30040.VertexBDLG;
@@ -83,53 +84,87 @@ public class PathFinderTest {
     }
 
     /*@Test
-    public void getPathForVertexToactorFast(){
+     public void getPathForVertexToactorFast(){
+     ArrayList<PathPair> pairs = new ArrayList<>(1000);
+     PathFinder p = new PathFinder(graph);
+     p.FloydWarshallWithPathReconstruction();
+     for (Object u : graph.getVertices()) {
+     for (Object v : graph.getVertices()) {
+     p.pathReconstuctor((VertexBDLG)u,(VertexBDLG)v);
+     p.pathsToString();
+     p.clearPaths();
+                
+     }
+            
+     }
+     }*/
+    @Test
+    public void getPathForVertexToactorFast() {
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         PathFinder p = new PathFinder(graph);
         p.FloydWarshallWithPathReconstruction();
         for (Object u : graph.getVertices()) {
             for (Object v : graph.getVertices()) {
-                p.Path((VertexBDLG)u,(VertexBDLG)v);
-                p.pathsToString();
+                p.pathReconstuctor((VertexBDLG) u, (VertexBDLG) v);
+                p.printPaths();
                 p.clearPaths();
-                
             }
-            
         }
-    }*/
- /*@Test 
-    public void getPathForVertexToactorFast(){
-        ArrayList<PathPair> pairs = new ArrayList<>(1000);
-        PathFinder p = new PathFinder(graph);
-        p.FloydWarshallWithPathReconstruction();
-        for (Object u : graph.getVertices()) {
-            p.bfsParths((VertexBDLG)u);
-            p.pathsToString();
-            p.clearPaths();
-        }
-    }*/
+    }
+    
+    /*
+     @Test
+     public void getPathForVertexToactorFast() {
+     long numberOfPaths = 0;
+     PathFinder p = new PathFinder(graph);
+     PathFinder pp = new PathFinder(graph);
+     for (Object v : graph.getVertices()) {
+     for (Actor a : graph.getActors()) {
+     if (((VertexBDLG) v).getEvent().getEventId() > 1) {
+     System.out.println("\n" + ((VertexBDLG) v).toString() + " to " + a.getLabel());
+     p.bfsParthsAll((VertexBDLG) v, a);
+     numberOfPaths += p.getPaths().size();
+     pp.getPathsFrom((VertexBDLG) v, a, new ArrayList<PathPair>());
+
+     p.printPaths();
+     System.out.println();
+     pp.printPaths();
+     assertEquals("Checking Paths are the same", p.toString(), pp.toString());
+     p.clearPaths();
+     pp.clearPaths();
+     }
+     }
+     System.out.println();
+     }
+
+     System.out.println("Vertexs: " + graph.getVertexCount());
+     System.out.println("Edges: " + graph.getEdgeCount());
+     System.out.println("Paths Num: " + numberOfPaths);
+     }*/
+
     @Test
-    public void getPathForVertexToactorFast() {
+    public void getPathForAllVertexsToAllActors() {
         long numberOfPaths = 0;
         PathFinder p = new PathFinder(graph);
-        PathFinder pp = new PathFinder(graph);
-        for (Object v : graph.getVertices()) {
-            for (Actor a : graph.getActors()) {
-                if (((VertexBDLG) v).getEvent().getEventId() > 1) {
-                    System.out.println("\n" + ((VertexBDLG) v).toString() + " to " + a.getLabel());
-                    p.bfsParthsAll((VertexBDLG) v, a);
+        for (Actor a : graph.getActors()) {
+            for (NetworkEvent e : graph.getEvents()) {
+                for (Actor aa : graph.getActors()) {
+                    VertexBDLG v = new VertexBDLG(a, e);
+                    if ((!graph.containsVertex(v)) || (!(v.getActor().getId() == 0) && !(v.getEvent().getEventId() == 0)
+                            && !(aa.getId() == 2))) {
+                        continue;
+                    }
+                    System.out.println("\n" + v.toString() + " to " + aa.getLabel());
+                    p.bfsParthsAll(v, aa);
                     numberOfPaths += p.getPaths().size();
-                    pp.getPathsFrom((VertexBDLG) v, a, new ArrayList<PathPair>());
-
                     p.printPaths();
-                    System.out.println();
-                    pp.printPaths();
-                    assertEquals("Checking Paths are the same", p.toString(), pp.toString());
+
                     p.clearPaths();
-                    pp.clearPaths();
+                    System.out.println();
+                    return;
                 }
+                System.out.println();
             }
-            System.out.println();
         }
 
         System.out.println("Vertexs: " + graph.getVertexCount());

@@ -83,8 +83,8 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                         for (final V other : picked) {
                             undirectedMenu.add(new AbstractAction("[" + other + "," + vertex + "]") {
                                 public void actionPerformed(ActionEvent e) {
-                                    graph.addEdge(edgeFactory.create(EdgeType.UNDIRECTED, other, vertex),
-                                            other, vertex);
+                                    //graph.addEdge(edgeFactory.create(EdgeType.UNDIRECTED, other, vertex),
+                                    //        other, vertex);
                                     vv.repaint();
                                 }
                             });

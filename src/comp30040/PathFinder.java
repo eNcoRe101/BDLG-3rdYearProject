@@ -146,17 +146,17 @@ public class PathFinder {
         for (int k = 0; k < numberOfVertexs; k++) {
             for (int i = 0; i < numberOfVertexs; i++) {
                 for (int j = 0; j < numberOfVertexs; j++) {
-                    if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
+                    //if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
-                    }
+                    //}
                 }
             }
         }
-        System.out.print("");
+        System.out.print("FloydWarshall finished");
     }
 
-    public void Path(VertexBDLG u, VertexBDLG v) {
+    public void pathReconstuctor(VertexBDLG u, VertexBDLG v) {
         List<PathPair> tmpPath = new ArrayList<>();
         if (this.next[u.getId()][v.getId()] != null) {
             while (!u.equals(v)) {

@@ -157,7 +157,7 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
         if (ed == null || ed == EdgeType.UNDIRECTED) {
             allSuccessors.addAll(this.vertex_maps.get(v)[INCIDENT].keySet());
         }
-        return Collections.unmodifiableCollection(allSuccessors);
+        return allSuccessors;
     }
 
     @Override
