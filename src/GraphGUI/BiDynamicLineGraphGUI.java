@@ -28,10 +28,12 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import JungModedClasss.EditingModalGraphMouse;
+import edu.uci.ics.jung.visualization.VisualizationImageServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.Paint;
 import java.awt.ScrollPane;
 import java.awt.Shape;
@@ -41,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
@@ -78,16 +81,18 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             }
         });
     }
-    
-    private void createImageOfGraph(VisualizationViewer vv, File fileToWriteTo){
-        BufferedImage buffer = new BufferedImage(vv.getWidth(), vv.getHeight(),
-                                                 BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = buffer.createGraphics();
-        g.dispose();
-        try{
+
+    private void createImageOfGraph(VisualizationViewer vv, File fileToWriteTo) {
+        VisualizationImageServer<VertexBDLG, Edge> vis = new VisualizationImageServer<>(vv.getGraphLayout(), vv.getGraphLayout().getSize());
+
+        BufferedImage buffer = (BufferedImage) vis.getImage(new Point2D.Double(vv.getGraphLayout().getSize().getWidth() / 2,
+                vv.getGraphLayout().getSize().getHeight() / 2),
+                new Dimension(vv.getGraphLayout().getSize()));
+        //Graphics2D g = buffer.createGraphics();
+        //g.dispose();
+        try {
             ImageIO.write(buffer, "jpeg", fileToWriteTo);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e);
         }
     }
@@ -130,8 +135,9 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         Transformer<Context<Graph<VertexBDLG, Edge>, Edge>, Shape> newEdgeTypes = new Transformer<Context<Graph<VertexBDLG, Edge>, Edge>, Shape>() {
             @Override
             public Shape transform(Context<Graph<VertexBDLG, Edge>, Edge> e) {
-                if(e.element.getEdgeType() == EdgeType.DIRECTED)
+                if (e.element.getEdgeType() == EdgeType.DIRECTED) {
                     return (new EdgeShape.Line<VertexBDLG, Edge>()).transform(e);
+                }
                 return (new EdgeShape.QuadCurve<VertexBDLG, Edge>()).transform(e);
             }
         };
@@ -144,14 +150,13 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 return "Vertex " + v.toString() + " knowlage: " + Double.toString(v.getKnowlage());
             }
         });
-        
-        
+
         Factory<VertexBDLG> vertexFactory = new VertexFactory(this.currentBidlg);
         Factory<Edge> edgeFactory = new EdgeFactory();
-        
+
         EditingModalGraphMouse graphMouse = new EditingModalGraphMouse(vvTmp.getRenderContext(), vertexFactory, edgeFactory);
         graphMouse.setMode(this.currentMouseMode);
-        
+
         vvTmp.setGraphMouse(graphMouse);
         vvTmp.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
         vvTmp.getRenderContext().setVertexShapeTransformer(newVertexSize);
@@ -162,7 +167,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private void updateJpanels(int currentSelectedItem, boolean refresh) {
         if (currentIndexOfSelectedView != currentSelectedItem
                 || refresh) {
-            
+
             Factory<VertexBDLG> vertexFactory = new VertexFactory(this.currentBidlg);
             Factory<Edge> edgeFactory = new EdgeFactory();
             EditingModalGraphMouse graphMouseOne;
@@ -191,7 +196,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.layoutOneMode = new KKLayout<>(gg);
                     this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
                     this.vvOneMode.setSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
-                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);  
+                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);
                     graphMouseOne.setMode(this.currentMouseMode);
                     this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
                     this.vvOneMode.setGraphMouse(graphMouseOne);
@@ -208,7 +213,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.layoutOneMode = new KKLayout<>(gg);
                     this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
                     this.vvOneMode.setSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
-                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);  
+                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);
                     graphMouseOne.setMode(this.currentMouseMode);
                     this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
                     this.vvOneMode.setGraphMouse(graphMouseOne);
@@ -233,7 +238,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         }
     }
 
-    private void updateVvMouseMode() {        
+    private void updateVvMouseMode() {
         Factory<VertexBDLG> vertexFactory = new VertexFactory(this.currentBidlg);
         Factory<Edge> edgeFactory = new EdgeFactory();
 
@@ -498,15 +503,17 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mouseModeChangerActionPerformed
 
     private void stopKDiffsuinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopKDiffsuinActionPerformed
-        if(this.kDC != null)
+        if (this.kDC != null) {
             this.kDC.stopKnowlageCalculation();
+        }
     }//GEN-LAST:event_stopKDiffsuinActionPerformed
 
     private void exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportActionPerformed
         final JFileChooser fc = new JFileChooser();
-        int op = fc.showOpenDialog(this);
-        if(op == JFileChooser.APPROVE_OPTION && (this.vv != null || this.vvOneMode != null)){
-            File fileToWriteTo = fc.getSelectedFile();
+        int op = fc.showSaveDialog(this);
+        if (op == JFileChooser.APPROVE_OPTION && (this.vv != null || this.vvOneMode != null)) {
+            File fileToWriteTo = new File(fc.getSelectedFile().getAbsolutePath());
+            System.out.println("Save as file: " + fileToWriteTo.getAbsolutePath());
             this.createImageOfGraph(vv, fileToWriteTo);
         }
     }//GEN-LAST:event_exportActionPerformed
