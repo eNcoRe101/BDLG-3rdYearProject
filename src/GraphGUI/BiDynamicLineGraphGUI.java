@@ -31,13 +31,16 @@ import JungModedClasss.EditingModalGraphMouse;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.ScrollPane;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
@@ -74,6 +77,19 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 new BiDynamicLineGraphGUI().setVisible(true);
             }
         });
+    }
+    
+    private void createImageOfGraph(VisualizationViewer vv, File fileToWriteTo){
+        BufferedImage buffer = new BufferedImage(vv.getWidth(), vv.getHeight(),
+                                                 BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = buffer.createGraphics();
+        g.dispose();
+        try{
+            ImageIO.write(buffer, "jpeg", fileToWriteTo);
+        }
+        catch(Exception e){
+            System.err.println(e);
+        }
     }
 
     private VisualizationViewer genrateVisualizationViewer(File fileToUse) throws FileNotFoundException {
@@ -398,7 +414,12 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         });
         FileMenu.add(importcvs);
 
-        export.setText("Export");
+        export.setText("Export as jpeg");
+        export.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportActionPerformed(evt);
+            }
+        });
         FileMenu.add(export);
 
         exit.setText("Exit");
@@ -480,6 +501,15 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         if(this.kDC != null)
             this.kDC.stopKnowlageCalculation();
     }//GEN-LAST:event_stopKDiffsuinActionPerformed
+
+    private void exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportActionPerformed
+        final JFileChooser fc = new JFileChooser();
+        int op = fc.showOpenDialog(this);
+        if(op == JFileChooser.APPROVE_OPTION && (this.vv != null || this.vvOneMode != null)){
+            File fileToWriteTo = fc.getSelectedFile();
+            this.createImageOfGraph(vv, fileToWriteTo);
+        }
+    }//GEN-LAST:event_exportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;
