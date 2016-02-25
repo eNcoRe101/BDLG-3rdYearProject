@@ -416,7 +416,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         });
         FileMenu.add(importcvs);
 
-        export.setText("Export as jpeg");
+        export.setText("Export to png");
         export.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportActionPerformed(evt);

@@ -74,14 +74,24 @@ public class KnowledgeDiffusionCalculator {
     }
     
     public JScrollPane getKnowlageTableAsJTable() {
-        String[] headers = new String[graph.getNumberOfActors()];
-        String[][] tableArray = new String[this.finalKnowlageTable.length][this.finalKnowlageTable.length];
-        for (int i = 0; i < tableArray.length; i++) {
+        String[] headers = new String[graph.getNumberOfActors()+1];
+        headers[graph.getNumberOfActors()] = "Knowlage Gained";
+        String[][] tableArray = new String[this.finalKnowlageTable.length+1][this.finalKnowlageTable.length+1];
+        double[] knowlageResived = new double[graph.getNumberOfActors()];
+        double knowlageGaged = 0;
+        for (int i = 0; i < tableArray.length-1; i++) {
             headers[i] = "" + (i + 1);
-            for (int j = 0; j < tableArray[i].length; j++) {
-                tableArray[i][j] = String.format("%.2f", finalKnowlageTable[i][j]);
+            for (int j = 0; j < tableArray[i].length-1; j++) {
+                tableArray[i][j] = String.format("%.4f", finalKnowlageTable[i][j]);
+                knowlageGaged += finalKnowlageTable[i][j];
+                knowlageResived[j] += finalKnowlageTable[i][j];
             }
+            tableArray[i][graph.getNumberOfActors()] = String.format("%.4f", knowlageGaged);
+            knowlageGaged = 0;
         }
+        for(int i = 0; i < tableArray.length-1; i++)
+            tableArray[graph.getNumberOfActors()][i] = String.format("%.4f", knowlageResived[i]);
+        
         DefaultTableModel newtableMod = new DefaultTableModel(tableArray, headers) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -91,7 +101,7 @@ public class KnowledgeDiffusionCalculator {
         JTable tableToReturn = new JTable(newtableMod);
         JScrollPane pane = new JScrollPane(tableToReturn);
         JList<String> rowHeaders = new JList<>(headers);
-        rowHeaders.setFixedCellWidth(50);
+        rowHeaders.setFixedCellWidth(110);
         rowHeaders.setFixedCellHeight(tableToReturn.getRowHeight());
         pane.setRowHeaderView(rowHeaders);
         Border emptyBoarder = BorderFactory.createEmptyBorder();
