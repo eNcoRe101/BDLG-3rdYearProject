@@ -22,15 +22,12 @@ import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
-import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
+import JungModedClasss.EditingModalGraphMouse;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,9 +38,8 @@ import java.awt.geom.Ellipse2D;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -124,10 +120,6 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             }
         };
         vvTmp.getRenderContext().setEdgeShapeTransformer(newEdgeTypes);
-
-        DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-        graphMouse.setMode(this.currentMouseMode);
-        ScalingControl visualizationViewerScalingControl = new LayoutScalingControl();
         vvTmp.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vvTmp.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
         vvTmp.setVertexToolTipTransformer(new Transformer<VertexBDLG, String>() {
@@ -136,7 +128,14 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 return "Vertex " + v.toString() + " knowlage: " + Double.toString(v.getKnowlage());
             }
         });
-        //vv.scaleToLayout(visualizationViewerScalingControl);
+        
+        
+        Factory<VertexBDLG> vertexFactory = new VertexFactory(this.currentBidlg);
+        Factory<Edge> edgeFactory = new EdgeFactory();
+        
+        EditingModalGraphMouse graphMouse = new EditingModalGraphMouse(vvTmp.getRenderContext(), vertexFactory, edgeFactory);
+        graphMouse.setMode(this.currentMouseMode);
+        
         vvTmp.setGraphMouse(graphMouse);
         vvTmp.getRenderer().getVertexLabelRenderer().setPosition(Position.AUTO);
         vvTmp.getRenderContext().setVertexShapeTransformer(newVertexSize);
@@ -147,7 +146,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private void updateJpanels(int currentSelectedItem, boolean refresh) {
         if (currentIndexOfSelectedView != currentSelectedItem
                 || refresh) {
-            DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+            
+            Factory<VertexBDLG> vertexFactory = new VertexFactory(this.currentBidlg);
+            Factory<Edge> edgeFactory = new EdgeFactory();
+            EditingModalGraphMouse graphMouseOne;
             Graph<String, String> gg;
             currentIndexOfSelectedView = currentSelectedItem;
             switch (currentSelectedItem) {
@@ -162,8 +164,6 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                         graphJPane.setPreferredSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
                         this.getContentPane().add(graphJPane, BorderLayout.CENTER);
                         this.layout.setSize(this.getSize());
-                        //GraphZoomScrollPane graphZoom = new GraphZoomScrollPane(this.vv);
-                        //this.OptionsPanel.add(graphZoom);
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(BiDynamicLineGraphGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -175,9 +175,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.layoutOneMode = new KKLayout<>(gg);
                     this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
                     this.vvOneMode.setSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
-                    graphMouse.setMode(this.currentMouseMode);
+                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);  
+                    graphMouseOne.setMode(this.currentMouseMode);
                     this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
-                    this.vvOneMode.setGraphMouse(graphMouse);
+                    this.vvOneMode.setGraphMouse(graphMouseOne);
                     this.remove(this.graphJPane);
                     this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
                     //this.vvOneMode.getRenderContext().setVertexFillPaintTransformer(this.newVertexColour);
@@ -191,9 +192,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     this.layoutOneMode = new KKLayout<>(gg);
                     this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
                     this.vvOneMode.setSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
-                    graphMouse.setMode(this.currentMouseMode);
+                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);  
+                    graphMouseOne.setMode(this.currentMouseMode);
                     this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
-                    this.vvOneMode.setGraphMouse(graphMouse);
+                    this.vvOneMode.setGraphMouse(graphMouseOne);
                     this.remove(this.graphJPane);
                     this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
                     graphJPane = new ScrollPane();
@@ -215,19 +217,21 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         }
     }
 
-    private void updateVvMouseMode() {
-        ModalGraphMouse graphMouse;
-        /*if(this.currentMouseMode == ModalGraphMouse.Mode.EDITING)
-            graphMouse = new EditingModalGraphMouse(vv.getRenderContext(),
-                                                    this.currentBidlg);
-        else*/
-        graphMouse = new DefaultModalGraphMouse();
-        graphMouse.setMode(this.currentMouseMode);
+    private void updateVvMouseMode() {        
+        Factory<VertexBDLG> vertexFactory = new VertexFactory(this.currentBidlg);
+        Factory<Edge> edgeFactory = new EdgeFactory();
+
         if (this.vv != null) {
+            EditingModalGraphMouse graphMouse = new EditingModalGraphMouse(vv.getRenderContext(), vertexFactory, edgeFactory);
+            graphMouse.setMode(this.currentMouseMode);
             vv.setGraphMouse(graphMouse);
+            vv.addKeyListener(graphMouse.getModeKeyListener());
         }
         if (this.vvOneMode != null) {
-            vv.setGraphMouse(graphMouse);
+            EditingModalGraphMouse graphMouseOne = new EditingModalGraphMouse(vv.getRenderContext(), vertexFactory, edgeFactory);
+            graphMouseOne.setMode(this.currentMouseMode);
+            vvOneMode.setGraphMouse(graphMouseOne);
+            vvOneMode.addKeyListener(graphMouseOne.getModeKeyListener());
         }
     }
 
@@ -242,11 +246,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<String>();
+        VisulizerPicker = new javax.swing.JComboBox<>();
         jTextFieldBetaKinput = new javax.swing.JTextField();
         jTextFieldAlphaKinput = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        mouseModeChanger = new javax.swing.JComboBox<String>();
+        mouseModeChanger = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -296,7 +300,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         jTextFieldAlphaKinput.setText("");
 
-        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Transforming", "Picking", "Annotating", "Edditing" }));
+        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Transforming", "Picking", "Annotation", "Editing" }));
         mouseModeChanger.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mouseModeChangerActionPerformed(evt);

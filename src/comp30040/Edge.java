@@ -21,7 +21,7 @@ public class Edge<V> {
         this.firstV = v;
         this.secondV = vv;
     }
-
+  
     public EdgeType getEdgeType() {
         return et;
     }

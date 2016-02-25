@@ -217,8 +217,8 @@
               <StringArray count="4">
                 <StringItem index="0" value="Transforming"/>
                 <StringItem index="1" value="Picking"/>
-                <StringItem index="2" value="Annotating"/>
-                <StringItem index="3" value="Edditing"/>
+                <StringItem index="2" value="Annotation"/>
+                <StringItem index="3" value="Editing"/>
               </StringArray>
             </Property>
           </Properties>
