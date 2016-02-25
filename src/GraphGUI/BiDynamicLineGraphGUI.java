@@ -44,6 +44,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
@@ -82,16 +83,12 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         });
     }
 
-    private void createImageOfGraph(VisualizationViewer vv, File fileToWriteTo) {
-        VisualizationImageServer<VertexBDLG, Edge> vis = new VisualizationImageServer<>(vv.getGraphLayout(), vv.getGraphLayout().getSize());
-
-        BufferedImage buffer = (BufferedImage) vis.getImage(new Point2D.Double(vv.getGraphLayout().getSize().getWidth() / 2,
-                vv.getGraphLayout().getSize().getHeight() / 2),
-                new Dimension(vv.getGraphLayout().getSize()));
-        //Graphics2D g = buffer.createGraphics();
-        //g.dispose();
+    private void createImageOfGraph(VisualizationViewer vvLocal, File fileToWriteTo) {
+        BufferedImage buffer = new BufferedImage(vv.getGraphLayout().getSize().width, vv.getGraphLayout().getSize().height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = buffer.createGraphics();
+        vvLocal.paint(g);
         try {
-            ImageIO.write(buffer, "jpeg", fileToWriteTo);
+            ImageIO.write(buffer, "png", fileToWriteTo);
         } catch (Exception e) {
             System.err.println(e);
         }
@@ -514,7 +511,10 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         if (op == JFileChooser.APPROVE_OPTION && (this.vv != null || this.vvOneMode != null)) {
             File fileToWriteTo = new File(fc.getSelectedFile().getAbsolutePath());
             System.out.println("Save as file: " + fileToWriteTo.getAbsolutePath());
-            this.createImageOfGraph(vv, fileToWriteTo);
+            if(currentIndexOfSelectedView == 0 || currentIndexOfSelectedView == 1)
+                this.createImageOfGraph(vv, fileToWriteTo);
+            else
+                this.createImageOfGraph(vvOneMode, fileToWriteTo);
         }
     }//GEN-LAST:event_exportActionPerformed
 
