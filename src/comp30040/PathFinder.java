@@ -26,6 +26,7 @@ public class PathFinder {
     private ArrayList< List<PathPair>> paths = new ArrayList<>();
     private double[][] dist;
     private VertexBDLG[][] next;
+    private HashSet<VertexBDLG>[][] nextListz;
     private int maxPathLength = -1; // value that sets the depth of the max length of a path to look for
     // were -1 reprosents that paths can be any length
     private boolean stopPathFinding = false;
@@ -34,6 +35,7 @@ public class PathFinder {
         this.graph = g;
         this.next = new VertexBDLG[this.graph.getVertexCount()][this.graph.getVertexCount()];
         this.dist = new double[this.graph.getVertexCount()][this.graph.getVertexCount()];
+        this.nextListz = (HashSet<VertexBDLG>[][]) new HashSet[this.graph.getVertexCount()][this.graph.getVertexCount()];
     }
     
     public void setMaxPathLength(int max){
@@ -146,10 +148,16 @@ public class PathFinder {
         for (int k = 0; k < numberOfVertexs; k++) {
             for (int i = 0; i < numberOfVertexs; i++) {
                 for (int j = 0; j < numberOfVertexs; j++) {
+                    
                     if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
+                        
                     }
+                    if(nextListz[i][j] == null)
+                            nextListz[i][j] = new HashSet<>();
+                    if(next[i][k] != null && graph.isSuccessor(next[i][k], next[i][j]))
+                        nextListz[i][j].add(next[i][k]);
                 }
             }
         }

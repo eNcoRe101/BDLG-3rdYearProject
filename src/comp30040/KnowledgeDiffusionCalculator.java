@@ -244,7 +244,7 @@ public class KnowledgeDiffusionCalculator {
                     if (knowlageMatrix[0][k] < 0) {
                         knowlageMatrix[0][k] = 0;
                     }
-                    graph.setVertexKnowlage(vetex, knowlageMatrix[0][k]);
+                    graph.setVertexKnowlage(vetex, knowlageMatrix[1][k]);
                 }
 
                 //place path on ferbiden list
