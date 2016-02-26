@@ -8,6 +8,7 @@ package JungModedClasss;
 /*
 THIS IS A MODIFIED CLASS FROM THE JUNG LIBARY (SEE LICENCE)
  */
+import comp30040.Edge;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -70,8 +71,8 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                         for (final V other : picked) {
                             directedMenu.add(new AbstractAction("[" + other + "," + vertex + "]") {
                                 public void actionPerformed(ActionEvent e) {
-                                    graph.addEdge(edgeFactory.create(),
-                                            other, vertex, EdgeType.DIRECTED);
+                                    graph.addEdge((E) new Edge(EdgeType.DIRECTED, other, vertex),
+                                            other, vertex);
                                     vv.repaint();
                                 }
                             });
@@ -83,8 +84,8 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                         for (final V other : picked) {
                             undirectedMenu.add(new AbstractAction("[" + other + "," + vertex + "]") {
                                 public void actionPerformed(ActionEvent e) {
-                                    //graph.addEdge(edgeFactory.create(EdgeType.UNDIRECTED, other, vertex),
-                                    //        other, vertex);
+                                    graph.addEdge((E) new Edge(EdgeType.UNDIRECTED, other, vertex),
+                                            other, vertex);
                                     vv.repaint();
                                 }
                             });
