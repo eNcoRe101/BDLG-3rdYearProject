@@ -146,10 +146,10 @@ public class PathFinder {
         for (int k = 0; k < numberOfVertexs; k++) {
             for (int i = 0; i < numberOfVertexs; i++) {
                 for (int j = 0; j < numberOfVertexs; j++) {
-                    //if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
+                    if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
-                    //}
+                    }
                 }
             }
         }
@@ -163,6 +163,7 @@ public class PathFinder {
                 tmpPath.add(new PathPair(u, this.graph.getEdgeType(u, next[u.getId()][v.getId()])));
                 u = next[u.getId()][v.getId()];
             }
+            tmpPath.add(new PathPair(u, null));
             this.paths.add(tmpPath);
         }
     }

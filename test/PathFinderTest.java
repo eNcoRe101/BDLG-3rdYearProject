@@ -99,12 +99,13 @@ public class PathFinderTest {
      }
      }*/
     @Test
-    public void getPathForVertexToactorFast() {
+    public void getPathFloydWarshall() {
         ArrayList<PathPair> pairs = new ArrayList<>(1000);
         PathFinder p = new PathFinder(graph);
         p.FloydWarshallWithPathReconstruction();
         for (Object u : graph.getVertices()) {
             for (Object v : graph.getVertices()) {
+                
                 p.pathReconstuctor((VertexBDLG) u, (VertexBDLG) v);
                 p.printPaths();
                 p.clearPaths();
