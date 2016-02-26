@@ -84,7 +84,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     }
 
     private void createImageOfGraph(VisualizationViewer vvLocal, File fileToWriteTo) {
-        BufferedImage buffer = new BufferedImage(vv.getGraphLayout().getSize().width, vv.getGraphLayout().getSize().height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage buffer = new BufferedImage(this.graphJPane.getWidth(), this.graphJPane.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffer.createGraphics();
         vvLocal.paint(g);
         try {
