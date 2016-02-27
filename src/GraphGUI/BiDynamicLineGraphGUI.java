@@ -28,12 +28,10 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import JungModedClasss.EditingModalGraphMouse;
-import edu.uci.ics.jung.visualization.VisualizationImageServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.Paint;
 import java.awt.ScrollPane;
 import java.awt.Shape;
@@ -43,8 +41,6 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
@@ -509,7 +505,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         final JFileChooser fc = new JFileChooser();
         int op = fc.showSaveDialog(this);
         if (op == JFileChooser.APPROVE_OPTION && (this.vv != null || this.vvOneMode != null)) {
-            File fileToWriteTo = new File(fc.getSelectedFile().getAbsolutePath());
+            File fileToWriteTo = new File(fc.getSelectedFile().getAbsolutePath() + ".png");
             System.out.println("Save as file: " + fileToWriteTo.getAbsolutePath());
             if(currentIndexOfSelectedView == 0 || currentIndexOfSelectedView == 1)
                 this.createImageOfGraph(vv, fileToWriteTo);
