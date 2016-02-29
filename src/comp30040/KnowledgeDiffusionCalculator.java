@@ -75,7 +75,7 @@ public class KnowledgeDiffusionCalculator {
     
     public JScrollPane getKnowlageTableAsJTable() {
         String[] headers = new String[graph.getNumberOfActors()+1];
-        headers[graph.getNumberOfActors()] = "Knowlage Gained";
+        headers[graph.getNumberOfActors()] = "Knowlage Diffused";
         String[][] tableArray = new String[this.finalKnowlageTable.length+1][this.finalKnowlageTable.length+1];
         double[] knowlageResived = new double[graph.getNumberOfActors()];
         double knowlageGaged = 0;
@@ -100,12 +100,15 @@ public class KnowledgeDiffusionCalculator {
         };
         JTable tableToReturn = new JTable(newtableMod);
         JScrollPane pane = new JScrollPane(tableToReturn);
-        JList<String> rowHeaders = new JList<>(headers);
+        String[] headers2 = new String[headers.length];
+        headers2 = headers.clone();
+        headers2[headers2.length-1] = "Knowlage Gained";
+        JList<String> rowHeaders = new JList<>(headers2);
         rowHeaders.setFixedCellWidth(110);
         rowHeaders.setFixedCellHeight(tableToReturn.getRowHeight());
         pane.setRowHeaderView(rowHeaders);
         Border emptyBoarder = BorderFactory.createEmptyBorder();
-        TitledBorder title = BorderFactory.createTitledBorder(emptyBoarder, "Actor Knowlage Defsuion from Actor to Actor");
+        TitledBorder title = BorderFactory.createTitledBorder(emptyBoarder, "Actor Knowlage Diffusion from Actor to Actor");
         pane.setBorder(title);
         return pane;
     }
@@ -147,7 +150,6 @@ public class KnowledgeDiffusionCalculator {
         if (i.equals(j)) {
             return knowlageMatrix[1];
         }
-        double vertexKnowloage = 0;
         //TODO: fill out stub, add path finding and prams
         int k = 1; // k == (2-1) dude to compsie index starting at 0
         while (k < graph.getNumberOfEvents()) {
@@ -185,13 +187,13 @@ public class KnowledgeDiffusionCalculator {
                     if (knowlageMatrix[0][k] < 0) {
                         knowlageMatrix[0][k] = 0;
                     }
-                    
+                    double vertexKnowloage = knowlageMatrix[1][k];
+                    graph.setVertexKnowlage(pp.get(pp.size()-1).v, vertexKnowloage + graph.getVertexKnowlage(pp.get(pp.size()-1).v));
                     
                 }
 
                 //place path on ferbiden list
-                vertexKnowloage += knowlageMatrix[1][k];
-                graph.setVertexKnowlage(vetex, vertexKnowloage + graph.getVertexKnowlage(vetex));
+                
             }
             k++;
 
