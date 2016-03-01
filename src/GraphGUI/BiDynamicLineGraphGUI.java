@@ -260,11 +260,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<>();
+        VisulizerPicker = new javax.swing.JComboBox<String>();
         jTextFieldBetaKinput = new javax.swing.JTextField();
         jTextFieldAlphaKinput = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        mouseModeChanger = new javax.swing.JComboBox<>();
+        mouseModeChanger = new javax.swing.JComboBox<String>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -289,7 +289,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         OptionsPanel.setAlignmentX(0.0F);
         OptionsPanel.setAlignmentY(0.0F);
         OptionsPanel.setMaximumSize(new java.awt.Dimension(220, 32767));
-        OptionsPanel.setPreferredSize(new java.awt.Dimension(220, 718));
+        OptionsPanel.setPreferredSize(new java.awt.Dimension(235, 718));
 
         refreshGraphButton.setText("Refresh");
         refreshGraphButton.addActionListener(new java.awt.event.ActionListener() {
@@ -314,7 +314,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         jTextFieldAlphaKinput.setText("");
 
-        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Transforming", "Picking", "Annotation", "Editing" }));
+        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Transforming", "Picking", "Annotation", "Editing" }));
         mouseModeChanger.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mouseModeChangerActionPerformed(evt);
@@ -342,32 +342,30 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         OptionsPanel.setLayout(OptionsPanelLayout);
         OptionsPanelLayout.setHorizontalGroup(
             OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(OptionsPanelLayout.createSequentialGroup()
-                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(OptionsPanelLayout.createSequentialGroup()
-                        .addContainerGap()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, OptionsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(VisulizerPicker, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, OptionsPanelLayout.createSequentialGroup()
+                        .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                            .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(OptionsPanelLayout.createSequentialGroup()
-                                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-                                    .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jTextFieldBetaKinput)
-                                    .add(jTextFieldAlphaKinput)))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator1)
-                            .add(mouseModeChanger, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(OptionsPanelLayout.createSequentialGroup()
-                                .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(maxPathLengthJField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 76, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(OptionsPanelLayout.createSequentialGroup()
-                                .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jLabel1)
-                                    .add(refreshGraphButton)
-                                    .add(stopKDiffsuin))
-                                .add(0, 0, Short.MAX_VALUE))))
-                    .add(VisulizerPicker, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jTextFieldBetaKinput)
+                            .add(jTextFieldAlphaKinput)))
+                    .add(jSeparator1)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, mouseModeChanger, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, OptionsPanelLayout.createSequentialGroup()
+                        .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(maxPathLengthJField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 76, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, OptionsPanelLayout.createSequentialGroup()
+                        .add(OptionsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel1)
+                            .add(refreshGraphButton)
+                            .add(stopKDiffsuin))
+                        .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         OptionsPanelLayout.setVerticalGroup(
@@ -397,7 +395,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(mouseModeChanger, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(420, Short.MAX_VALUE))
+                .addContainerGap(459, Short.MAX_VALUE))
         );
 
         getContentPane().add(OptionsPanel, java.awt.BorderLayout.WEST);
