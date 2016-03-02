@@ -74,9 +74,7 @@ public class VertexBDLG {
             return false;
         }
         final VertexBDLG other = (VertexBDLG) obj;
-        if (!Objects.equals(this.a, other.a)) {
-            return false;
-        }
-        return Objects.equals(this.e, other.e);
+        return Objects.equals(this.a, other.a)
+                && Objects.equals(this.e, other.e);
     }
 }

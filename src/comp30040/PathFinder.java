@@ -264,6 +264,8 @@ public class PathFinder {
                 neighbours = graph.getSuccessors(currentVP.v, EdgeType.UNDIRECTED);
             else
                 neighbours = graph.getSuccessors(currentVP.v);
+            if(neighbours == null)
+                continue;
             for (VertexBDLG dest : neighbours) {
                 ArrayList<PathPair> currentPath2 = new ArrayList<>(currentPath);
                 EdgeType currentEt = graph.getEdgeType(currentVP.v, dest);

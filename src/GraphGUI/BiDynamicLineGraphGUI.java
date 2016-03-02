@@ -96,7 +96,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         }
 
         GraphImporter gi = new GraphImporter(fileToUse);
-        this.currentBidlg = new BiDynamicLineGraph<>(gi);
+        if(this.currentBidlg == null)
+            this.currentBidlg = new BiDynamicLineGraph<>(gi);
         if (this.kDC == null) {
             this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
             jTextFieldBetaKinput.setText(Double.toString(this.kDC.getBetaKnowlageDifussionCoeffient()));

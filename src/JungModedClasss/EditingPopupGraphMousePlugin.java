@@ -34,6 +34,8 @@ import org.apache.commons.collections15.Factory;
  * directed edges.
  *
  * @author Tom Nelson
+ * @param <V>
+ * @param <E>
  *
  */
 public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMousePlugin {
@@ -47,6 +49,7 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
     }
 
     @SuppressWarnings({"unchecked", "serial"})
+    @Override
     protected void handlePopup(MouseEvent e) {
         final VisualizationViewer<V, E> vv
                 = (VisualizationViewer<V, E>) e.getSource();
@@ -70,6 +73,7 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                         popup.add(directedMenu);
                         for (final V other : picked) {
                             directedMenu.add(new AbstractAction("[" + other + "," + vertex + "]") {
+                                @Override
                                 public void actionPerformed(ActionEvent e) {
                                     graph.addEdge((E) new Edge(EdgeType.DIRECTED, other, vertex),
                                             other, vertex);
@@ -83,6 +87,7 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                         popup.add(undirectedMenu);
                         for (final V other : picked) {
                             undirectedMenu.add(new AbstractAction("[" + other + "," + vertex + "]") {
+                                @Override
                                 public void actionPerformed(ActionEvent e) {
                                     graph.addEdge((E) new Edge(EdgeType.UNDIRECTED, other, vertex),
                                             other, vertex);
@@ -93,6 +98,7 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                     }
                 }
                 popup.add(new AbstractAction("Delete Vertex") {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         pickedVertexState.pick(vertex, false);
                         graph.removeVertex(vertex);
@@ -101,6 +107,7 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                 });
             } else if (edge != null) {
                 popup.add(new AbstractAction("Delete Edge") {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         pickedEdgeState.pick(edge, false);
                         graph.removeEdge(edge);
@@ -109,6 +116,7 @@ public class EditingPopupGraphMousePlugin<V, E> extends AbstractPopupGraphMouseP
                 });
             } else {
                 popup.add(new AbstractAction("Create Vertex") {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         V newVertex = vertexFactory.create();
                         graph.addVertex(newVertex);

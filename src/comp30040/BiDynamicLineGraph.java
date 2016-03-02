@@ -164,6 +164,30 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     public Collection<V> getSuccessors(V v) {
         return this.getSuccessors(v, null);
     }
+    
+    @Override
+    public boolean removeVertex(V vertex)
+    {
+        if (!containsVertex(vertex))
+            return false;
+        
+        // copy to avoid concurrent modification in removeEdge
+        Collection<E> incident = new ArrayList<>(getIncidentEdges(vertex));
+        
+        for (E edge : incident)
+            removeEdge(edge);
+        
+        vertex_knowlage_map.remove(vertex);
+        vertex_maps.remove(vertex);
+        
+        int i = 0;
+        for(V v : vertex_maps.keySet()){
+            ((VertexBDLG) v).setId(i);
+            i++;
+        }
+        
+        return true;
+    }
 
     public EdgeType getEdgeType(V vOne, V vTwo) {
         if (this.vertex_maps.get(vOne)[INCIDENT].containsKey(vTwo)) {
