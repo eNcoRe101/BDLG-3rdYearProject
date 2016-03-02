@@ -9,6 +9,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,7 +136,7 @@ public class PathFinder {
             int u = ((VertexBDLG) graph.getIncidentVertices(e).toArray()[0]).getId();
             int v = ((VertexBDLG) graph.getIncidentVertices(e).toArray()[1]).getId();
             if (u == v) {
-                this.dist[u][v] = 0;
+                this.dist[u][v] = Integer.MAX_VALUE;
             } else if (((Edge) e).getEdgeType() == EdgeType.DIRECTED) {
                 this.dist[u][v] = 1;
             } else {
@@ -149,19 +150,21 @@ public class PathFinder {
             for (int i = 0; i < numberOfVertexs; i++) {
                 for (int j = 0; j < numberOfVertexs; j++) {
                     
-                    if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
+                    /*if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
                         
-                    }
+                    }*/
                     if(nextListz[i][j] == null)
                             nextListz[i][j] = new HashSet<>();
-                    if(next[i][k] != null && graph.isSuccessor(next[i][k], next[i][j]))
+                    if(next[i][k] != null && next[i][j] != null && graph.isSuccessor(next[i][j], next[i][k])){
                         nextListz[i][j].add(next[i][k]);
+                        
+                    }
                 }
             }
         }
-        System.out.print("FloydWarshall finished");
+        System.out.println("FloydWarshall finished");
     }
 
     public void pathReconstuctor(VertexBDLG u, VertexBDLG v) {
@@ -173,6 +176,18 @@ public class PathFinder {
             }
             tmpPath.add(new PathPair(u, null));
             this.paths.add(tmpPath);
+        }
+    }
+    
+    public void fastPathFinderDp(){
+        HashMap<VertexBDLG, HashMap<Actor, ArrayList<ArrayList<PathPair>>>> pathsFromVectorToActor = new HashMap<>();
+        for(int i = graph.getEvents().length-1; i >= 0; i++){
+            for(Actor a : graph.getEvents()[i].getActorsAtEvent()){
+                VertexBDLG v = new VertexBDLG(a, graph.getEvents()[i]);
+                HashMap tmpRef = pathsFromVectorToActor.get(v);
+                if(tmpRef == null)
+                    tmpRef = new HashMap<>();
+            }
         }
     }
 

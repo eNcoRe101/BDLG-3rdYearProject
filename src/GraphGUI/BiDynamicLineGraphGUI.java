@@ -169,7 +169,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
             switch (currentSelectedItem) {
                 case 0:
                     try {
-                        this.vv = genrateVisualizationViewer(currentCVSFile);
+                        this.vv = genrateVisualizationViewer(this.currentCVSFile);
                         if (graphJPane != null || refresh) {
                             this.remove(graphJPane);
                         }
@@ -183,7 +183,20 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                     }
                     break;
                 case 1:
-                    break;
+                    this.layoutOneMode = new KKLayout<>((Graph)this.currentBidlg);
+                    this.vvOneMode = new VisualizationViewer<>(this.layoutOneMode);
+                    this.vvOneMode.setSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
+                    graphMouseOne = new EditingModalGraphMouse(this.vvOneMode.getRenderContext(), vertexFactory, edgeFactory);
+                    graphMouseOne.setMode(this.currentMouseMode);
+                    this.vvOneMode.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.GRAY));
+                    this.vvOneMode.setGraphMouse(graphMouseOne);
+                    this.remove(this.graphJPane);
+                    this.vvOneMode.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+                    //this.vvOneMode.getRenderContext().setVertexFillPaintTransformer(this.newVertexColour);
+                    graphJPane = new ScrollPane();
+                    graphJPane.add(new GraphZoomScrollPane(this.vvOneMode));
+                    this.graphJPane.setPreferredSize(new Dimension(this.getWidth() - OptionsPanel.getWidth(), this.getHeight()));
+                    this.add(graphJPane, BorderLayout.CENTER);
                 case 2:
                     gg = this.currentBidlg.getOneModeActorGraph();
                     this.layoutOneMode = new KKLayout<>(gg);

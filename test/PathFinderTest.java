@@ -105,10 +105,13 @@ public class PathFinderTest {
         p.FloydWarshallWithPathReconstruction();
         for (Object u : graph.getVertices()) {
             for (Object v : graph.getVertices()) {
-                
+                //if (((VertexBDLG) u).getActor().equals(imp.getActors()[1])
+                //        && ((VertexBDLG) u).getEvent().getEventId() > 1 && ((VertexBDLG) v).getActor().equals(imp.getActors()[0])) {
+                System.out.println("\n" + u.toString() + " to " + ((VertexBDLG) v).getActor().getLabel());
                 p.pathReconstuctor((VertexBDLG) u, (VertexBDLG) v);
                 p.printPaths();
                 p.clearPaths();
+                //}
             }
         }
     }

@@ -93,7 +93,7 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
     public NetworkEvent[] getEvents() {
         return this.imp.getEvents();
     }
-
+    
     public NetworkEvent[] getActorsEvents(Actor a) {
         return this.imp.getActorsEvents(a);
     }
