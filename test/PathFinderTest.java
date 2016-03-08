@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 public class PathFinderTest {
 
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/sample-2mode.csv";
+    private final String relativePathToTestData = "./data/mafia-2mode.csv";
     private BiDynamicLineGraph graph;
 
     public PathFinderTest() throws FileNotFoundException {
@@ -174,5 +174,11 @@ public class PathFinderTest {
         System.out.println("Vertexs: " + graph.getVertexCount());
         System.out.println("Edges: " + graph.getEdgeCount());
         System.out.println("Paths Num: " + numberOfPaths);
+    }
+    
+    @Test
+    public void testFastPathFinderDp(){
+        PathFinder p = new PathFinder(graph);
+        p.fastPathFinderDp();
     }
 }

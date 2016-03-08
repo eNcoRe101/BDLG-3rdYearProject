@@ -33,6 +33,18 @@ public class Path {
         return path.get(path.size()-1).v.getActor();
     }
     
+    public boolean addPath(Path p){
+        if(this.path.get(path.size()-1).et == EdgeType.UNDIRECTED
+            && p.getPathPairs().get(0).et == EdgeType.UNDIRECTED)
+            return false;
+        this.path.addAll(p.getPathPairs());
+        return true;
+    }
+    
+    public ArrayList<PathPair> getPathPairs(){
+        return this.path;
+    }
+    
     public boolean addNewPathPair(PathPair p){
         if(this.path.isEmpty()){
             if (p.et == null || p.et == EdgeType.UNDIRECTED){
