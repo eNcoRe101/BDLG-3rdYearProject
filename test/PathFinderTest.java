@@ -15,16 +15,11 @@ import comp30040.VertexBDLG;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertArrayEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -34,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 public class PathFinderTest {
 
     private GraphImporter imp;
-    private final String relativePathToTestData = "./data/mafia-2mode.csv";
+    private final String relativePathToTestData = "./data/sample-2mode.csv";
     private BiDynamicLineGraph graph;
 
     public PathFinderTest() throws FileNotFoundException {
