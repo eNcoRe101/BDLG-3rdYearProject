@@ -12,10 +12,11 @@ import java.util.Objects;
  * @author Richard de Mellow
  */
 public class VertexBDLG {
-    private Actor a = null;
-    private NetworkEvent e = null;
+    private final Actor a;
+    private final NetworkEvent e;
     private double currentKnowlage = 0;
     private int id;
+    private int priority;
     
     public VertexBDLG(Actor a, NetworkEvent e, int id){
         this.a = a;
@@ -50,6 +51,14 @@ public class VertexBDLG {
     
     public int getId(){
         return this.id;
+    }
+    
+    public void setPiority(int p){
+        this.priority = p;
+    }
+    
+    public int getPriority(){
+        return this.priority;
     }
     
     @Override

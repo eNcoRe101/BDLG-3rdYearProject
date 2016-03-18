@@ -36,6 +36,14 @@ public class KnowledgeDiffusionCalculator {
         this.pathF = new PathFinder(this.graph);
         findKnowlageDifusionBetweenAllActors();
     }
+    
+    public KnowledgeDiffusionCalculator(BiDynamicLineGraph graph,
+                                        PathFinderType pfType) {
+        this.graph = graph;
+        this.actorEventKnowlageMap = new HashMap<>();
+        this.pathF = new PathFinder(this.graph, pfType);
+        findKnowlageDifusionBetweenAllActors();
+    }
 
     public void updateAlphaGain(double alpha) {
         this.alphaEventKnowlageGain = alpha;

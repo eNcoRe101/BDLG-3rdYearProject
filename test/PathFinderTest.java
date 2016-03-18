@@ -15,6 +15,7 @@ import comp30040.VertexBDLG;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -102,11 +103,24 @@ public class PathFinderTest {
             for (Object v : graph.getVertices()) {
                 //if (((VertexBDLG) u).getActor().equals(imp.getActors()[1])
                 //        && ((VertexBDLG) u).getEvent().getEventId() > 1 && ((VertexBDLG) v).getActor().equals(imp.getActors()[0])) {
-                System.out.println("\n" + u.toString() + " to " + ((VertexBDLG) v).getActor().getLabel());
+                //System.out.println("\n" + u.toString() + " to " + ((VertexBDLG) v).getActor().getLabel());
                 p.pathReconstuctor((VertexBDLG) u, (VertexBDLG) v);
                 p.printPaths();
                 p.clearPaths();
                 //}
+            }
+        }
+    }
+    
+    @Test
+    public void getPathDijkstra(){
+        PathFinder p = new PathFinder(graph);
+        for(VertexBDLG u : (Collection<VertexBDLG>) graph.getVertices()){
+            for(VertexBDLG v : (Collection<VertexBDLG>) graph.getVertices()){
+                System.out.println(u + " to " + v);
+                p.dijkstra(u, v);
+                //p.printPaths();
+                //p.clearPaths();
             }
         }
     }

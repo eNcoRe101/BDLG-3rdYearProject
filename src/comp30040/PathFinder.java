@@ -9,10 +9,12 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -24,10 +26,10 @@ import java.util.Stack;
 public class PathFinder {
 
     private BiDynamicLineGraph graph = null;
+    private PathFinderType currentPathFindingMethod;
     private ArrayList< List<PathPair>> paths = new ArrayList<>();
     private double[][] dist;
     private VertexBDLG[][] next;
-    private HashSet<VertexBDLG>[][] nextListz;
     private int maxPathLength = -1; // value that sets the depth of the max length of a path to look for
     // were -1 reprosents that paths can be any length
     private boolean stopPathFinding = false;
@@ -36,11 +38,21 @@ public class PathFinder {
         this.graph = g;
         this.next = new VertexBDLG[this.graph.getVertexCount()][this.graph.getVertexCount()];
         this.dist = new double[this.graph.getVertexCount()][this.graph.getVertexCount()];
-        this.nextListz = (HashSet<VertexBDLG>[][]) new HashSet[this.graph.getVertexCount()][this.graph.getVertexCount()];
+        this.currentPathFindingMethod = PathFinderType.BFS_ALL_PATHS;
+    }
+    
+    public PathFinder(BiDynamicLineGraph g, PathFinderType pfType){
+        this.next = new VertexBDLG[this.graph.getVertexCount()][this.graph.getVertexCount()];
+        this.dist = new double[this.graph.getVertexCount()][this.graph.getVertexCount()];
+        this.currentPathFindingMethod = pfType;
     }
 
     public void setMaxPathLength(int max) {
         this.maxPathLength = max;
+    }
+    
+    public void setPathFinderType(PathFinderType pfType){
+        this.currentPathFindingMethod = pfType;
     }
 
     public int getMaxPathLength() {
@@ -77,7 +89,24 @@ public class PathFinder {
         paths.clear();
         System.gc();
     }
-
+    
+    public void getPathsFrom(VertexBDLG v, Actor a){
+        switch(this.currentPathFindingMethod){
+            case BFS_ALL_PATHS:
+                this.getPathsFrom(v, a, new ArrayList<PathPair>());
+                break;
+            case SHORTEST_PATHS:
+                break;
+        }
+        
+    }
+    
+    /**
+     * Original custom recursive path finding algo by Richard de Mellow
+     * @param i
+     * @param j
+     * @param currentPath 
+     */
     public void getPathsFrom(VertexBDLG i, Actor j, ArrayList<PathPair> currentPath) {
         if (i.getActor().equals(j)) {
             return;
@@ -124,7 +153,69 @@ public class PathFinder {
             }
         }
     }
+    
+    /**
+     * Dijkstra algrithom shortest path
+     * @param source
+     * @param target
+     */
+    public void dijkstra(VertexBDLG source, VertexBDLG target){
+        if(source.equals(target))
+            return;
+        int[] distLocal = new int[graph.getVertexCount()];
+        VertexBDLG[] prevLocal = new VertexBDLG[graph.getVertexCount()];
+        Comparator<VertexBDLG> vertexCompar = new VertexBDLGComparator();
+        PriorityQueue<VertexBDLG> q = new PriorityQueue<>(vertexCompar);
 
+        distLocal[source.getId()] = 0;
+        ((VertexBDLG)graph.getVertex(source.getActor(), source.getEvent())).setPiority(0);
+        
+        for(VertexBDLG v : (Collection<VertexBDLG>) graph.getVertices()){
+            if(!v.equals(source)){
+                distLocal[v.getId()] = Integer.MAX_VALUE-1;
+                v.setPiority(Integer.MAX_VALUE-1);
+            }
+            q.add(v);
+        }
+        
+        while(!q.isEmpty()){
+            VertexBDLG u = q.poll();
+            Collection<VertexBDLG> neighbors;
+            if(source.equals(u))
+                neighbors = graph.getSuccessors(u, EdgeType.UNDIRECTED);
+            else
+                neighbors = graph.getSuccessors(u);
+            
+            for(VertexBDLG v : neighbors){
+                int alt = distLocal[u.getId()] + 1;
+                if(alt < distLocal[v.getId()]){
+                    distLocal[v.getId()] = alt;
+                    prevLocal[v.getId()] = u;
+                    v.setPiority(alt);
+                    q.add(v);
+                }
+            }
+        }
+        VertexBDLG tmpV = target;
+        Stack<VertexBDLG> s = new Stack<>();
+        while(true){
+            
+            s.push(tmpV);
+            if(prevLocal[tmpV.getId()] == null || prevLocal[tmpV.getId()].equals(tmpV))
+                break;
+            tmpV = prevLocal[tmpV.getId()];
+        }
+        while(!s.isEmpty()){
+            tmpV = s.pop();
+            System.out.print(tmpV);
+            //if(graph.getEdgeType(s, s))
+        }
+        System.out.println();
+    }
+    
+    /**
+     * FloydWarshall with Path Reconstruction
+     */
     public void FloydWarshallWithPathReconstruction() {
         int numberOfVertexs = graph.getVertexCount();
         for (int i = 0; i < numberOfVertexs; i++) {
@@ -150,25 +241,21 @@ public class PathFinder {
         for (int k = 0; k < numberOfVertexs; k++) {
             for (int i = 0; i < numberOfVertexs; i++) {
                 for (int j = 0; j < numberOfVertexs; j++) {
-
-                    /*if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
+                    if ((this.dist[i][k] + this.dist[k][j]) < this.dist[i][j]) {
                         dist[i][j] = dist[i][k] + dist[k][j];
                         next[i][j] = next[i][k];
-                        
-                    }*/
-                    if (nextListz[i][j] == null) {
-                        nextListz[i][j] = new HashSet<>();
-                    }
-                    if (next[i][k] != null && next[i][j] != null && graph.isSuccessor(next[i][j], next[i][k])) {
-                        nextListz[i][j].add(next[i][k]);
-
                     }
                 }
             }
         }
         System.out.println("FloydWarshall finished");
     }
-
+    
+    /**
+     * Path reconstruction method for FloydWarshall algorithom 
+     * @param u
+     * @param v 
+     */
     public void pathReconstuctor(VertexBDLG u, VertexBDLG v) {
         List<PathPair> tmpPath = new ArrayList<>();
         if (this.next[u.getId()][v.getId()] != null) {
@@ -180,7 +267,11 @@ public class PathFinder {
             this.paths.add(tmpPath);
         }
     }
-
+    
+    
+    /**
+     * Custom path finding algo by Richard de Mellow
+     */
     public void fastPathFinderDp() {
         HashMap<VertexBDLG, HashMap<Actor, ArrayList<Path>>> pathsFromVectorToActor = new HashMap<>();
         for (int i = graph.getEvents().length; i > 0; i--) {
@@ -227,29 +318,7 @@ public class PathFinder {
         }
         System.out.println("finished fast path finder dp");
     }
-
-    public void bfsParths(VertexBDLG v) {
-        int numberOfVertexs = graph.getVertexCount();
-        double[] dist = new double[numberOfVertexs];
-        VertexBDLG[] parent = new VertexBDLG[numberOfVertexs];
-        for (int i = 0; i < numberOfVertexs; i++) {
-            dist[i] = Integer.MAX_VALUE;
-        }
-        dist[v.getId()] = 0;
-        Queue<VertexBDLG> q = new LinkedList<>();
-        q.add(v);
-        while (!q.isEmpty()) {
-            VertexBDLG currentV = q.remove();
-            for (Object dest : graph.getSuccessors(currentV)) {
-                if (dist[((VertexBDLG) dest).getId()] == Integer.MAX_VALUE) {
-                    dist[((VertexBDLG) dest).getId()] = dist[currentV.getId()] + 1;
-                    parent[((VertexBDLG) dest).getId()] = currentV;
-                    q.add(((VertexBDLG) dest));
-                }
-            }
-        }
-        System.out.print("");
-    }
+    
     Set<ArrayList<PathPair>> seen;
 
     private boolean stuck(VertexBDLG v, Actor a) {
@@ -274,7 +343,12 @@ public class PathFinder {
         return true;
     }
     Queue<ArrayList<PathPair>> q = new LinkedList<>();
-
+    
+    /**
+     * Working breath first search that uses a FILO queue
+     * @param v
+     * @param a 
+     */
     public void bfsParthsAll(VertexBDLG v, Actor a) {
         if (v.getActor().equals(a)) {
             return;
@@ -342,7 +416,39 @@ public class PathFinder {
         }
         this.stopPathFinding = false;
     }
-
+    
+    /**
+     * bfs algo that doesnt work properly 
+     * @param v 
+     */
+    public void bfsParths(VertexBDLG v) {
+        int numberOfVertexs = graph.getVertexCount();
+        double[] distLocal = new double[numberOfVertexs];
+        VertexBDLG[] parent = new VertexBDLG[numberOfVertexs];
+        for (int i = 0; i < numberOfVertexs; i++) {
+            distLocal[i] = Integer.MAX_VALUE;
+        }
+        distLocal[v.getId()] = 0;
+        Queue<VertexBDLG> qLocal = new LinkedList<>();
+        qLocal.add(v);
+        while (!qLocal.isEmpty()) {
+            VertexBDLG currentV = qLocal.remove();
+            for (Object dest : graph.getSuccessors(currentV)) {
+                if (distLocal[((VertexBDLG) dest).getId()] == Integer.MAX_VALUE) {
+                    distLocal[((VertexBDLG) dest).getId()] = distLocal[currentV.getId()] + 1;
+                    parent[((VertexBDLG) dest).getId()] = currentV;
+                    qLocal.add(((VertexBDLG) dest));
+                }
+            }
+        }
+        System.out.print("");
+    }
+    
+    /**
+     * Method that is probably redundent
+     * @param v
+     * @param p 
+     */
     private void PrintPath(VertexBDLG v, ArrayList<Queue<VertexBDLG>> p) {
         VertexBDLG currentV = v;
         Stack<PathPair> s = new Stack<>();

@@ -13,10 +13,10 @@ public enum PathFinderType {
     /**
      * 
      */
-    bfsAllPaths,
+    BFS_ALL_PATHS,
 
     /**
      *
      */
-    shortestPaths
+    SHORTEST_PATHS
 }
