@@ -165,7 +165,7 @@ public class PathFinder {
         int[] distLocal = new int[graph.getVertexCount()];
         VertexBDLG[] prevLocal = new VertexBDLG[graph.getVertexCount()];
         Comparator<VertexBDLG> vertexCompar = new VertexBDLGComparator();
-        PriorityQueue<VertexBDLG> q = new PriorityQueue<>((Comparator<VertexBDLG>)vertexCompar);
+        PriorityQueue<VertexBDLG> q = new PriorityQueue<VertexBDLG>(vertexCompar);
 
         distLocal[source.getId()] = 0;
         ((VertexBDLG)graph.getVertex(source.getActor(), source.getEvent())).setPiority(0);
