@@ -10,6 +10,7 @@ import java.util.Comparator;
 /**
  *
  * @author rich
+ * @param <VertexBDLG>
  */
 public class VertexBDLGComparator implements Comparator<VertexBDLG>
 {
