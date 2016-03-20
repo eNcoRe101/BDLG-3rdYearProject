@@ -165,7 +165,7 @@ public class PathFinder {
         int[] distLocal = new int[graph.getVertexCount()];
         VertexBDLG[] prevLocal = new VertexBDLG[graph.getVertexCount()];
         Comparator<VertexBDLG> vertexCompar = new VertexBDLGComparator();
-        PriorityQueue<VertexBDLG> q = new PriorityQueue<>(vertexCompar);
+        PriorityQueue<VertexBDLG> q = new PriorityQueue<>((Comparator<VertexBDLG>)vertexCompar);
 
         distLocal[source.getId()] = 0;
         ((VertexBDLG)graph.getVertex(source.getActor(), source.getEvent())).setPiority(0);
@@ -188,7 +188,10 @@ public class PathFinder {
             
             for(VertexBDLG v : neighbors){
                 int alt = distLocal[u.getId()] + 1;
-                if(alt < distLocal[v.getId()]){
+                if(alt < distLocal[v.getId()]
+                   && (prevLocal[u.getId()] == null
+                       || (graph.getEdgeType(u, v) != EdgeType.UNDIRECTED
+                       && graph.getEdgeType(prevLocal[u.getId()], u) != EdgeType.UNDIRECTED))){
                     distLocal[v.getId()] = alt;
                     prevLocal[v.getId()] = u;
                     v.setPiority(alt);
