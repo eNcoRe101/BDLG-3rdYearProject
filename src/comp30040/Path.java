@@ -33,6 +33,10 @@ public class Path {
         return path.get(path.size()-1).v.getActor();
     }
     
+    public int getNumberOfVertexs(){
+        return this.path.size();
+    }
+    
     public boolean addPath(Path p){
         if(this.path.get(path.size()-1).et == EdgeType.UNDIRECTED
             && p.getPathPairs().get(0).et == EdgeType.UNDIRECTED)

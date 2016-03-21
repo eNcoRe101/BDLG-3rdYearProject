@@ -77,6 +77,10 @@ public class KnowledgeDiffusionCalculator {
         return this.finalKnowlageTable;
     }
     
+    public PathFinderType getPFType(){
+        return this.pathF.getPFType();
+    }
+    
     public void refreshKnowlageDifusionValues(){
         this.findKnowlageDifusionBetweenAllActors();
     }
@@ -170,7 +174,8 @@ public class KnowledgeDiffusionCalculator {
                 //get paths from this actor at this event to any event J attends
                 pathF.clearPaths();
                 VertexBDLG vetex = new VertexBDLG(i, graph.getEvents()[k]);
-                pathF.bfsParthsAll(vetex, j);
+                //pathF.bfsParthsAll(vetex, j);
+                pathF.getPathsFrom(vetex, j);
                 ArrayList<List<PathPair>> pathsToUse = pathF.getPaths();
                 //caculate knowlage transfer 
                 double knowlageGainForThisPath = knowlageMatrix[0][k];

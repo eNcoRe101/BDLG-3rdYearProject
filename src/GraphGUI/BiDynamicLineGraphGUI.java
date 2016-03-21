@@ -28,6 +28,9 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import JungModedClasss.EditingModalGraphMouse;
+import comp30040.PathFinderType;
+import static comp30040.PathFinderType.BFS_ALL_PATHS;
+import static comp30040.PathFinderType.SHORTEST_PATHS;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -61,6 +64,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     private KnowledgeDiffusionCalculator kDC = null;
     private int currentIndexOfSelectedView = 0;
     private Mode currentMouseMode = ModalGraphMouse.Mode.TRANSFORMING;
+    private PathFinderType pFType = BFS_ALL_PATHS;
 
     /**
      * Creates new form DynamicLineGraphGUI
@@ -268,12 +272,12 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         OptionsPanel = new javax.swing.JPanel();
         refreshGraphButton = new javax.swing.JButton();
-        VisulizerPicker = new javax.swing.JComboBox<String>();
+        VisulizerPicker = new javax.swing.JComboBox<>();
         jSeparator2 = new javax.swing.JSeparator();
         jTextFieldBetaKinput = new javax.swing.JTextField();
         jTextFieldAlphaKinput = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        mouseModeChanger = new javax.swing.JComboBox<String>();
+        mouseModeChanger = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -324,7 +328,7 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
 
         jTextFieldAlphaKinput.setText("");
 
-        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Transforming", "Picking", "Annotation", "Editing" }));
+        mouseModeChanger.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Transforming", "Picking", "Annotation", "Editing" }));
         mouseModeChanger.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mouseModeChangerActionPerformed(evt);
@@ -349,6 +353,11 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
         });
 
         pathFinderAlgo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BFS All Paths", "Shortest Parths" }));
+        pathFinderAlgo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pathFinderAlgoActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout OptionsPanelLayout = new org.jdesktop.layout.GroupLayout(OptionsPanel);
         OptionsPanel.setLayout(OptionsPanelLayout);
@@ -520,8 +529,8 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mouseModeChangerActionPerformed
 
     private void runKDiffsuinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runKDiffsuinActionPerformed
-        if (this.kDC == null) {
-            this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg);
+        if (this.kDC == null || this.pFType != this.kDC.getPFType()) {
+            this.kDC = new KnowledgeDiffusionCalculator(this.currentBidlg, this.pFType);
             jTextFieldBetaKinput.setText(Double.toString(this.kDC.getBetaKnowlageDifussionCoeffient()));
             jTextFieldAlphaKinput.setText(Double.toString(this.kDC.getAlphaGainValue()));
             this.maxPathLengthJField.setText(Integer.toString(this.kDC.getMaxPathLength()));
@@ -542,6 +551,20 @@ public class BiDynamicLineGraphGUI extends javax.swing.JFrame {
                 this.createImageOfGraph(vvOneMode, fileToWriteTo);
         }
     }//GEN-LAST:event_exportActionPerformed
+
+    private void pathFinderAlgoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pathFinderAlgoActionPerformed
+        switch(this.pathFinderAlgo.getSelectedIndex()){
+            case 0:
+                this.pFType = BFS_ALL_PATHS;
+                break;
+            case 1:
+                this.pFType = SHORTEST_PATHS;
+                break;
+            default:
+                this.pFType = BFS_ALL_PATHS;
+                break;
+        }
+    }//GEN-LAST:event_pathFinderAlgoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu EditMenu;

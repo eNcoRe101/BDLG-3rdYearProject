@@ -9,6 +9,7 @@ import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
 import comp30040.NetworkEvent;
 import comp30040.PathFinder;
+import static comp30040.PathFinderType.SHORTEST_PATHS;
 import comp30040.PathPair;
 import comp30040.VertexBDLG;
 
@@ -155,6 +156,36 @@ public class PathFinderTest {
      System.out.println("Edges: " + graph.getEdgeCount());
      System.out.println("Paths Num: " + numberOfPaths);
      }*/
+    
+    @Test
+    public void getPathForAllVertexsToAllActorsDijkstra() {
+        long numberOfPaths = 0;
+        PathFinder p = new PathFinder(graph, SHORTEST_PATHS);
+        for (Actor a : graph.getActors()) {
+            for (NetworkEvent e : graph.getEvents()) {
+                for (Actor aa : graph.getActors()) {
+                    VertexBDLG v = new VertexBDLG(a, e);
+                    if ((!graph.containsVertex(v)) || (!(v.getActor().getId() == 0) && !(v.getEvent().getEventId() == 0)
+                            && !(aa.getId() == 2))) {
+                        continue;
+                    }
+                    System.out.println("\n" + v.toString() + " to " + aa.getLabel());
+                    p.getPathsFrom(v, aa);
+                    numberOfPaths += p.getPaths().size();
+                    p.printPaths();
+
+                    p.clearPaths();
+                    System.out.println();
+                    return;
+                }
+                System.out.println();
+            }
+        }
+
+        System.out.println("Vertexs: " + graph.getVertexCount());
+        System.out.println("Edges: " + graph.getEdgeCount());
+        System.out.println("Paths Num: " + numberOfPaths);
+    }
 
     @Test
     public void getPathForAllVertexsToAllActors() {

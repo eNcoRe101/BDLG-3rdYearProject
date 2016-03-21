@@ -8,6 +8,7 @@ import comp30040.Actor;
 import comp30040.BiDynamicLineGraph;
 import comp30040.GraphImporter;
 import comp30040.KnowledgeDiffusionCalculator;
+import static comp30040.PathFinderType.SHORTEST_PATHS;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -110,6 +111,28 @@ public class KnowledgeDiffusionCalculatorTest {
                              KnowlageTable[a.getId()-1][aa.getId()-1], 
                              k.getKnowlageFromActors(a, aa),
                              0.00001);
+                System.out.printf("%.2f, ", k.getKnowlageFromActors(a, aa));
+            }
+             System.out.println("]");
+            i++;
+        }
+    }
+    
+    @Test
+    public void getKnowlageDiffusionForActor3(){
+        KnowledgeDiffusionCalculator k = new KnowledgeDiffusionCalculator(graph, SHORTEST_PATHS);
+        k.updateMaxPathLength(1);
+        double[][] KnowlageTable = {{0.0, 0.0, 0.5, 1.25, 1.125, 0.0},
+                                    {0.630859375, 0.0, 0.625, 0.671875, 0.49755859375, 0.5},
+                                    {0.625, 0.0, 0.0, 0.625, 0.4375, 0.0},
+                                    {1.25, 0.0, 0.5, 0.0, 1.125, 0.0},
+                                    {0.5, 0.0, 0.0, 0.5, 0.0, 0.0},
+                                    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+        int i = 0;
+        for(Actor a : imp.getActors())
+        {
+            System.out.print("[" + (i+1) + "|");
+            for(Actor aa : imp.getActors()){
                 System.out.printf("%.2f, ", k.getKnowlageFromActors(a, aa));
             }
              System.out.println("]");

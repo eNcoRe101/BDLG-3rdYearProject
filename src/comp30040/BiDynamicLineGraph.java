@@ -10,7 +10,6 @@ import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -43,7 +42,10 @@ public class BiDynamicLineGraph<V, E> extends SparseGraph<V, E> {
 
     public V getVertex(Actor a, NetworkEvent e) {
         if (this.containsVertex((V) new VertexBDLG(a, e))) {
-            return (V) new VertexBDLG(a, e);
+            for(V v : this.vertex_knowlage_map.keySet()){
+                if(v.equals((V) new VertexBDLG(a, e)))
+                    return v;
+            }
         }
         return null;
     }

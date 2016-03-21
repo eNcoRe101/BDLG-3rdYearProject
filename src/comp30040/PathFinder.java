@@ -41,6 +41,7 @@ public class PathFinder {
     }
     
     public PathFinder(BiDynamicLineGraph g, PathFinderType pfType){
+        this.graph = g;
         this.next = new VertexBDLG[this.graph.getVertexCount()][this.graph.getVertexCount()];
         this.dist = new double[this.graph.getVertexCount()][this.graph.getVertexCount()];
         this.currentPathFindingMethod = pfType;
@@ -89,12 +90,18 @@ public class PathFinder {
         System.gc();
     }
     
+    public PathFinderType getPFType(){
+        return this.currentPathFindingMethod;
+    }
+    
     public void getPathsFrom(VertexBDLG v, Actor a){
         switch(this.currentPathFindingMethod){
             case BFS_ALL_PATHS:
                 this.getPathsFrom(v, a, new ArrayList<PathPair>());
                 break;
             case SHORTEST_PATHS:
+                for(NetworkEvent e : graph.getActorsEvents(a))
+                    this.dijkstra(v, (VertexBDLG)graph.getVertex(a, e));
                 break;
         }
         
@@ -209,6 +216,7 @@ public class PathFinder {
                 break;
             tmpV = prevLocal[tmpV.getId()];
         }
+        //s.push(source);
         Path currentPath = new Path();
         tmpV = s.pop();
         boolean ok = currentPath.addNewPathPair(new PathPair(tmpV, null));
@@ -219,7 +227,8 @@ public class PathFinder {
             currentPath.getLastPath().et = graph.getEdgeType(currentPath.getLastPath().v, tmpV);
             ok = currentPath.addNewPathPair(new PathPair(tmpV, null));
         }
-        this.paths.add(currentPath.getPathPairs());
+        if(currentPath.getNumberOfVertexs() > 1)
+            this.paths.add(currentPath.getPathPairs());
     }
     
     /**
