@@ -45,6 +45,12 @@ public class Path {
         return this.path;
     }
     
+    public PathPair getLastPath(){
+        if(!this.path.isEmpty())
+            return this.path.get(path.size()-1);
+        return null;
+    }
+    
     public boolean addNewPathPair(PathPair p){
         if(this.path.isEmpty()){
             if (p.et == null || p.et == EdgeType.UNDIRECTED){

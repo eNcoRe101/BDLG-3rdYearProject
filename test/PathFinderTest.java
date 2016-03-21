@@ -119,8 +119,9 @@ public class PathFinderTest {
             for(VertexBDLG v : (Collection<VertexBDLG>) graph.getVertices()){
                 System.out.println(u + " to " + v);
                 p.dijkstra(u, v);
-                //p.printPaths();
-                //p.clearPaths();
+                p.printPaths();
+                p.clearPaths();
+                System.out.println();
             }
         }
     }

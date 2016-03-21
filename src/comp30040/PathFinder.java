@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -160,7 +159,7 @@ public class PathFinder {
      * @param target
      */
     public void dijkstra(VertexBDLG source, VertexBDLG target){
-        if(source.equals(target))
+        if(source.equals(target) || source.getEvent().getEventId() > target.getEvent().getEventId())
             return;
         int[] distLocal = new int[graph.getVertexCount()];
         VertexBDLG[] prevLocal = new VertexBDLG[graph.getVertexCount()];
@@ -189,9 +188,11 @@ public class PathFinder {
             for(VertexBDLG v : neighbors){
                 int alt = distLocal[u.getId()] + 1;
                 if(alt < distLocal[v.getId()]
-                   && (prevLocal[u.getId()] == null
-                       || (graph.getEdgeType(u, v) != EdgeType.UNDIRECTED
-                       && graph.getEdgeType(prevLocal[u.getId()], u) != EdgeType.UNDIRECTED))){
+                   && graph.isSuccessor(u, v))
+                 //  && (prevLocal[u.getId()] == null
+                 //      || (graph.getEdgeType(u, v) != EdgeType.UNDIRECTED
+                 //      && graph.getEdgeType(prevLocal[u.getId()], u) != EdgeType.UNDIRECTED)))
+                        {
                     distLocal[v.getId()] = alt;
                     prevLocal[v.getId()] = u;
                     v.setPiority(alt);
@@ -208,12 +209,17 @@ public class PathFinder {
                 break;
             tmpV = prevLocal[tmpV.getId()];
         }
+        Path currentPath = new Path();
+        tmpV = s.pop();
+        boolean ok = currentPath.addNewPathPair(new PathPair(tmpV, null));
         while(!s.isEmpty()){
+            if(!ok)
+                System.out.println("Path creation problem");
             tmpV = s.pop();
-            System.out.print(tmpV);
-            //if(graph.getEdgeType(s, s))
+            currentPath.getLastPath().et = graph.getEdgeType(currentPath.getLastPath().v, tmpV);
+            ok = currentPath.addNewPathPair(new PathPair(tmpV, null));
         }
-        System.out.println();
+        this.paths.add(currentPath.getPathPairs());
     }
     
     /**
