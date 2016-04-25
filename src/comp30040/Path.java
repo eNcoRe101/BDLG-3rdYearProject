@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public class Path {
     private ArrayList<PathPair> path = null;
+    private int numberOfUndirectedEdges = 0;
             
     public Path(){
         this.path = new ArrayList<>();
@@ -21,6 +22,10 @@ public class Path {
     
     public Path(ArrayList<PathPair> p){
         this.path = p;
+    }
+    
+    public int getNumUndirectedEdges(){
+        return numberOfUndirectedEdges;
     }
     
     public void setPathWithCopy(ArrayList<PathPair> p){
@@ -59,6 +64,8 @@ public class Path {
         if(this.path.isEmpty()){
             if (p.et == null || p.et == EdgeType.UNDIRECTED){
                 this.path.add(p);
+                if(p.et == EdgeType.UNDIRECTED)
+                    this.numberOfUndirectedEdges++;
                 return true;
             }
             else
@@ -71,6 +78,8 @@ public class Path {
                 return false;
             }
             else{
+                if(p.et == EdgeType.UNDIRECTED)
+                    this.numberOfUndirectedEdges++;
                 this.path.add(p);
                 return true;
             }

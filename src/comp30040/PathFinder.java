@@ -26,7 +26,7 @@ public class PathFinder {
 
     private BiDynamicLineGraph graph = null;
     private PathFinderType currentPathFindingMethod;
-    private ArrayList< List<PathPair>> paths = new ArrayList<>();
+    private ArrayList<List<PathPair>> paths = new ArrayList<>();
     private double[][] dist;
     private VertexBDLG[][] next;
     private int maxPathLength = -1; // value that sets the depth of the max length of a path to look for
@@ -97,7 +97,8 @@ public class PathFinder {
     public void getPathsFrom(VertexBDLG v, Actor a){
         switch(this.currentPathFindingMethod){
             case BFS_ALL_PATHS:
-                this.getPathsFrom(v, a, new ArrayList<PathPair>());
+                //this.getPathsFrom(v, a, new ArrayList<PathPair>());
+                this.bfsParthsAll(v, a);
                 break;
             case SHORTEST_PATHS:
                 for(NetworkEvent e : graph.getActorsEvents(a))
