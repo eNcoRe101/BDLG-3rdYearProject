@@ -339,7 +339,7 @@ public class PathFinder {
     }
     
     Set<ArrayList<PathPair>> seen;
-
+    /*
     private boolean stuck(VertexBDLG v, Actor a) {
         Stack<VertexBDLG> q = new Stack<>();
         int i = 0;
@@ -360,7 +360,7 @@ public class PathFinder {
             i++;
         }
         return true;
-    }
+    }*/
     Queue<ArrayList<PathPair>> q = new LinkedList<>();
     
     /**
@@ -439,7 +439,7 @@ public class PathFinder {
     /**
      * bfs algo that doesnt work properly 
      * @param v 
-     */
+     *//*
     public void bfsParths(VertexBDLG v) {
         int numberOfVertexs = graph.getVertexCount();
         double[] distLocal = new double[numberOfVertexs];
@@ -461,13 +461,13 @@ public class PathFinder {
             }
         }
         System.out.print("");
-    }
+    }*/
     
     /**
      * Method that is probably redundent
      * @param v
      * @param p 
-     */
+     *//*
     private void PrintPath(VertexBDLG v, ArrayList<Queue<VertexBDLG>> p) {
         VertexBDLG currentV = v;
         Stack<PathPair> s = new Stack<>();
@@ -485,7 +485,7 @@ public class PathFinder {
             aPath.add(s.pop());
         }
         this.paths.add(aPath);
-    }
+    }*/
 
     @Override
     public String toString() {

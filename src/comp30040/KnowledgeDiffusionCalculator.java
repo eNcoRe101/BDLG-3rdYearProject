@@ -181,8 +181,8 @@ public class KnowledgeDiffusionCalculator {
                 double knowlageGainForThisPath = knowlageMatrix[0][k];
                 double demominator;
                 for (List<PathPair> pp : pathsToUse) {
-                    System.out.print(pathF.pathToString(pp));
-                    System.out.println("Inistal K : " + knowlageMatrix[0][k]);
+                    //System.out.print(pathF.pathToString(pp));
+                    //System.out.println("Inistal K : " + knowlageMatrix[0][k]);
                     demominator = 1;
                     for (PathPair p : pp) {
                         if (p.et == null) {
@@ -192,11 +192,11 @@ public class KnowledgeDiffusionCalculator {
                             demominator *= this.betaActorKnowlageDiffusionCoeffient;
                         }
                     }
-                    System.out.println("Dem : " + demominator);
+                    //System.out.println("Dem : " + demominator);
                     knowlageMatrix[1][k] += ((knowlageMatrix[0][k]) * demominator);
-                    System.out.println("Diffused " + (knowlageMatrix[0][k]) * demominator);
+                    //System.out.println("Diffused " + (knowlageMatrix[0][k]) * demominator);
                     knowlageMatrix[0][k] -= (knowlageMatrix[0][k]) * demominator;
-                    System.out.println("left over knowlage : " + knowlageMatrix[0][k]);
+                    //System.out.println("left over knowlage : " + knowlageMatrix[0][k]);
                     if (knowlageMatrix[0][k] < 0) {
                         knowlageMatrix[0][k] = 0;
                     }
@@ -214,6 +214,7 @@ public class KnowledgeDiffusionCalculator {
         return knowlageMatrix[1];
     }
     
+    /*
     private double[] findKnowlageDifusionActorToOtherOld(Actor i, Actor j) {
 
         double[][] knowlageMatrix = new double[2][graph.getNumberOfEvents()]; //knowlage carred forward && 
@@ -269,5 +270,5 @@ public class KnowledgeDiffusionCalculator {
         }
 
         return knowlageMatrix[1];
-    }
+    }*/
 }
